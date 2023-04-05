@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -12,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Role {
+public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
@@ -26,4 +27,7 @@ public class Role {
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
     private List<Student> students;
+
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    private List<Teacher> teachers;
 }

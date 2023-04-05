@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "tbl_question", schema = "dbo")
@@ -24,21 +25,31 @@ public class Question implements Serializable {
     @Column(name = "question_id")
     private String questionId;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "topic_text")
+    private String topicText;
+
+    @Column(name = "topic_image")
+    private byte[] topicImage;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "level")
     private Level level;
 
+    @Column(name = "created_date")
+    private LocalDate createdDate;
+
     @ManyToOne
     @JoinColumn(name = "subject_id", referencedColumnName = "subject_id")
     private Subject subject;
 
-    enum Level{
+    public enum Level{
         EASY,
         NORMAL,
         DIFFICULT
     }
 
+    @PrePersist
+    private void prePersist(){
+        createdDate = LocalDate.now();
+    }
 }

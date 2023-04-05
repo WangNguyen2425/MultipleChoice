@@ -18,17 +18,35 @@ public class Student implements Serializable {
     @Column(name = "student_id")
     private String studentId;
 
-    @Column(name = "student_name")
-    private String studentName;
+    @Column(name = "full_name")
+    private String fullName;
+
+    @Column(name = "birthday")
+    private LocalDate birthday;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender")
+    private Gender gender;
 
     @Column(name = "username")
     private String username;
 
+    @Column(name = "password")
+    private String password;
+
     @Column(name = "join_date")
     private LocalDate joinDate;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
     private Role role;
+
+    @PrePersist
+    private void prePersist(){
+        joinDate = LocalDate.now();
+    }
 
 }

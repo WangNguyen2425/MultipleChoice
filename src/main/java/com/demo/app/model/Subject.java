@@ -18,6 +18,10 @@ public class Subject implements Serializable {
     @Column(name = "subject_id")
     private String subjectId;
 
+    @Column(name = "title")
+    private String title;
+
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
     private Set<Question> questions;
+
 }
