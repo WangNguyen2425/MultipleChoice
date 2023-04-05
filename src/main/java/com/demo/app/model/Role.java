@@ -23,4 +23,7 @@ public class Role {
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
     private List<Admin> admins;
+
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    private List<Student> students;
 }
