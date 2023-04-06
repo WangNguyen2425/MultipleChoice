@@ -1,12 +1,18 @@
 package com.demo.app.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "tbl_student_test_set")
+@Getter
+@Setter
+@NoArgsConstructor
 public class StudentTestSet implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
