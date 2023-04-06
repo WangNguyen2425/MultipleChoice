@@ -34,5 +34,5 @@ public class Test implements Serializable {
     private Set<TestSet> testSets;
 
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
-    private List<TestQuestion> testQuestions;
+    private List<TestDetail> testDetails;
 }

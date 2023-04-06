@@ -27,4 +27,7 @@ public class Subject implements Serializable {
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
     private List<TeacherSubject> teacherSubjects;
+
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
+    private List<StudentSubject> studentSubjects;
 }

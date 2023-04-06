@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "tbl_test_set", schema = "dbo")
@@ -28,5 +29,9 @@ public class TestSet implements Serializable {
     @JoinColumn(name = "test_id", referencedColumnName = "test_id")
     private Test test;
 
+    @OneToMany(mappedBy = "testSet", cascade = CascadeType.ALL)
+    private List<TestSetDetail> testSetDetails;
 
+    @OneToMany(mappedBy = "testSet", cascade = CascadeType.ALL)
+    private List<StudentTestSet> studentTestSets;
 }
