@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,4 +25,6 @@ public class Subject implements Serializable {
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
     private Set<Question> questions;
 
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
+    private List<TeacherSubject> teacherSubjects;
 }

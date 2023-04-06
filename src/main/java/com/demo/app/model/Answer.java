@@ -17,4 +17,8 @@ public class Answer implements Serializable {
 
     @Column(name = "is_corrected", columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isCorrected;
+
+    @ManyToOne
+    @JoinColumn(name = "question_id", referencedColumnName = "question_id")
+    private Question question;
 }

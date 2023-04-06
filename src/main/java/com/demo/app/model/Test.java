@@ -8,6 +8,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "tbl_test", schema = "dbo")
@@ -27,4 +29,10 @@ public class Test implements Serializable {
 
     @Column(name = "test_date")
     private LocalDate testDate;
+
+    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
+    private Set<TestSet> testSets;
+
+    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
+    private List<TestQuestion> testQuestions;
 }

@@ -8,6 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "tbl_question", schema = "dbo")
@@ -41,6 +42,9 @@ public class Question implements Serializable {
     @ManyToOne
     @JoinColumn(name = "subject_id", referencedColumnName = "subject_id")
     private Subject subject;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    private List<Answer> answers;
 
     public enum Level{
         EASY,

@@ -8,6 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "tbl_teacher", schema = "dbo")
@@ -44,4 +45,7 @@ public class Teacher implements Serializable {
    @ManyToOne
    @JoinColumn(name = "role_id", referencedColumnName = "role_id")
    private Role role;
+
+   @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+   private List<TeacherSubject> teacherSubjects;
 }
