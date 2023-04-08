@@ -48,4 +48,7 @@ public class Teacher implements Serializable {
 
    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
    private List<TeacherSubject> teacherSubjects;
+
+   @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+   private List<Classroom> classrooms;
 }

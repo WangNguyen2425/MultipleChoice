@@ -18,7 +18,6 @@ public class Answer implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "answer_id")
     private int answerId;
-
     @Column(name = "content")
     private String content;
 

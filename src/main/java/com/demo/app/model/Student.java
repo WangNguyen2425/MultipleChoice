@@ -51,6 +51,9 @@ public class Student implements Serializable {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<StudentTestSet> studentTestSets;
 
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private List<StudentClass> studentClasses;
+
     @PrePersist
     private void prePersist(){
         joinDate = LocalDate.now();
