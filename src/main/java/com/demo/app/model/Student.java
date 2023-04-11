@@ -16,8 +16,9 @@ import java.util.List;
 @NoArgsConstructor
 public class Student implements Serializable {
     @Id
-    @Column(name = "student_id")
-    private String studentId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
 
     @Column(name = "full_name")
     private String fullName;
@@ -40,6 +41,8 @@ public class Student implements Serializable {
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    private boolean status;
 
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")

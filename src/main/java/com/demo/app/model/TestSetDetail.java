@@ -16,11 +16,14 @@ import java.util.List;
 public class TestSetDetail implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "test_set_detail_id")
-    private int testSetDetailId;
+    @Column(name = "id")
+    private int id;
 
-    @Column(name = "")
+    @Column(name = "question_no")
     private int questionNo;
+
+    @Column(name = "status")
+    private boolean status;
 
     @ManyToOne
     @JoinColumn(name = "test_set_id", referencedColumnName = "test_set_id")

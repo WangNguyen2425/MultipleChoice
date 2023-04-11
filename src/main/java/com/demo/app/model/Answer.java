@@ -16,13 +16,17 @@ import java.util.List;
 public class Answer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "answer_id")
-    private int answerId;
+    @Column(name = "id")
+    private int id;
+
     @Column(name = "content")
     private String content;
 
-    @Column(name = "is_corrected", columnDefinition = "TINYINT(1) DEFAULT 0")
+    @Column(name = "is_corrected", columnDefinition = "BIT(1) DEFAULT 0")
     private boolean isCorrected;
+
+    @Column(name = "status")
+    private boolean status;
 
     @ManyToOne
     @JoinColumn(name = "question_id", referencedColumnName = "question_id")

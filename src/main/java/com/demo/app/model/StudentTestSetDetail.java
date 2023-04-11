@@ -15,11 +15,14 @@ import java.io.Serializable;
 public class StudentTestSetDetail implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "student_test_set_detail_id")
-    private int studentTestSetDetailId;
+    @Column(name = "id")
+    private int id;
 
     @Column(name = "mark")
     private double mark;
+
+    @Column(name = "status")
+    private boolean status;
 
     @ManyToOne
     @JoinColumn(name = "student_test_set_id", referencedColumnName = "student_test_set_id")

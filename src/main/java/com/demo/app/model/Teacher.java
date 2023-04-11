@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -18,13 +17,9 @@ import java.util.List;
 public class Teacher implements Serializable {
 
    @Id
-   @GeneratedValue(generator = "UUID")
-   @GenericGenerator(
-           name = "UUID",
-           strategy = "org.hibernate.id.UUIDGenerator"
-   )
-   @Column(name = "teacher_id")
-   private String teacherId;
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @Column(name = "id")
+   private int id;
 
    @Column(name = "full_name")
    private String fullName;
@@ -41,6 +36,9 @@ public class Teacher implements Serializable {
 
    @Column(name = "password")
    private String password;
+
+   @Column(name = "status")
+   private boolean status;
 
    @ManyToOne
    @JoinColumn(name = "role_id", referencedColumnName = "role_id")

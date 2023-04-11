@@ -16,11 +16,14 @@ import java.util.List;
 public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id")
-    private int roleId;
+    @Column(name = "id")
+    private int id;
 
     @Column(name = "role_name")
     private String roleName;
+
+    @Column(name = "status")
+    private boolean status;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
     private List<Admin> admins;

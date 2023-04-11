@@ -16,11 +16,14 @@ public class TestSetDetailAnswer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "test_set_detail_answer_id")
-    private int testSetDetailAnswerId;
+    @Column(name = "id")
+    private int id;
 
     @Column(name = "question_no")
     private int questionNo;
+
+    @Column(name = "status")
+    private boolean status;
 
     @ManyToOne
     @JoinColumn(name = "answer_id", referencedColumnName = "answer_id")

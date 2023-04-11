@@ -16,11 +16,15 @@ import java.util.Set;
 @NoArgsConstructor
 public class Subject implements Serializable {
     @Id
-    @Column(name = "subject_id")
-    private String subjectId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private String id;
 
     @Column(name = "title")
     private String title;
+
+    @Column(name = "status")
+    private boolean status;
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
     private Set<Question> questions;

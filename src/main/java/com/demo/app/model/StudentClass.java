@@ -15,8 +15,11 @@ import java.io.Serializable;
 public class StudentClass implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "student_class_id")
-    private int studentClassId;
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "status")
+    private boolean status;
 
     @ManyToOne
     @JoinColumn(name = "classroom_id", referencedColumnName = "classroom_id")

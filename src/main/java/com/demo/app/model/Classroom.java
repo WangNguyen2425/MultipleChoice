@@ -17,8 +17,8 @@ import java.util.List;
 public class Classroom implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "classroom_id")
-    private int classId;
+    @Column(name = "id")
+    private int id;
 
     @Column(name = "semester")
     private String semester;
@@ -29,11 +29,19 @@ public class Classroom implements Serializable {
     @Column(name = "created_date")
     private LocalDate createdDate;
 
+    @Column(name = "status")
+    private boolean status;
+
     @OneToMany(mappedBy = "classroom", cascade = CascadeType.ALL)
     private List<StudentClass> studentClasses;
 
     @ManyToOne
     @JoinColumn(name = "teacher_id", referencedColumnName = "teacher_id")
     private Teacher teacher;
+
+    @PrePersist
+    private void prePersist(){
+        createdDate = LocalDate.now();
+    }
 
 }

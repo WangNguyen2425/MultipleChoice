@@ -19,11 +19,14 @@ public class TestSet implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "test_set_id")
-    private int testSetId;
+    @Column(name = "id")
+    private int id;
 
     @Column(name = "test_no")
     private int testNo;
+
+    @Column(name = "status")
+    private boolean status;
 
     @ManyToOne
     @JoinColumn(name = "test_id", referencedColumnName = "test_id")
