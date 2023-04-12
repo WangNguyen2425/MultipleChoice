@@ -32,4 +32,9 @@ public class Role implements Serializable {
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
     private List<Teacher> teachers;
+
+    public Role(String roleName, boolean status) {
+        this.roleName = roleName;
+        this.status = status;
+    }
 }

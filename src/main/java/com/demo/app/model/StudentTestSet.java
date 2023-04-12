@@ -18,6 +18,9 @@ public class StudentTestSet implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "mark")
+    private double mark;
+
     @ManyToOne
     private Student student;
 

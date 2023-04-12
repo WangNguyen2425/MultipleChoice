@@ -26,6 +26,13 @@ public class Admin implements Serializable {
     @Column(name = "status")
     private boolean status;
 
+    public Admin(String username, String password, boolean status, Role role) {
+        this.username = username;
+        this.password = password;
+        this.status = status;
+        this.role = role;
+    }
+
     @ManyToOne
     private Role role;
 }
