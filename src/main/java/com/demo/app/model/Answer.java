@@ -29,7 +29,7 @@ public class Answer implements Serializable {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "question_id", referencedColumnName = "question_id")
+    @JoinColumn(name = "question_id", referencedColumnName = "id")
     private Question question;
 
     @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL)

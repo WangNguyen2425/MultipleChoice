@@ -26,10 +26,10 @@ public class TestSetDetailAnswer implements Serializable {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "answer_id", referencedColumnName = "answer_id")
+    @JoinColumn(name = "answer_id", referencedColumnName = "id")
     private Answer answer;
 
     @ManyToOne
-    @JoinColumn(name = "test_set_detail_id", referencedColumnName = "test_set_detail_id")
+    @JoinColumn(name = "test_set_detail_id", referencedColumnName = "id")
     private TestSetDetail testSetDetail;
 }

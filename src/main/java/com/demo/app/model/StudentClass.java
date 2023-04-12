@@ -22,10 +22,10 @@ public class StudentClass implements Serializable {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "classroom_id", referencedColumnName = "classroom_id")
+    @JoinColumn(name = "classroom_id", referencedColumnName = "id")
     private Classroom classroom;
 
     @ManyToOne
-    @JoinColumn(name = "student_id", referencedColumnName = "student_id")
+    @JoinColumn(name = "student_id", referencedColumnName = "id")
     private Student student;
 }

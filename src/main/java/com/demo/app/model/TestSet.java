@@ -29,7 +29,7 @@ public class TestSet implements Serializable {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "test_id", referencedColumnName = "test_id")
+    @JoinColumn(name = "test_id", referencedColumnName = "id")
     private Test test;
 
     @OneToMany(mappedBy = "testSet", cascade = CascadeType.ALL)

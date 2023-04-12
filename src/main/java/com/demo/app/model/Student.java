@@ -45,7 +45,7 @@ public class Student implements Serializable {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "role_id")
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)

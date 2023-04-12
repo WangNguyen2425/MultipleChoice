@@ -22,10 +22,10 @@ public class TeacherSubject implements Serializable {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "teacher_id", referencedColumnName = "teacher_id")
+    @JoinColumn(name = "teacher_id", referencedColumnName = "id")
     private Teacher teacher;
 
     @ManyToOne
-    @JoinColumn(name = "subject_id", referencedColumnName = "subject_id")
+    @JoinColumn(name = "subject_id", referencedColumnName = "id")
     private Subject subject;
 }

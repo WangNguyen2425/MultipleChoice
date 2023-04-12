@@ -38,7 +38,7 @@ public class Question implements Serializable {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "subject_id", referencedColumnName = "subject_id")
+    @JoinColumn(name = "subject_id", referencedColumnName = "id")
     private Subject subject;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)

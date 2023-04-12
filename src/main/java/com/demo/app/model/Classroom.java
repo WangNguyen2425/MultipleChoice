@@ -36,7 +36,7 @@ public class Classroom implements Serializable {
     private List<StudentClass> studentClasses;
 
     @ManyToOne
-    @JoinColumn(name = "teacher_id", referencedColumnName = "teacher_id")
+    @JoinColumn(name = "teacher_id", referencedColumnName = "id")
     private Teacher teacher;
 
     @PrePersist

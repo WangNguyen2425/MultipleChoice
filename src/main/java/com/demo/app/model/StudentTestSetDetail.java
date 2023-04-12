@@ -25,6 +25,6 @@ public class StudentTestSetDetail implements Serializable {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "student_test_set_id", referencedColumnName = "student_test_set_id")
+    @JoinColumn(name = "student_test_set_id", referencedColumnName = "id")
     private StudentTestSet studentTestSet;
 }

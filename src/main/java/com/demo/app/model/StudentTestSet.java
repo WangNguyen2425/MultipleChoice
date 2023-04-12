@@ -20,7 +20,7 @@ public class StudentTestSet implements Serializable {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "student_id", referencedColumnName = "student_id")
+    @JoinColumn(name = "student_id", referencedColumnName = "id")
     private Student student;
 
     @Column(name = "status")

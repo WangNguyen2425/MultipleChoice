@@ -23,11 +23,11 @@ public class TestDetail implements Serializable {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "test_id", referencedColumnName = "test_id")
+    @JoinColumn(name = "test_id", referencedColumnName = "id")
     private Test test;
 
     @ManyToOne
-    @JoinColumn(name = "question_id", referencedColumnName = "question_id")
+    @JoinColumn(name = "question_id", referencedColumnName = "id")
     private Question question;
 
 }

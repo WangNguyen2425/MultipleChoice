@@ -16,7 +16,6 @@ import java.util.List;
 public class TestSetDetail implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
     @Column(name = "question_no")
@@ -26,11 +25,11 @@ public class TestSetDetail implements Serializable {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "test_set_id", referencedColumnName = "test_set_id")
+    @JoinColumn(name = "test_set_id", referencedColumnName = "id")
     private TestSet testSet;
 
     @ManyToOne
-    @JoinColumn(name = "question_id", referencedColumnName = "question_id")
+    @JoinColumn(name = "question_id", referencedColumnName = "id")
     private Question question;
 
     @OneToMany(mappedBy = "testSetDetail", cascade = CascadeType.ALL)
