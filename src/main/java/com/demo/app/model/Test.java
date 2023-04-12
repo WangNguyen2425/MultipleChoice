@@ -19,8 +19,7 @@ public class Test implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private String id;
+    private int id;
 
     @Column(name = "test_date")
     private LocalDate testDate;

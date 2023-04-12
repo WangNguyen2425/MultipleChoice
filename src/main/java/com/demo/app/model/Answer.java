@@ -16,7 +16,6 @@ import java.util.List;
 public class Answer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
     @Column(name = "content")
@@ -29,7 +28,6 @@ public class Answer implements Serializable {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "question_id", referencedColumnName = "id")
     private Question question;
 
     @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL)

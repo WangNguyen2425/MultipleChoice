@@ -18,7 +18,6 @@ public class Question implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
     @Column(name = "topic_text")
@@ -38,7 +37,6 @@ public class Question implements Serializable {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "subject_id", referencedColumnName = "id")
     private Subject subject;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)

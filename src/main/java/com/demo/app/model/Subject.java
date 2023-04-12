@@ -17,8 +17,7 @@ import java.util.Set;
 public class Subject implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private String id;
+    private int id;
 
     @Column(name = "title")
     private String title;

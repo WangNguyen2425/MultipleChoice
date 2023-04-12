@@ -16,18 +16,15 @@ public class TestDetail implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
     @Column(name = "status")
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "test_id", referencedColumnName = "id")
     private Test test;
 
     @ManyToOne
-    @JoinColumn(name = "question_id", referencedColumnName = "id")
     private Question question;
 
 }

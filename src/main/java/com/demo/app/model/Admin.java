@@ -27,6 +27,5 @@ public class Admin implements Serializable {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "role_id")
     private Role role;
 }

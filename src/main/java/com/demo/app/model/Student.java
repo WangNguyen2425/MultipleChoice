@@ -17,7 +17,6 @@ import java.util.List;
 public class Student implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
     @Column(name = "full_name")
@@ -45,7 +44,6 @@ public class Student implements Serializable {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
