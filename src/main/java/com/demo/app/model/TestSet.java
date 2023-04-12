@@ -19,7 +19,6 @@ public class TestSet implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
     @Column(name = "test_no")
@@ -29,7 +28,6 @@ public class TestSet implements Serializable {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "test_id", referencedColumnName = "id")
     private Test test;
 
     @OneToMany(mappedBy = "testSet", cascade = CascadeType.ALL)

@@ -18,7 +18,6 @@ public class Teacher implements Serializable {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-   @Column(name = "id")
    private int id;
 
    @Column(name = "full_name")
@@ -41,7 +40,6 @@ public class Teacher implements Serializable {
    private boolean status;
 
    @ManyToOne
-   @JoinColumn(name = "role_id", referencedColumnName = "id")
    private Role role;
 
    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)

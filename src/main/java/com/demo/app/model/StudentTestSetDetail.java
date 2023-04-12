@@ -15,7 +15,6 @@ import java.io.Serializable;
 public class StudentTestSetDetail implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
     @Column(name = "mark")
@@ -25,6 +24,5 @@ public class StudentTestSetDetail implements Serializable {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "student_test_set_id", referencedColumnName = "id")
     private StudentTestSet studentTestSet;
 }

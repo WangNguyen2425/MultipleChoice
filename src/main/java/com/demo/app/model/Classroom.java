@@ -17,7 +17,6 @@ import java.util.List;
 public class Classroom implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
     @Column(name = "semester")
@@ -36,7 +35,6 @@ public class Classroom implements Serializable {
     private List<StudentClass> studentClasses;
 
     @ManyToOne
-    @JoinColumn(name = "teacher_id", referencedColumnName = "id")
     private Teacher teacher;
 
     @PrePersist

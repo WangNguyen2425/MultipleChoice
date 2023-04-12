@@ -16,7 +16,6 @@ public class TestSetDetailAnswer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
     @Column(name = "question_no")
@@ -26,10 +25,8 @@ public class TestSetDetailAnswer implements Serializable {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "answer_id", referencedColumnName = "id")
     private Answer answer;
 
     @ManyToOne
-    @JoinColumn(name = "test_set_detail_id", referencedColumnName = "id")
     private TestSetDetail testSetDetail;
 }

@@ -15,17 +15,14 @@ import java.io.Serializable;
 public class StudentSubject implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
     @Column(name = "status")
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "student_id", referencedColumnName = "id")
     private Student student;
 
     @ManyToOne
-    @JoinColumn(name = "subject_id", referencedColumnName = "id")
     private Subject subject;
 }

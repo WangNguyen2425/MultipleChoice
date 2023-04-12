@@ -25,11 +25,9 @@ public class TestSetDetail implements Serializable {
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "test_set_id", referencedColumnName = "id")
     private TestSet testSet;
 
     @ManyToOne
-    @JoinColumn(name = "question_id", referencedColumnName = "id")
     private Question question;
 
     @OneToMany(mappedBy = "testSetDetail", cascade = CascadeType.ALL)
