@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "tbl_teacher", schema = "dbo")
+@Table(name = "teacher")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -30,21 +30,18 @@ public class Teacher implements Serializable {
    @Column(name = "gender")
    private Gender gender;
 
-   @Column(name = "username")
-   private String username;
+   @Column(name = "email", unique = true)
+   private String email;
 
-   @Column(name = "password")
-   private String password;
-
-   @Column(name = "status")
-   private boolean status;
-
-   @ManyToOne
-   private Role role;
+   @Column(name = "phone_number", unique = true)
+   private String phoneNumber;
 
    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
    private List<TeacherSubject> teacherSubjects;
 
    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
-   private List<Classroom> classrooms;
+   private List<ExamClass> examClasses;
+
+   @OneToOne
+   private User user;
 }

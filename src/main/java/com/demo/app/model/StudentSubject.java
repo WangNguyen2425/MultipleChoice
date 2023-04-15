@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "tbl_student_subject", schema = "dbo")
+@Table(name = "student_subject")
 @Getter
 @Setter
 @NoArgsConstructor

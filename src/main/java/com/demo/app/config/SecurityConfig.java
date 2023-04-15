@@ -24,10 +24,7 @@ public class SecurityConfig {
 
         @Bean
         public SecurityFilterChain filterChainAdmin(HttpSecurity http) throws Exception{
-//            http.csrf().disable()
-//                .authorizeHttpRequests().requestMatchers("/admin/**").authenticated()
-//                .and()
-//                .formLogin((form) -> form.loginPage("/admin/login").loginProcessingUrl("/admin/login/check").defaultSuccessUrl("admin/home").failureUrl("admin/login?success=fail"));
+            http.csrf().disable().authorizeHttpRequests().requestMatchers("/admin/**").authenticated().and().formLogin().loginPage("/admin/login");
 
             return http.build();
         }

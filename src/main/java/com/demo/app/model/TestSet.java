@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "tbl_test_set", schema = "dbo")
+@Table(name = "test_set")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -31,8 +31,8 @@ public class TestSet implements Serializable {
     private Test test;
 
     @OneToMany(mappedBy = "testSet", cascade = CascadeType.ALL)
-    private List<TestSetDetail> testSetDetails;
+    private List<TestSetQuestion> testSetQuestions;
 
     @OneToMany(mappedBy = "testSet", cascade = CascadeType.ALL)
-    private List<StudentTestSet> studentTestSets;
+    private List<StudentTest> studentTests;
 }

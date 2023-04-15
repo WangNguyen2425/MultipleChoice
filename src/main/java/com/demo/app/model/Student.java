@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "tbl_student", schema = "dbo")
+@Table(name = "student")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,31 +29,23 @@ public class Student implements Serializable {
     @Column(name = "gender")
     private Gender gender;
 
-    @Column(name = "username")
-    private String username;
-
-    @Column(name = "password")
-    private String password;
-
     @Column(name = "join_date")
     private LocalDate joinDate;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
-    private boolean status;
-
-    @ManyToOne
-    private Role role;
+    @Column(name = "email", unique = true)
+    private String email;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<StudentSubject> studentSubjects;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private List<StudentTestSet> studentTestSets;
+    private List<StudentTest> studentTests;
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private List<StudentClass> studentClasses;
+    @OneToOne
+    private User user;
 
     @PrePersist
     private void prePersist(){

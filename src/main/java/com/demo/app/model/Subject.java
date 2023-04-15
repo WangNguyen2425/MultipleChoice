@@ -7,10 +7,9 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 @Entity
-@Table(name = "tbl_subject", schema = "dbo")
+@Table(name = "subject", schema = "dbo")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -26,11 +25,14 @@ public class Subject implements Serializable {
     private boolean status;
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
-    private Set<Question> questions;
-
-    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
     private List<TeacherSubject> teacherSubjects;
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
     private List<StudentSubject> studentSubjects;
+
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
+    private List<Chapter> chapters;
+
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
+    private List<ExamClass> examClasses;
 }

@@ -6,13 +6,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
-@Table(name = "tbl_admin", schema = "dbo")
+@Table(name = "[user]")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Admin implements Serializable {
+public class User implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -26,13 +28,18 @@ public class Admin implements Serializable {
     @Column(name = "status")
     private boolean status;
 
-    public Admin(String username, String password, boolean status, Role role) {
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserRole> userRoles;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Student student;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Teacher teacher;
+
+    public User(String username, String password, boolean status) {
         this.username = username;
         this.password = password;
         this.status = status;
-        this.role = role;
     }
-
-    @ManyToOne
-    private Role role;
 }

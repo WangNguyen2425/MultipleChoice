@@ -8,12 +8,11 @@ import lombok.Setter;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "tbl_test_detail", schema = "dbo")
+@Table(name = "student_test_detail_answer")
 @Getter
 @Setter
 @NoArgsConstructor
-public class TestDetail implements Serializable {
-
+public class StudentTestDetailAnswer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -21,10 +20,12 @@ public class TestDetail implements Serializable {
     @Column(name = "status")
     private boolean status;
 
-    @ManyToOne
-    private Test test;
+    @Column(name = "is_selected")
+    private boolean isSelected;
+
+    @Column(name = "is_corrected")
+    private boolean isCorrected;
 
     @ManyToOne
-    private Question question;
-
+    private StudentTestDetail studentTestDetail;
 }

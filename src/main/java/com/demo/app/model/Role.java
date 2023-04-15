@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "tbl_role", schema = "dbo")
+@Table(name = "role")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,20 +21,9 @@ public class Role implements Serializable {
     @Column(name = "role_name")
     private String roleName;
 
-    @Column(name = "status")
-    private boolean status;
-
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
-    private List<Admin> admins;
-
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
-    private List<Student> students;
-
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
-    private List<Teacher> teachers;
-
-    public Role(String roleName, boolean status) {
+    private List<UserRole> userRoles;
+    public Role(String roleName) {
         this.roleName = roleName;
-        this.status = status;
     }
 }

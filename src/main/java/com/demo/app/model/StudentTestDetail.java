@@ -9,25 +9,24 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "tb l_student_test_set_detail")
+@Table(name = "student_test_detail")
 @Getter
 @Setter
 @NoArgsConstructor
-public class StudentTestSetDetail implements Serializable {
+public class StudentTestDetail implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @Column(name = "question_mark")
-    private double questionMark;
-
 
     @Column(name = "status")
     private boolean status;
 
     @ManyToOne
-    private StudentTestSet studentTestSet;
+    private StudentTest studentTest;
 
-    @OneToMany(mappedBy = "studentTestSetDetail", cascade = CascadeType.ALL)
-    private List<StudentTestSetDetailAnswer> studentTestSetDetailAnswers;
+    @OneToOne
+    private TestSetQuestion testSetQuestion;
+
+    @OneToMany(mappedBy = "studentTestDetail", cascade = CascadeType.ALL)
+    private List<StudentTestDetailAnswer> studentTestDetailAnswers;
 }

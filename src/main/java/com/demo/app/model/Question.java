@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "tbl_question", schema = "dbo")
+@Table(name = "question")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -37,16 +37,16 @@ public class Question implements Serializable {
     private boolean status;
 
     @ManyToOne
-    private Subject subject;
+    private Chapter chapter;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Answer> answers;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    private List<TestSetDetail> testSetDetails;
+    private List<TestSetQuestion> testSetQuestions;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    private List<TestDetail> testDetails;
+    private List<TestQuestion> testQuestions;
 
     public enum Level{
         EASY,

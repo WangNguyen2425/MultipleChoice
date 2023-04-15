@@ -6,10 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
-@Table(name = "tbl_answer", schema = "dbo")
+@Table(name = "answer")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -30,6 +29,4 @@ public class Answer implements Serializable {
     @ManyToOne
     private Question question;
 
-    @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL)
-    private List<TestSetDetailAnswer> testSetDetailAnswers;
 }

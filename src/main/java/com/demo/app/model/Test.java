@@ -7,11 +7,10 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "tbl_test", schema = "dbo")
+@Table(name = "test")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -31,5 +30,5 @@ public class Test implements Serializable {
     private Set<TestSet> testSets;
 
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
-    private List<TestDetail> testDetails;
+    private Set<TestQuestion> testQuestions;
 }

@@ -7,14 +7,13 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
-@Table(name = "tbl_classroom", schema = "dbo")
+@Table(name = "exam_class")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Classroom implements Serializable {
+public class ExamClass implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -31,11 +30,11 @@ public class Classroom implements Serializable {
     @Column(name = "status")
     private boolean status;
 
-    @OneToMany(mappedBy = "classroom", cascade = CascadeType.ALL)
-    private List<StudentClass> studentClasses;
-
     @ManyToOne
     private Teacher teacher;
+
+    @ManyToOne
+    private Subject subject;
 
     @PrePersist
     private void prePersist(){
