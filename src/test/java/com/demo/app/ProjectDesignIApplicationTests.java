@@ -15,11 +15,6 @@ class ProjectDesignIApplicationTests {
 
     @Test
     void contextLoads() {
-        List<Object[]> userStudent = studentRepository.getUserStudentByUsername("");
-        for (Object[] us : userStudent){
-            System.out.println(us[0]);
-            System.out.println(us[1]);
-        }
     }
 
 }

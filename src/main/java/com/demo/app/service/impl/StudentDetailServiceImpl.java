@@ -20,7 +20,6 @@ public class StudentDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        List<Object[]> userStudent = studentRepository.getUserStudentByUsername(username);
 
         return null;
     }

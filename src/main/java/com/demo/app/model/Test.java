@@ -1,12 +1,12 @@
 package com.demo.app.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,9 +20,6 @@ public class Test implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "test_date")
-    private LocalDate testDate;
-
     @Column(name = "status")
     private boolean status;
 
@@ -31,4 +28,7 @@ public class Test implements Serializable {
 
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
     private Set<TestQuestion> testQuestions;
+
+    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
+    private List<ExamClass> examClasses;
 }

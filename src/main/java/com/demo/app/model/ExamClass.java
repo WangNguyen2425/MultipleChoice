@@ -1,12 +1,13 @@
 package com.demo.app.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "exam_class")
@@ -35,6 +36,12 @@ public class ExamClass implements Serializable {
 
     @ManyToOne
     private Subject subject;
+
+    @OneToMany(mappedBy = "examClass", cascade = CascadeType.ALL)
+    private List<StudentExamClass> studentExamClasses;
+
+    @ManyToOne
+    private Test test;
 
     @PrePersist
     private void prePersist(){

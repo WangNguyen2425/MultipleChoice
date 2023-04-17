@@ -1,6 +1,6 @@
 package com.demo.app.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,12 +36,11 @@ public class Teacher implements Serializable {
    @Column(name = "phone_number", unique = true)
    private String phoneNumber;
 
-   @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
-   private List<TeacherSubject> teacherSubjects;
 
    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
    private List<ExamClass> examClasses;
 
    @OneToOne
+   @JoinColumn(referencedColumnName = "id", name = "user_id")
    private User user;
 }

@@ -1,15 +1,16 @@
 package com.demo.app.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "student_test_set")
+@Table(name = "student_test")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,14 +19,18 @@ public class StudentTest implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "mark")
-    private double mark;
+    @Column(name = "test_mark")
+    private double testMark;
 
     @Column(name = "image")
-    private byte[] image;
+    @Lob
+    private String image;
 
     @Column(name = "status")
     private boolean status;
+
+    @Column(name = "test_date")
+    private LocalDate testDate;
 
     @ManyToOne
     private Student student;

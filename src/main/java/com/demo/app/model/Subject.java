@@ -1,6 +1,6 @@
 package com.demo.app.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,12 +23,6 @@ public class Subject implements Serializable {
 
     @Column(name = "status")
     private boolean status;
-
-    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
-    private List<TeacherSubject> teacherSubjects;
-
-    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
-    private List<StudentSubject> studentSubjects;
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
     private List<Chapter> chapters;

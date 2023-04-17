@@ -1,6 +1,6 @@
 package com.demo.app.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,12 +21,17 @@ public class StudentTestDetail implements Serializable {
     @Column(name = "status")
     private boolean status;
 
+    @Column(name = "question_mark")
+    private double questionMark;
+
+    @Column(name = "selected_answer")
+    private String selectedAnswer;
+
     @ManyToOne
     private StudentTest studentTest;
 
     @OneToOne
     private TestSetQuestion testSetQuestion;
 
-    @OneToMany(mappedBy = "studentTestDetail", cascade = CascadeType.ALL)
-    private List<StudentTestDetailAnswer> studentTestDetailAnswers;
+
 }
