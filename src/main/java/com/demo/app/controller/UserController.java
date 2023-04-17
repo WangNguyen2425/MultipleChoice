@@ -2,14 +2,16 @@ package com.demo.app.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class MainController {
+@RequestMapping("/user")
+public class UserController {
 
     @GetMapping("/login")
     public ModelAndView adminLogin(){
-        ModelAndView mav = new ModelAndView("student-login");
+        ModelAndView mav = new ModelAndView("user-login");
         return mav;
     }
 }

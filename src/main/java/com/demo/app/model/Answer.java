@@ -20,7 +20,7 @@ public class Answer implements Serializable {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "is_corrected", columnDefinition = "BIT(1) DEFAULT 0")
+    @Column(name = "is_corrected")
     private boolean isCorrected;
 
     @Column(name = "status")
