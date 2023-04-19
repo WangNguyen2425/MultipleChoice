@@ -25,11 +25,11 @@ public class SecurityConfig {
         protected void configure(HttpSecurity http) throws Exception {
             http
                     .antMatcher("/user/**").authorizeHttpRequests()
-                    .antMatchers("/static/**").permitAll()
+                    .antMatchers("/static/**" , "/user/login").permitAll()
                     .antMatchers("/user/**").hasAnyRole("ROLE_ADMIN", "ROLE_STUDENT")
                     .anyRequest().authenticated()
                     .and()
-                    .formLogin().loginPage("/login")
+                    .formLogin().loginPage("/user/login")
                     .loginProcessingUrl("/user/login/check")
                     .failureUrl("/user/login?error=true")
                     .and()

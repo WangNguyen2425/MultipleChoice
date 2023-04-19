@@ -20,10 +20,10 @@ public class StudentTestDetail implements Serializable {
     @Column(name = "status")
     private boolean status;
 
-    @Column(name = "question_mark")
+    @Column(name = "question_mark", precision = 2, scale = 1)
     private double questionMark;
 
-    @Column(name = "selected_answer")
+    @Column(name = "selected_answer", columnDefinition = "varchar(4)")
     private String selectedAnswer;
 
     @ManyToOne

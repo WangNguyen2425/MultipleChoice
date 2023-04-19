@@ -10,7 +10,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "student")
+@Table(name = "student", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"email"}, name = "uni_email"),
+        @UniqueConstraint(columnNames = {"phone_number"}, name = "uni_phone_number")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -32,10 +35,10 @@ public class Student implements Serializable {
     @Column(name = "join_date")
     private LocalDate joinDate;
 
-    @Column(name = "phone_number", unique = true)
+    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email")
     private String email;
 
 

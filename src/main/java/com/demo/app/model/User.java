@@ -9,7 +9,9 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "[user]")
+@Table(name = "[user]", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username", name = "uni_username")
+})
 @Getter
 @Setter
 @NoArgsConstructor

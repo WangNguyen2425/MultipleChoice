@@ -10,7 +10,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "teacher")
+@Table(name = "teacher", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "email", name = "uni_email"),
+        @UniqueConstraint(columnNames = "phone_number", name = "uni_phone_number")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -27,7 +30,7 @@ public class Teacher implements Serializable {
    private LocalDate birthday;
 
    @Enumerated(EnumType.STRING)
-   @Column(name = "gender")
+   @Column(name = "gender", length = 10)
    private Gender gender;
 
    @Column(name = "email", unique = true)
