@@ -23,8 +23,10 @@ public class LoadDatabase implements CommandLineRunner {
         List<Role> roles = roleRepository.findAll();
         if (roles.size() == 0) {
             roleRepository.save(new Role("ROLE_ADMIN"));
+            roleRepository.save(new Role("ROLE_PRINCIPAL"));
             roleRepository.save(new Role("ROLE_TEACHER"));
             roleRepository.save(new Role("ROLE_STUDENT"));
+            roleRepository.save(new Role("ROLE_USER"));
         }
     }
 }

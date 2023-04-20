@@ -1,47 +1,53 @@
 package com.demo.app.config;
 
+import com.demo.app.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+@AllArgsConstructor
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final PasswordEncoder passwordEncoder;
+    private final UserService userServiceImpl;
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .authorizeHttpRequests()
+                .antMatchers("/api/v*/user/signup").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin().loginPage("/api/v*/user/login")
+                .and()
+                .logout().logoutUrl("/api/v*/user/logout")
+                .deleteCookies("JSESSIONID")
+                .clearAuthentication(true)
+                .invalidateHttpSession(true)
+                .and()
+        ;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(daoAuthenticationProvider());
+    }
 
     @Bean
-    public static PasswordEncoder passwordEncode() {
-        return new BCryptPasswordEncoder(15);
+    public DaoAuthenticationProvider daoAuthenticationProvider(){
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder.passwordEncode());
+        provider.setUserDetailsService((UserDetailsService) userServiceImpl);
+        return provider;
     }
 
-    @Order(1)
-    @Configuration
-    public static class UserSecurityConfig extends WebSecurityConfigurerAdapter {
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http
-                    .antMatcher("/user/**").authorizeHttpRequests()
-                    .antMatchers("/static/**" , "/user/login").permitAll()
-                    .antMatchers("/user/**").hasAnyRole("ROLE_ADMIN", "ROLE_STUDENT")
-                    .anyRequest().authenticated()
-                    .and()
-                    .formLogin().loginPage("/user/login")
-                    .loginProcessingUrl("/user/login/check")
-                    .failureUrl("/user/login?error=true")
-                    .and()
-                    .logout().logoutUrl("/user/logout")
-                    .deleteCookies("JSESSIONID")
-                    .clearAuthentication(true)
-                    .invalidateHttpSession(true)
-                    .and()
-                    .csrf().disable();
-
-        }
-
-
-    }
 }

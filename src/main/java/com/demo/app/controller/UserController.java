@@ -1,17 +1,19 @@
 package com.demo.app.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
+import com.demo.app.dto.UserDto;
+import com.demo.app.service.UserService;
+import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("/user")
+@RestController
+@RequestMapping(path = "api/v1/user")
+@AllArgsConstructor
 public class UserController {
 
-    @GetMapping("/login")
-    public ModelAndView adminLogin(){
-        ModelAndView mav = new ModelAndView("user-login");
-        return mav;
+    private final UserService userService;
+
+    @PostMapping("/signup")
+    public String userSignUp(@RequestBody UserDto request){
+        return "";
     }
 }
