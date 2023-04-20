@@ -3,13 +3,14 @@ package com.demo.app.dto;
 import lombok.*;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class UserDto {
+public class RegisterDto {
 
-    private final String username;
+    private String username;
 
-    private final String password;
+    private String password;
 
 }
