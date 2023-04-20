@@ -26,8 +26,12 @@ public class Test implements Serializable {
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
     private Set<TestSet> testSets;
 
-    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
-    private Set<TestQuestion> testQuestions;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "test_question",
+            joinColumns = @JoinColumn(name = "test_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "question_id", referencedColumnName = "id")
+    )
+    private Set<Question> questions;
 
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
     private List<ExamClass> examClasses;

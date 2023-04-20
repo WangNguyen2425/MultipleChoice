@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "exam_class")
@@ -37,8 +37,11 @@ public class ExamClass implements Serializable {
     @ManyToOne
     private Subject subject;
 
-    @OneToMany(mappedBy = "examClass", cascade = CascadeType.ALL)
-    private List<StudentExamClass> studentExamClasses;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "student_exam_class",
+            joinColumns = @JoinColumn(name = "exam_class_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
+    private Set<Student> students;
 
     @ManyToOne
     private Test test;

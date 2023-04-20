@@ -1,10 +1,12 @@
 package com.demo.app.service.impl;
 
+import com.demo.app.config.PasswordEncoder;
+import com.demo.app.dto.UserDto;
 import com.demo.app.model.User;
 import com.demo.app.repository.UserRepository;
 import com.demo.app.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,14 +21,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
+
     private static final String USER_NOT_FOUND_MSG = "User with username: %s not found !";
 
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
-    public <S extends User> S save(S entity) {
-        return userRepository.save(entity);
+    @Override
+    public User saveUser(UserDto userDto) {
+        User user = modelMapper.map(userDto, User.class);
+        user.setPassword(passwordEncoder.passwordEncode().encode(userDto.getPassword()));
+
+        return userRepository.save(user);
     }
 
     public Optional<User> findById(Integer integer) {

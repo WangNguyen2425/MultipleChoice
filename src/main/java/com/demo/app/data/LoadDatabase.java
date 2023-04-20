@@ -28,5 +28,6 @@ public class LoadDatabase implements CommandLineRunner {
             roleRepository.save(new Role("ROLE_STUDENT"));
             roleRepository.save(new Role("ROLE_USER"));
         }
+
     }
 }

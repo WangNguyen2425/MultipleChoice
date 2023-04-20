@@ -4,8 +4,10 @@ import com.demo.app.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -24,10 +26,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .antMatchers("/api/v*/user/signup").permitAll()
+                .antMatchers("/api/v*/auth/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/api/v*/user/login")
+                .formLogin() //.loginPage("/api/v*/auth/login") - Custom login page
                 .and()
                 .logout().logoutUrl("/api/v*/user/logout")
                 .deleteCookies("JSESSIONID")
@@ -48,6 +50,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         provider.setPasswordEncoder(passwordEncoder.passwordEncode());
         provider.setUserDetailsService((UserDetailsService) userServiceImpl);
         return provider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
+        return configuration.getAuthenticationManager();
     }
 
 }

@@ -49,8 +49,6 @@ public class Student implements Serializable {
     @JoinColumn(referencedColumnName = "id", name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private List<StudentExamClass> studentExamClasses;
 
     @PrePersist
     private void prePersist(){

@@ -42,12 +42,6 @@ public class Question implements Serializable {
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Answer> answers;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    private List<TestSetQuestion> testSetQuestions;
-
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    private List<TestQuestion> testQuestions;
-
     public enum Level{
         EASY,
         NORMAL,
