@@ -10,7 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.util.Collections;
+import java.util.List;
 
 @Component
 @AllArgsConstructor
@@ -35,10 +35,10 @@ public class LoadDatabase implements CommandLineRunner {
 
         if(!userRepository.existsByUsername("admin")){
             User user = new User();
-            Role role = roleRepository.findByRoleName("ROLE_ADMIN").orElse(new Role());
+            List<Role> roles = roleRepository.findAll();
             user.setUsername("admin");
             user.setPassword(passwordEncoder.passwordEncode().encode("admin"));
-            user.setRoles(Collections.singleton(role));
+            user.setRoles(roles);
             userRepository.save(user);
         }
 

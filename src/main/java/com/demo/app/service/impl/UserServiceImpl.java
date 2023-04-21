@@ -1,7 +1,7 @@
 package com.demo.app.service.impl;
 
 import com.demo.app.config.PasswordEncoder;
-import com.demo.app.dto.RegisterDto;
+import com.demo.app.dto.UserDto;
 import com.demo.app.model.Role;
 import com.demo.app.model.User;
 import com.demo.app.repository.RoleRepository;
@@ -39,12 +39,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User saveUser(RegisterDto userDto) {
+    public User saveUser(UserDto userDto) {
         User user = modelMapper.map(userDto, User.class);
         user.setPassword(passwordEncoder.passwordEncode().encode(userDto.getPassword()));
 
         Role role = roleRepository.findByRoleName("ROLE_USER").get();
-        user.setRoles(Collections.singleton(role));
+        user.setRoles(Collections.singletonList(role));
         return userRepository.save(user);
     }
 
