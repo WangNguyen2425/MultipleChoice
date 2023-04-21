@@ -1,32 +1,45 @@
 package com.demo.app.data;
 
+import com.demo.app.config.PasswordEncoder;
 import com.demo.app.model.Role;
+import com.demo.app.model.User;
 import com.demo.app.repository.RoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.demo.app.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import javax.transaction.Transactional;
+import java.util.Collections;
 
 @Component
+@AllArgsConstructor
 public class LoadDatabase implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
 
-    @Autowired
-    public LoadDatabase(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
+    private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
     @Override
+    @Transactional
     public void run(String... args) {
-        List<Role> roles = roleRepository.findAll();
-        if (roles.size() == 0) {
+        long roleCount = roleRepository.count();
+        if (roleCount == 0) {
             roleRepository.save(new Role("ROLE_ADMIN"));
             roleRepository.save(new Role("ROLE_PRINCIPAL"));
             roleRepository.save(new Role("ROLE_TEACHER"));
             roleRepository.save(new Role("ROLE_STUDENT"));
             roleRepository.save(new Role("ROLE_USER"));
+        }
+
+        if(!userRepository.existsByUsername("admin")){
+            User user = new User();
+            Role role = roleRepository.findByRoleName("ROLE_ADMIN").orElse(new Role());
+            user.setUsername("admin");
+            user.setPassword(passwordEncoder.passwordEncode().encode("admin"));
+            user.setRoles(Collections.singleton(role));
+            userRepository.save(user);
         }
 
     }

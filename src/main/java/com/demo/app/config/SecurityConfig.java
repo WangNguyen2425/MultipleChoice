@@ -29,9 +29,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests()
                 .antMatchers(HttpMethod.GET,"/api/v*/**").permitAll()
                 .antMatchers("/api/v*/auth/**").permitAll()
+                .antMatchers("/api/v*/admin/**").hasRole("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()
-                .formLogin() //.loginPage("/api/v*/auth/login") - Custom login page
+                .formLogin()//.loginPage("/api/v*/auth/login") //- Custom login page
                 .and()
                 .logout().logoutUrl("/api/v*/user/logout")
                 .deleteCookies("JSESSIONID")
