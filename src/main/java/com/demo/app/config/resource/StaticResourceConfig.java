@@ -1,4 +1,4 @@
-package com.demo.app.config;
+package com.demo.app.config.resource;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;

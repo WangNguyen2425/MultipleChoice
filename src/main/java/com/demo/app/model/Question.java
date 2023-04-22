@@ -42,14 +42,14 @@ public class Question implements Serializable {
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Answer> answers;
 
-    public enum Level{
+    public enum Level {
         EASY,
         NORMAL,
         DIFFICULT
     }
 
     @PrePersist
-    private void prePersist(){
+    private void prePersist() {
         createdDate = LocalDate.now();
     }
 }

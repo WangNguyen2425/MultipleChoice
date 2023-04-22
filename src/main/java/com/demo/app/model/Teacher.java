@@ -1,6 +1,7 @@
 package com.demo.app.model;
 
 import javax.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,31 +20,30 @@ import java.util.List;
 @NoArgsConstructor
 public class Teacher implements Serializable {
 
-   @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-   @Column(name = "full_name")
-   private String fullName;
+    @Column(name = "full_name")
+    private String fullName;
 
-   @Column(name = "birthday")
-   private LocalDate birthday;
+    @Column(name = "birthday")
+    private LocalDate birthday;
 
-   @Enumerated(EnumType.STRING)
-   @Column(name = "gender", length = 10)
-   private Gender gender;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender", length = 10)
+    private Gender gender;
 
-   @Column(name = "email", unique = true)
-   private String email;
+    @Column(name = "email")
+    private String email;
 
-   @Column(name = "phone_number", unique = true)
-   private String phoneNumber;
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+    private List<ExamClass> examClasses;
 
-   @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
-   private List<ExamClass> examClasses;
-
-   @OneToOne
-   @JoinColumn(referencedColumnName = "id", name = "user_id")
-   private User user;
+    @OneToOne
+    @JoinColumn(referencedColumnName = "id", name = "user_id")
+    private User user;
 }

@@ -33,7 +33,7 @@ public class User implements Serializable, UserDetails {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "status")
+    @Column(name = "status", columnDefinition = "default 1")
     private boolean status;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
@@ -53,7 +53,7 @@ public class User implements Serializable, UserDetails {
         return this
                 .getRoles()
                 .stream()
-                .map((role -> new SimpleGrantedAuthority(role.getRoleName()))).collect(Collectors.toSet());
+                .map((role -> new SimpleGrantedAuthority(role.getRoleName().toString()))).collect(Collectors.toSet());
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.demo.app.controller;
 
-import com.demo.app.dto.UserDto;
+import com.demo.app.dto.SignInAndUpDto;
 import com.demo.app.model.User;
 import com.demo.app.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -15,14 +15,14 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping(path = "/api/v1/")
 @AllArgsConstructor
-public class UserRestController {
+public class AuthController {
 
     private final UserService userService;
 
     private final AuthenticationManager authenticationManager;
 
     @PostMapping(path = "/auth/signin")
-    public ResponseEntity<String> authenticateUser(@RequestBody final UserDto userLogin) {
+    public ResponseEntity<String> authenticateUser(@RequestBody final SignInAndUpDto userLogin) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 userLogin.getUsername(),
                 userLogin.getPassword()
@@ -33,7 +33,7 @@ public class UserRestController {
 
 
     @PostMapping(path = "/auth/signup")
-    public ResponseEntity<?> registerUser(@RequestBody final UserDto userRegister) {
+    public ResponseEntity<?> registerUser(@RequestBody final SignInAndUpDto userRegister) {
         if (userService.existsByUsername(userRegister.getUsername())) {
             return new ResponseEntity<>("Username already taken !", HttpStatus.BAD_REQUEST);
         }

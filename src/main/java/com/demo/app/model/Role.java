@@ -20,10 +20,19 @@ public class Role implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "role_name", length = 60)
-    private String roleName;
+    @Column(name = "role_name", length = 20)
+    @Enumerated(EnumType.STRING)
+    private RoleType roleName;
 
-    public Role(String roleName) {
+    public enum RoleType{
+        ROLE_ADMIN,
+        ROLE_PRINCIPAL,
+        ROLE_TEACHER,
+        ROLE_STUDENT,
+        ROLE_USER
+    }
+
+    public Role(RoleType roleName) {
         this.roleName = roleName;
     }
 }

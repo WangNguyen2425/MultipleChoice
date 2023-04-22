@@ -1,7 +1,7 @@
 package com.demo.app.service.impl;
 
-import com.demo.app.config.PasswordEncoder;
-import com.demo.app.dto.UserDto;
+import com.demo.app.config.security.PasswordEncoder;
+import com.demo.app.dto.SignInAndUpDto;
 import com.demo.app.model.Role;
 import com.demo.app.model.User;
 import com.demo.app.repository.RoleRepository;
@@ -21,10 +21,13 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
+
     private final UserRepository userRepository;
 
     private final RoleRepository roleRepository;
+
     private final PasswordEncoder passwordEncoder;
+
     private final ModelMapper modelMapper;
 
     private static final String USER_NOT_FOUND_MSG = "User with username: %s not found !";
@@ -39,9 +42,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User saveUser(UserDto userDto) {
-        User user = modelMapper.map(userDto, User.class);
-        user.setPassword(passwordEncoder.passwordEncode().encode(userDto.getPassword()));
+    public User saveUser(SignInAndUpDto requestDto) {
+        User user = modelMapper.map(requestDto, User.class);
+        user.setPassword(passwordEncoder.passwordEncode().encode(requestDto.getPassword()));
 
         Role role = roleRepository.findByRoleName("ROLE_USER").get();
         user.setRoles(Collections.singletonList(role));

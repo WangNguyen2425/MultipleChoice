@@ -1,6 +1,7 @@
 package com.demo.app.model;
 
 import javax.persistence.*;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

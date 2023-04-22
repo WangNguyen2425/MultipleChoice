@@ -1,6 +1,7 @@
 package com.demo.app.model;
 
 import javax.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -47,7 +48,7 @@ public class ExamClass implements Serializable {
     private Test test;
 
     @PrePersist
-    private void prePersist(){
+    private void prePersist() {
         createdDate = LocalDate.now();
     }
 

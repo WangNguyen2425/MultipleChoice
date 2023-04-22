@@ -1,6 +1,6 @@
 package com.demo.app.data;
 
-import com.demo.app.config.PasswordEncoder;
+import com.demo.app.config.security.PasswordEncoder;
 import com.demo.app.model.Role;
 import com.demo.app.model.User;
 import com.demo.app.repository.RoleRepository;
@@ -21,19 +21,20 @@ public class LoadDatabase implements CommandLineRunner {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
+
     @Override
     @Transactional
     public void run(String... args) {
         long roleCount = roleRepository.count();
         if (roleCount == 0) {
-            roleRepository.save(new Role("ROLE_ADMIN"));
-            roleRepository.save(new Role("ROLE_PRINCIPAL"));
-            roleRepository.save(new Role("ROLE_TEACHER"));
-            roleRepository.save(new Role("ROLE_STUDENT"));
-            roleRepository.save(new Role("ROLE_USER"));
+            roleRepository.save(new Role(Role.RoleType.ROLE_ADMIN));
+            roleRepository.save(new Role(Role.RoleType.ROLE_PRINCIPAL));
+            roleRepository.save(new Role(Role.RoleType.ROLE_TEACHER));
+            roleRepository.save(new Role(Role.RoleType.ROLE_STUDENT));
+            roleRepository.save(new Role(Role.RoleType.ROLE_USER));
         }
 
-        if(!userRepository.existsByUsername("admin")){
+        if (!userRepository.existsByUsername("admin")) {
             User user = new User();
             List<Role> roles = roleRepository.findAll();
             user.setUsername("admin");
