@@ -1,5 +1,6 @@
 package com.demo.app.service.impl;
 
+import com.demo.app.config.security.PasswordEncoder;
 import com.demo.app.model.Role;
 import com.demo.app.model.Student;
 import com.demo.app.model.User;
@@ -27,23 +28,26 @@ public class StudentServiceImpl implements StudentService {
 
     private final RoleRepository roleRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Override
     public void saveStudentsExcelFile(MultipartFile file) throws IOException {
         Map<User, Student> userStudents = ExcelUtils.excelFileToUserStudents(file);
-        Role roleUser = roleRepository.findByRoleName(Role.RoleType.ROLE_USER.toString()).get();
-        Role roleStudent = roleRepository.findByRoleName(Role.RoleType.ROLE_STUDENT.toString()).get();
+        Role roleUser = roleRepository.findByRoleName(Role.RoleType.ROLE_USER).get();
+        Role roleStudent = roleRepository.findByRoleName(Role.RoleType.ROLE_STUDENT).get();
         List<Role> roles = new ArrayList<>();
         roles.add(roleUser);
         roles.add(roleStudent);
 
         userStudents.forEach((user, student) -> {
             user.setRoles(roles);
-
+            String encodePassword = passwordEncoder.passwordEncode().encode(user.getPassword());
+            user.setPassword(encodePassword);
             student.setUser(user);
         });
-
-        studentRepository.saveAll(userStudents.values());
         userRepository.saveAll(userStudents.keySet());
+        studentRepository.saveAll(userStudents.values());
+
 
     }
 
