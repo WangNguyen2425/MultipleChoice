@@ -33,8 +33,8 @@ public class User implements Serializable, UserDetails {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "status", columnDefinition = "default 1")
-    private boolean status;
+    @Column(name = "status")
+    private boolean status = true;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Student student;

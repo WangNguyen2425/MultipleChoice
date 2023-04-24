@@ -34,7 +34,7 @@ public class Question implements Serializable {
     private LocalDate createdDate;
 
     @Column(name = "status")
-    private boolean status;
+    private boolean status = true;
 
     @ManyToOne
     private Chapter chapter;

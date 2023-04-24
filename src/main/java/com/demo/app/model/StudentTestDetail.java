@@ -19,7 +19,7 @@ public class StudentTestDetail implements Serializable {
     private int id;
 
     @Column(name = "status")
-    private boolean status;
+    private boolean status = true;
 
     @Column(name = "question_mark", precision = 2, scale = 1)
     private double questionMark;

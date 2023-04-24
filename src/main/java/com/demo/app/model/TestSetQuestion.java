@@ -23,7 +23,7 @@ public class TestSetQuestion implements Serializable {
     private int questionNo;
 
     @Column(name = "status")
-    private boolean status;
+    private boolean status = true;
 
     @ManyToOne
     private TestSet testSet;

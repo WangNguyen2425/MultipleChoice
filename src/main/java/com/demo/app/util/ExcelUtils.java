@@ -33,6 +33,7 @@ public class ExcelUtils {
     private static final int COLUMN_INDEX_PHONE_NUMBER = 6;
 
     private static final int COLUMN_INDEX_EMAIL = 7;
+
     public static boolean hasExcelFormat(MultipartFile file) {
         return Objects.equals(file.getContentType(), TYPE);
     }
@@ -41,6 +42,7 @@ public class ExcelUtils {
 
         try (InputStream inputStream = file.getInputStream();
              Workbook workbook = new XSSFWorkbook(inputStream)) {
+
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> rows = sheet.iterator();
             Map<User, Student> userStudents = new HashMap<>();
@@ -60,7 +62,7 @@ public class ExcelUtils {
                         continue;
                     }
                     int columnIndex = cell.getColumnIndex();
-                    switch (columnIndex){
+                    switch (columnIndex) {
                         case COLUMN_INDEX_USERNAME:
                             user.setUsername(value.toString());
                             break;

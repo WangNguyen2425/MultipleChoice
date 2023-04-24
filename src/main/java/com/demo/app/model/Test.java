@@ -22,7 +22,7 @@ public class Test implements Serializable {
     private int id;
 
     @Column(name = "status")
-    private boolean status;
+    private boolean status = true;
 
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
     private Set<TestSet> testSets;

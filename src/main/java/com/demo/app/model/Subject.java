@@ -23,7 +23,7 @@ public class Subject implements Serializable {
     private String title;
 
     @Column(name = "status")
-    private boolean status;
+    private boolean status = true;
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
     private List<Chapter> chapters;

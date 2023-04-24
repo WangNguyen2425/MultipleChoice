@@ -26,7 +26,7 @@ public class Chapter implements Serializable {
     private int chapterNo;
 
     @Column(name = "status")
-    private boolean status;
+    private boolean status = true;
 
     @ManyToOne
     private Subject subject;

@@ -30,7 +30,7 @@ public class ExamClass implements Serializable {
     private LocalDate createdDate;
 
     @Column(name = "status")
-    private boolean status;
+    private boolean status = true;
 
     @ManyToOne
     private Teacher teacher;

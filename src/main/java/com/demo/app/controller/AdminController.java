@@ -1,7 +1,9 @@
 package com.demo.app.controller;
 
 import com.demo.app.dto.ResponseMessage;
+import com.demo.app.dto.StudentDto;
 import com.demo.app.service.StudentService;
+import com.demo.app.service.UserService;
 import com.demo.app.util.ExcelUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,26 +21,37 @@ public class AdminController {
 
     private final StudentService studentService;
 
+    private final UserService userService;
+
     @GetMapping(path = "/students/import")
     public ResponseEntity<?> importExcelFile(@RequestBody MultipartFile file){
-        String message;
+
         if (ExcelUtils.hasExcelFormat(file)){
             try {
                 studentService.saveStudentsExcelFile(file);
-                message = "Uploaded the file successfully: " + file.getOriginalFilename();
+                String message = "Uploaded the file successfully: " + file.getOriginalFilename();
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
             } catch (IOException e){
-                message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+                String message = "Could not upload the file: " + file.getOriginalFilename() + "!";
                 return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
             } catch (Exception e){
                 e.printStackTrace();
-                message = "Could not read the file: " + file.getOriginalFilename() + "!";
+                String message = "Could not read the file: " + file.getOriginalFilename() + "!";
                 return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
             }
         }
-        message = "Please upload an excel file!";
+        String message = "Please upload an excel file!";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message));
     }
 
+    @PostMapping(path = "/student/add")
+    public ResponseEntity<?> addNewStudent(@RequestBody StudentDto studentDto){
+        if (userService.existsByUsername(studentDto.getUsername())){
+            String message = "Username already taken !";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message));
+        }
+        studentService.saveStudent(studentDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }

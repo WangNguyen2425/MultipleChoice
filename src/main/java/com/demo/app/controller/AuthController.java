@@ -1,5 +1,6 @@
 package com.demo.app.controller;
 
+import com.demo.app.dto.ResponseMessage;
 import com.demo.app.dto.SignInAndUpDto;
 import com.demo.app.model.User;
 import com.demo.app.service.UserService;
@@ -22,23 +23,26 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping(path = "/auth/signin")
-    public ResponseEntity<String> authenticateUser(@RequestBody final SignInAndUpDto userLogin) {
+    public ResponseEntity<?> authenticateUser(@RequestBody final SignInAndUpDto userLogin) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 userLogin.getUsername(),
                 userLogin.getPassword()
         ));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new ResponseEntity<>("User signed-in successfully !", HttpStatus.OK);
+        String message = "User signed-in successfully !";
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
     }
 
 
     @PostMapping(path = "/auth/signup")
     public ResponseEntity<?> registerUser(@RequestBody final SignInAndUpDto userRegister) {
         if (userService.existsByUsername(userRegister.getUsername())) {
-            return new ResponseEntity<>("Username already taken !", HttpStatus.BAD_REQUEST);
+            String message = "Username already taken !";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message));
         }
         User user = userService.saveUser(userRegister);
-        return new ResponseEntity<>("User " + user.getUsername() + " registered successfully", HttpStatus.OK);
+        String message = String.format("User %s register successfully !", user.getUsername());
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
     }
 
 
