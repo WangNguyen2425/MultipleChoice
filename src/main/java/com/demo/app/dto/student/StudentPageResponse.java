@@ -1,4 +1,4 @@
-package com.demo.app.dto;
+package com.demo.app.dto.student;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class StudentPageResponse {
 
-    private List<StudentDto> studentDtos;
+    private List<StudentResponse> studentDtos;
 
     private int pageNo;
 

@@ -1,7 +1,9 @@
 package com.demo.app.service.impl;
 
 import com.demo.app.config.security.PasswordEncoder;
-import com.demo.app.dto.TeacherDto;
+import com.demo.app.dto.teacher.TeacherRequest;
+import com.demo.app.dto.teacher.TeacherResponse;
+import com.demo.app.exception.UsernameExistException;
 import com.demo.app.model.Role;
 import com.demo.app.model.Teacher;
 import com.demo.app.model.User;
@@ -33,7 +35,10 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     @Transactional
-    public void saveTeacher(TeacherDto teacherDto) {
+    public void saveTeacher(TeacherRequest request) throws UsernameExistException {
+        if (userRepository.existsByUsername(request.getUsername())){
+            throw new UsernameExistException("Username already taken !");
+        }
 
         Role userRole = roleRepository.findByRoleName(Role.RoleType.ROLE_USER).get();
         Role teacherRole = roleRepository.findByRoleName(Role.RoleType.ROLE_TEACHER).get();
@@ -42,16 +47,28 @@ public class TeacherServiceImpl implements TeacherService {
         roles.add(teacherRole);
 
         User user = new User();
-        user.setUsername(teacherDto.getUsername());
-        String encodePassword = passwordEncoder.passwordEncode().encode(teacherDto.getPassword());
+        user.setUsername(request.getUsername());
+        String encodePassword = passwordEncoder.passwordEncode().encode(request.getPassword());
         user.setPassword(encodePassword);
         user.setRoles(roles);
 
-        Teacher teacher = modelMapper.map(teacherDto, Teacher.class);
+        Teacher teacher = modelMapper.map(request, Teacher.class);
         teacher.setUser(user);
 
         userRepository.save(user);
         teacherRepository.save(teacher);
 
+    }
+
+    @Override
+    public List<TeacherResponse> getAllTeacher(){
+        List<Teacher> teachers = teacherRepository.findAll();
+        List<TeacherResponse> teacherResponses = new ArrayList<>();
+        teachers.forEach(teacher -> {
+            TeacherResponse teacherResponse = modelMapper.map(teacher, TeacherResponse.class);
+            teacherResponse.setUsername(teacher.getUser().getUsername());
+            teacherResponses.add(teacherResponse);
+        });
+        return teacherResponses;
     }
 }

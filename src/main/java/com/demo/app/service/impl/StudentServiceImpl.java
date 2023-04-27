@@ -1,8 +1,11 @@
 package com.demo.app.service.impl;
 
 import com.demo.app.config.security.PasswordEncoder;
-import com.demo.app.dto.StudentDto;
-import com.demo.app.dto.StudentPageResponse;
+import com.demo.app.dto.student.StudentRequest;
+import com.demo.app.dto.student.StudentPageResponse;
+import com.demo.app.dto.student.StudentResponse;
+import com.demo.app.exception.StudentNotFoundException;
+import com.demo.app.exception.UsernameExistException;
 import com.demo.app.model.Role;
 import com.demo.app.model.Student;
 import com.demo.app.model.User;
@@ -25,6 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,16 +62,19 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public void saveStudent(StudentDto studentDto){
+    public void saveStudent(StudentRequest request) throws UsernameExistException {
+        if (userRepository.existsByUsername(request.getUsername())){
+            throw new UsernameExistException("Username already taken !");
+        }
         List<Role> roles = getRoleUserAndStudent();
 
         User user = new User();
-        user.setUsername(studentDto.getUsername());
-        user.setPassword(passwordEncoder.passwordEncode().encode(studentDto.getPassword()));
+        user.setUsername(request.getUsername());
+        user.setPassword(passwordEncoder.passwordEncode().encode(request.getPassword()));
         user.setRoles(roles);
         user = userRepository.save(user);
 
-        Student student = modelMapper.map(studentDto, Student.class);
+        Student student = modelMapper.map(request, Student.class);
         student.setUser(user);
         studentRepository.save(student);
     }
@@ -77,10 +84,10 @@ public class StudentServiceImpl implements StudentService {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<Student> students = studentRepository.findAll(pageable);
-        List<StudentDto> studentDtos = students.stream().map(student -> new ModelMapper().map(student, StudentDto.class)).collect(Collectors.toList());
+        List<StudentResponse> studentResponses = students.stream().map(student -> modelMapper.map(student, StudentResponse.class)).collect(Collectors.toList());
 
         StudentPageResponse response = new StudentPageResponse();
-        response.setStudentDtos(studentDtos);
+        response.setStudentDtos(studentResponses);
         response.setPageNo(students.getNumber());
         response.setPageSize(students.getSize());
         response.setTotalElements(students.getTotalElements());
@@ -88,6 +95,29 @@ public class StudentServiceImpl implements StudentService {
         response.setFirst(students.isFirst());
         response.setLast(students.isLast());
         return response;
+    }
+
+    @Override
+    public List<StudentResponse> getAllStudents(){
+        List<Student> students = studentRepository.findAll();
+        List<StudentResponse> studentResponses = new ArrayList<>();
+        students.forEach(student -> {
+            StudentResponse studentResponse = modelMapper.map(student, StudentResponse.class);
+            studentResponse.setUsername(student.getUser().getUsername());
+            studentResponses.add(studentResponse);
+        });
+        return studentResponses;
+    }
+
+    @Override
+    public void updateStudent(int studentId, StudentRequest request) throws StudentNotFoundException {
+        Optional<Student> optionalStudent = studentRepository.findById(studentId);
+        if (optionalStudent.isEmpty()){
+            throw new StudentNotFoundException(String.format("Student %s not found !", request.getUsername()));
+        }
+        Student student = modelMapper.map(request, Student.class);
+        student.setId(optionalStudent.get().getId());
+        studentRepository.save(student);
     }
 
     private List<Role> getRoleUserAndStudent(){

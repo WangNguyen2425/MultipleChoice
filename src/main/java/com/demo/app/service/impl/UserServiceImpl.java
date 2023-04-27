@@ -1,7 +1,8 @@
 package com.demo.app.service.impl;
 
 import com.demo.app.config.security.PasswordEncoder;
-import com.demo.app.dto.SignInAndUpDto;
+import com.demo.app.dto.user.SignInAndUpDto;
+import com.demo.app.exception.UsernameExistException;
 import com.demo.app.model.Role;
 import com.demo.app.model.User;
 import com.demo.app.repository.RoleRepository;
@@ -15,8 +16,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -32,27 +31,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private static final String USER_NOT_FOUND_MSG = "User with username: %s not found !";
 
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
-
     @Override
-    public Boolean existsByUsername(String username) {
-        return userRepository.existsByUsername(username);
-    }
-
-    @Override
-    public User saveUser(SignInAndUpDto requestDto) {
-        User user = modelMapper.map(requestDto, User.class);
-        user.setPassword(passwordEncoder.passwordEncode().encode(requestDto.getPassword()));
+    public User saveUser(SignInAndUpDto request) throws UsernameExistException {
+        if (userRepository.existsByUsername(request.getUsername())){
+            throw new UsernameExistException("Username already taken !");
+        }
+        User user = modelMapper.map(request, User.class);
+        user.setPassword(passwordEncoder.passwordEncode().encode(request.getPassword()));
 
         Role role = roleRepository.findByRoleName(Role.RoleType.ROLE_USER).get();
         user.setRoles(Collections.singletonList(role));
         return userRepository.save(user);
-    }
-
-    public Optional<User> findById(Integer integer) {
-        return userRepository.findById(integer);
     }
 
     @Override

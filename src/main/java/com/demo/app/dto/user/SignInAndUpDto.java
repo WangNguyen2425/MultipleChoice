@@ -1,4 +1,4 @@
-package com.demo.app.dto;
+package com.demo.app.dto.user;
 
 import lombok.*;
 
@@ -6,7 +6,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-@ToString
 public class SignInAndUpDto {
 
     private String username;

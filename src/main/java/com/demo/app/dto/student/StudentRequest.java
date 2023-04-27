@@ -1,13 +1,13 @@
-package com.demo.app.dto;
+package com.demo.app.dto.student;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
-public class TeacherDto {
+@AllArgsConstructor
+public class StudentRequest {
 
     private String username;
 
@@ -19,9 +19,8 @@ public class TeacherDto {
 
     private String gender;
 
-    private String email;
-
     private String phoneNumber;
 
+    private String email;
 
 }

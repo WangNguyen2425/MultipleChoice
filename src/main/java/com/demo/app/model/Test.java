@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -23,6 +24,12 @@ public class Test implements Serializable {
 
     @Column(name = "status")
     private boolean status = true;
+
+    @Column(name = "test_day")
+    private LocalDate testDay;
+
+    @Column(name = "total_point")
+    private double totalPoint;
 
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
     private Set<TestSet> testSets;
