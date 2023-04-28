@@ -2,7 +2,7 @@ package com.demo.app.service.impl;
 
 import com.demo.app.config.security.PasswordEncoder;
 import com.demo.app.dto.user.SignInAndUpDto;
-import com.demo.app.exception.UsernameExistException;
+import com.demo.app.exception.FieldExistedException;
 import com.demo.app.model.Role;
 import com.demo.app.model.User;
 import com.demo.app.repository.RoleRepository;
@@ -10,6 +10,7 @@ import com.demo.app.repository.UserRepository;
 import com.demo.app.service.UserService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,11 +33,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private static final String USER_NOT_FOUND_MSG = "User with username: %s not found !";
 
     @Override
-    public User saveUser(SignInAndUpDto request) throws UsernameExistException {
+    public User saveUser(SignInAndUpDto request) throws FieldExistedException {
         if (userRepository.existsByUsername(request.getUsername())){
-            throw new UsernameExistException("Username already taken !");
+            throw new FieldExistedException("Username already taken !", HttpStatus.BAD_REQUEST);
         }
         User user = modelMapper.map(request, User.class);
+
         user.setPassword(passwordEncoder.passwordEncode().encode(request.getPassword()));
 
         Role role = roleRepository.findByRoleName(Role.RoleType.ROLE_USER).get();

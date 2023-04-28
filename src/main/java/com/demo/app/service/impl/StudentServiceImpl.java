@@ -4,8 +4,8 @@ import com.demo.app.config.security.PasswordEncoder;
 import com.demo.app.dto.student.StudentRequest;
 import com.demo.app.dto.student.StudentPageResponse;
 import com.demo.app.dto.student.StudentResponse;
-import com.demo.app.exception.StudentNotFoundException;
-import com.demo.app.exception.UsernameExistException;
+import com.demo.app.exception.EntityNotFoundException;
+import com.demo.app.exception.FieldExistedException;
 import com.demo.app.model.Role;
 import com.demo.app.model.Student;
 import com.demo.app.model.User;
@@ -20,15 +20,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,9 +44,9 @@ public class StudentServiceImpl implements StudentService {
     private final ModelMapper modelMapper;
 
     @Override
-    public void saveStudentsExcelFile(MultipartFile file) throws IOException {
+    public void saveStudentsExcelFile(MultipartFile file) throws IOException, FieldExistedException {
         Map<User, Student> userStudents = ExcelUtils.excelFileToUserStudents(file);
-        List<Role> roles = getRoleUserAndStudent();
+        List<Role> roles = roleRepository.findAllByRoleNameIn(Arrays.asList(Role.RoleType.ROLE_USER, Role.RoleType.ROLE_STUDENT));
 
         userStudents.forEach((user, student) -> {
             user.setRoles(roles);
@@ -62,21 +60,18 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public void saveStudent(StudentRequest request) throws UsernameExistException {
-        if (userRepository.existsByUsername(request.getUsername())){
-            throw new UsernameExistException("Username already taken !");
-        }
-        List<Role> roles = getRoleUserAndStudent();
+    public void saveStudent(StudentRequest request) throws FieldExistedException {
+        checkIfUsernameExists(request.getUsername());
+        checkIfEmailExists(request.getEmail());
+        checkIfPhoneNumberExists(request.getPhoneNumber());
 
-        User user = new User();
-        user.setUsername(request.getUsername());
+        List<Role> roles = roleRepository.findAllByRoleNameIn(Arrays.asList(Role.RoleType.ROLE_USER, Role.RoleType.ROLE_STUDENT));
+
+        User user = modelMapper.map(request, User.class);
         user.setPassword(passwordEncoder.passwordEncode().encode(request.getPassword()));
         user.setRoles(roles);
-        user = userRepository.save(user);
-
-        Student student = modelMapper.map(request, Student.class);
-        student.setUser(user);
-        studentRepository.save(student);
+        user.getStudent().setUser(user);
+        userRepository.save(user);
     }
 
     @Override
@@ -98,35 +93,56 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<StudentResponse> getAllStudents(){
-        List<Student> students = studentRepository.findAll();
-        List<StudentResponse> studentResponses = new ArrayList<>();
-        students.forEach(student -> {
-            StudentResponse studentResponse = modelMapper.map(student, StudentResponse.class);
-            studentResponse.setUsername(student.getUser().getUsername());
-            studentResponses.add(studentResponse);
-        });
-        return studentResponses;
+    public List<StudentResponse> getAllStudents() throws EntityNotFoundException {
+        List<Student> students = studentRepository.findByStatus(true);
+        if (students.size() == 0) {
+            throw new EntityNotFoundException("Not found any students", HttpStatus.NOT_FOUND);
+        }
+        return students.stream().map(student -> {
+            StudentResponse response = modelMapper.map(student, StudentResponse.class);
+            response.setUsername(student.getUser().getUsername());
+            return response;
+        }).collect(Collectors.toList());
     }
 
     @Override
-    public void updateStudent(int studentId, StudentRequest request) throws StudentNotFoundException {
-        Optional<Student> optionalStudent = studentRepository.findById(studentId);
-        if (optionalStudent.isEmpty()){
-            throw new StudentNotFoundException(String.format("Student %s not found !", request.getUsername()));
+    @Transactional
+    public void updateStudent(int studentId, StudentRequest request) throws EntityNotFoundException, FieldExistedException {
+        Student existStudent = studentRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException(String.format("Student %s not found !", request.getUsername()), HttpStatus.NOT_FOUND));
+
+        if (!existStudent.getUser().getUsername().equals(request.getUsername())) {
+            checkIfUsernameExists(request.getUsername());
         }
+        if (!existStudent.getPhoneNumber().equals(request.getPhoneNumber())) {
+            checkIfPhoneNumberExists(request.getPhoneNumber());
+        }
+        if (!existStudent.getEmail().equals(request.getEmail())) {
+            checkIfEmailExists(request.getEmail());
+        }
+
         Student student = modelMapper.map(request, Student.class);
-        student.setId(optionalStudent.get().getId());
+        student.setJoinDate(existStudent.getJoinDate());
+        student.setUser(existStudent.getUser());
+        student.setId(existStudent.getId());
+
         studentRepository.save(student);
     }
 
-    private List<Role> getRoleUserAndStudent(){
-        Role roleUser = roleRepository.findByRoleName(Role.RoleType.ROLE_USER).get();
-        Role roleStudent = roleRepository.findByRoleName(Role.RoleType.ROLE_STUDENT).get();
-        List<Role> roles = new ArrayList<>();
-        roles.add(roleUser);
-        roles.add(roleStudent);
+    private void checkIfUsernameExists(String username) throws FieldExistedException {
+        if (userRepository.existsByUsername(username)) {
+            throw new FieldExistedException("Username already taken!", HttpStatus.BAD_REQUEST);
+        }
+    }
 
-        return roles;
+    private void checkIfPhoneNumberExists(String phoneNumber) throws FieldExistedException {
+        if (studentRepository.existsByPhoneNumber(phoneNumber)) {
+            throw new FieldExistedException("Phone number already taken!", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private void checkIfEmailExists(String email) throws FieldExistedException {
+        if (studentRepository.existsByEmail(email)) {
+            throw new FieldExistedException("Email already taken!", HttpStatus.BAD_REQUEST);
+        }
     }
 }

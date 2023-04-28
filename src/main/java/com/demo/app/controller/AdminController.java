@@ -7,8 +7,7 @@ import com.demo.app.dto.student.StudentRequest;
 import com.demo.app.dto.student.StudentResponse;
 import com.demo.app.dto.teacher.TeacherRequest;
 import com.demo.app.dto.teacher.TeacherResponse;
-import com.demo.app.exception.StudentNotFoundException;
-import com.demo.app.exception.UsernameExistException;
+import com.demo.app.exception.FieldExistedException;
 import com.demo.app.service.StudentService;
 import com.demo.app.service.TeacherService;
 import com.demo.app.util.ExcelUtils;
@@ -18,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -50,14 +50,10 @@ public class AdminController {
     }
 
     @PostMapping(path = "/student/add")
-    public ResponseEntity<?> addNewStudent(@RequestBody StudentRequest request) {
-        try {
-            studentService.saveStudent(request);
-            String message = String.format("Student %s have been saved successfully !", request.getUsername());
-            return new ResponseEntity<>(new ResponseMessage(message), HttpStatus.CREATED);
-        } catch (UsernameExistException ex){
-            return new ResponseEntity<>(new ResponseMessage(ex.getMessage()), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> addNewStudent(@RequestBody @Valid StudentRequest request) throws FieldExistedException {
+        studentService.saveStudent(request);
+        String message = String.format("Student %s have been saved successfully !", request.getFullName());
+        return new ResponseEntity<>(new ResponseMessage(message), HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/students/page")
@@ -70,36 +66,31 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping(path = "/students/list")
-    public ResponseEntity<List<StudentResponse>> getAllStudents(){
+    @GetMapping(path = "/students")
+    public ResponseEntity<List<StudentResponse>> getAllStudents() {
         List<StudentResponse> studentResponses = studentService.getAllStudents();
         return ResponseEntity.status(HttpStatus.OK).body(studentResponses);
     }
 
     @PutMapping(path = "/student/{id}")
-    public ResponseEntity<?> updateStudent(@PathVariable(name = "id") int studentId, @RequestBody StudentRequest request){
-        try{
-            studentService.updateStudent(studentId, request);
-        } catch (StudentNotFoundException ex){
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
-        return null;
+    public ResponseEntity<?> updateStudent(@PathVariable(name = "id") int studentId, @RequestBody StudentRequest request) {
+        studentService.updateStudent(studentId, request);
+        String message = String.format("Student with id = %d updated successfully !", studentId);
+        return new ResponseEntity<>(new ResponseMessage(message), HttpStatus.OK);
     }
 
     @PostMapping(path = "/teacher/add")
-    public ResponseEntity<?> addNewTeacher(@RequestBody TeacherRequest request){
-        try {
-            teacherService.saveTeacher(request);
-            String message = String.format("Student %s have been saved successfully !", request.getUsername());
-            return new ResponseEntity<>(new ResponseMessage(message), HttpStatus.CREATED);
-        } catch (UsernameExistException ex){
-            return new ResponseEntity<>(new ResponseMessage(ex.getMessage()), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> addNewTeacher(@RequestBody TeacherRequest request) throws FieldExistedException {
+        teacherService.saveTeacher(request);
+        String message = String.format("Teacher %s have been saved successfully !", request.getFullName());
+        return new ResponseEntity<>(new ResponseMessage(message), HttpStatus.CREATED);
+
     }
 
-    @GetMapping(path = "/teachers/list")
-    public ResponseEntity<List<TeacherResponse>> getAllTeachers(){
+    @GetMapping(path = "/teachers")
+    public ResponseEntity<List<TeacherResponse>> getAllTeachers() {
         List<TeacherResponse> teacherResponses = teacherService.getAllTeacher();
         return ResponseEntity.status(HttpStatus.OK).body(teacherResponses);
     }
+
 }

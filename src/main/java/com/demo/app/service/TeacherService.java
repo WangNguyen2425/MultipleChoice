@@ -2,12 +2,12 @@ package com.demo.app.service;
 
 import com.demo.app.dto.teacher.TeacherRequest;
 import com.demo.app.dto.teacher.TeacherResponse;
-import com.demo.app.exception.UsernameExistException;
+import com.demo.app.exception.FieldExistedException;
 
 import java.util.List;
 
 public interface TeacherService {
-    void saveTeacher(TeacherRequest request) throws UsernameExistException;
+    void saveTeacher(TeacherRequest request) throws FieldExistedException;
 
     List<TeacherResponse> getAllTeacher();
 }
