@@ -108,8 +108,8 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public void updateStudent(int studentId, StudentRequest request) throws EntityNotFoundException, FieldExistedException {
-        Student existStudent = studentRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException(String.format("Student %s not found !", request.getUsername()), HttpStatus.NOT_FOUND));
-
+        Student existStudent = studentRepository.findById(studentId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Student %s not found !", request.getUsername()), HttpStatus.NOT_FOUND));
         if (!existStudent.getUser().getUsername().equals(request.getUsername())) {
             checkIfUsernameExists(request.getUsername());
         }
@@ -126,6 +126,27 @@ public class StudentServiceImpl implements StudentService {
         student.setId(existStudent.getId());
 
         studentRepository.save(student);
+    }
+
+    @Override
+    public void disableStudent(int studentId) throws EntityNotFoundException {
+        Student existStudent = studentRepository.findById(studentId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Not found any student with id = %d !", studentId), HttpStatus.NOT_FOUND));
+        existStudent.getUser().setStatus(false);
+        studentRepository.save(existStudent);
+    }
+
+    @Override
+    @Transactional
+    public void deleteStudent(int studentId) throws EntityNotFoundException {
+        Student existStudent = studentRepository.findById(studentId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Not found any student with id = %d !", studentId), HttpStatus.NOT_FOUND));
+        User user = existStudent.getUser();
+
+        userRepository.deleteRoleFromUser(user.getId());
+        studentRepository.delete(existStudent);
+        userRepository.delete(user);
+
     }
 
     private void checkIfUsernameExists(String username) throws FieldExistedException {

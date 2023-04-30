@@ -20,4 +20,8 @@ public interface StudentService {
     List<StudentResponse> getAllStudents();
 
     void updateStudent(int studentId, StudentRequest request) throws EntityNotFoundException;
+
+    void disableStudent(int studentId) throws EntityNotFoundException;
+
+    void deleteStudent(int studentId) throws EntityNotFoundException;
 }

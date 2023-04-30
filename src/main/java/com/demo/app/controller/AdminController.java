@@ -29,6 +29,7 @@ public class AdminController {
     private final StudentService studentService;
     private final TeacherService teacherService;
 
+
     @GetMapping(path = "/students/import")
     public ResponseEntity<?> importExcelFile(@RequestBody MultipartFile file) {
         if (ExcelUtils.hasExcelFormat(file)) {
@@ -72,11 +73,23 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(studentResponses);
     }
 
-    @PutMapping(path = "/student/{id}")
+    @PutMapping(path = "/student/update/{id}")
     public ResponseEntity<?> updateStudent(@PathVariable(name = "id") int studentId, @RequestBody StudentRequest request) {
         studentService.updateStudent(studentId, request);
         String message = String.format("Student with id = %d updated successfully !", studentId);
         return new ResponseEntity<>(new ResponseMessage(message), HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/student/disable/{id}")
+    public ResponseEntity<?> disableStudent(@PathVariable(name = "id") int studentId){
+        studentService.disableStudent(studentId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping(path = "/student/delete/{id}")
+    public ResponseEntity<?> deleteStudent(@PathVariable(name = "id") int studentId){
+        studentService.deleteStudent(studentId);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping(path = "/teacher/add")
@@ -93,4 +106,22 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(teacherResponses);
     }
 
+    @PutMapping(path = "/teacher/update/{id}")
+    public ResponseEntity<?> updateTeacher(@PathVariable("id") int teacherId, @RequestBody TeacherRequest request){
+        teacherService.updateTeacher(teacherId, request);
+        String message = String.format("Teacher with id = %d updated successfully !", teacherId);
+        return new ResponseEntity<>(new ResponseMessage(message), HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/teacher/disable/{id}")
+    public ResponseEntity<?> disableTeacher(@PathVariable("id") int teacherId){
+        teacherService.disableTeacher(teacherId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping(path = "/teacher/delete/{id}")
+    public ResponseEntity<?> deleteTeacher(@PathVariable("id") int teacherId){
+        teacherService.deleteTeacher(teacherId);
+        return ResponseEntity.noContent().build();
+    }
 }

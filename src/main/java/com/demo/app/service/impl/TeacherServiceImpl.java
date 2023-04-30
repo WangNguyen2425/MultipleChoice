@@ -65,6 +65,49 @@ public class TeacherServiceImpl implements TeacherService {
             return response;
         }).collect(Collectors.toList());
     }
+
+    @Override
+    @Transactional
+    public void updateTeacher(int teacherId, TeacherRequest request) throws EntityNotFoundException, FieldExistedException{
+        Teacher existTeacher = teacherRepository.findById(teacherId).
+                orElseThrow(() -> new EntityNotFoundException(String.format("Teacher %s not found !", request.getFullName()), HttpStatus.NOT_FOUND));
+
+        if (!existTeacher.getUser().getUsername().equals(request.getUsername())) {
+            checkIfUsernameExists(request.getUsername());
+        }
+        if (!existTeacher.getPhoneNumber().equals(request.getPhoneNumber())) {
+            checkIfPhoneNumberExists(request.getPhoneNumber());
+        }
+        if (!existTeacher.getEmail().equals(request.getEmail())) {
+            checkIfEmailExists(request.getEmail());
+        }
+
+        Teacher teacher = modelMapper.map(request, Teacher.class);
+        teacher.setId(existTeacher.getId());
+        teacher.setUser(existTeacher.getUser());
+        teacherRepository.save(teacher);
+    }
+
+    @Override
+    public void disableTeacher(int teacherId) throws EntityNotFoundException{
+        Teacher existTeacher = teacherRepository.findById(teacherId).
+                orElseThrow(() -> new EntityNotFoundException(String.format("Not found any teacher with id = %d", teacherId), HttpStatus.NOT_FOUND));
+        existTeacher.getUser().setStatus(false);
+        teacherRepository.save(existTeacher);
+    }
+
+    @Override
+    @Transactional
+    public void deleteTeacher(int teacherId) throws EntityNotFoundException{
+        Teacher existTeacher = teacherRepository.findById(teacherId).
+                orElseThrow(() -> new EntityNotFoundException(String.format("Not found any teacher with id = %d", teacherId), HttpStatus.NOT_FOUND));
+        User user = existTeacher.getUser();
+
+        userRepository.deleteRoleFromUser(user.getId());
+        teacherRepository.delete(existTeacher);
+        userRepository.delete(user);
+    }
+
     private void checkIfUsernameExists(String username) throws FieldExistedException {
         if (userRepository.existsByUsername(username)) {
             throw new FieldExistedException("Username already taken!", HttpStatus.BAD_REQUEST);
