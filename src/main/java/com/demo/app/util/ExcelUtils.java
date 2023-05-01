@@ -44,22 +44,18 @@ public class ExcelUtils {
              Workbook workbook = new XSSFWorkbook(inputStream)) {
 
             Sheet sheet = workbook.getSheetAt(0);
-            Iterator<Row> rows = sheet.iterator();
             Map<User, Student> userStudents = new HashMap<>();
 
-            while (rows.hasNext()) {
-                Row row = rows.next();
-                if (row.getRowNum() == 0) {
-                    continue;
+            sheet.forEach(row -> {
+                if(row.getRowNum() == 0){
+                    return;
                 }
-                Iterator<Cell> cellsInRow = row.iterator();
-                Student student = new Student();
                 User user = new User();
-                while (cellsInRow.hasNext()) {
-                    Cell cell = cellsInRow.next();
+                Student student = new Student();
+                row.forEach(cell -> {
                     Object value = getCellValue(cell);
-                    if (value == null || value.toString().isEmpty()) {
-                        continue;
+                    if(value == null || value.toString().isBlank()){
+                        return;
                     }
                     int columnIndex = cell.getColumnIndex();
                     switch (columnIndex) {
@@ -86,15 +82,14 @@ public class ExcelUtils {
                         case COLUMN_INDEX_JOIN_DATE:
                             break;
                         case COLUMN_INDEX_PHONE_NUMBER:
-                            student.setPhoneNumber(value.toString());
+                            student.setPhoneNumber(cell.getStringCellValue());
                             break;
                         case COLUMN_INDEX_EMAIL:
                             student.setEmail(value.toString());
                     }
-                }
-                userStudents.put(user, student);
-            }
-
+                    userStudents.put(user, student);
+                });
+            });
             return userStudents;
         }
 

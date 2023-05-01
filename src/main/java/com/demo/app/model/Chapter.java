@@ -19,11 +19,11 @@ public class Chapter implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "chapter_name")
-    private String chapterName;
+    @Column(name = "title")
+    private String title;
 
-    @Column(name = "chapter_no")
-    private int chapterNo;
+    @Column(name = "[order]")
+    private int order;
 
     @Column(name = "status")
     private boolean status = true;

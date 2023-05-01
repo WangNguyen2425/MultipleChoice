@@ -6,6 +6,7 @@ import com.demo.app.dto.student.StudentPageResponse;
 import com.demo.app.dto.student.StudentResponse;
 import com.demo.app.exception.EntityNotFoundException;
 import com.demo.app.exception.FieldExistedException;
+import com.demo.app.exception.FileInputException;
 import com.demo.app.model.Role;
 import com.demo.app.model.Student;
 import com.demo.app.model.User;
@@ -44,18 +45,23 @@ public class StudentServiceImpl implements StudentService {
     private final ModelMapper modelMapper;
 
     @Override
-    public void saveStudentsExcelFile(MultipartFile file) throws IOException, FieldExistedException {
-        Map<User, Student> userStudents = ExcelUtils.excelFileToUserStudents(file);
-        List<Role> roles = roleRepository.findAllByRoleNameIn(Arrays.asList(Role.RoleType.ROLE_USER, Role.RoleType.ROLE_STUDENT));
+    public void saveStudentsExcelFile(MultipartFile file) throws FileInputException, FieldExistedException {
+        try {
+            Map<User, Student> userStudents = ExcelUtils.excelFileToUserStudents(file);
 
-        userStudents.forEach((user, student) -> {
-            user.setRoles(roles);
-            String encodePassword = passwordEncoder.passwordEncode().encode(user.getPassword());
-            user.setPassword(encodePassword);
-            student.setUser(user);
-        });
-        userRepository.saveAll(userStudents.keySet());
-        studentRepository.saveAll(userStudents.values());
+            List<Role> roles = roleRepository.findAllByRoleNameIn(Arrays.asList(Role.RoleType.ROLE_USER, Role.RoleType.ROLE_STUDENT));
+
+            userStudents.forEach((user, student) -> {
+                user.setRoles(roles);
+                String encodePassword = passwordEncoder.passwordEncode().encode(user.getPassword());
+                user.setPassword(encodePassword);
+                student.setUser(user);
+            });
+            userRepository.saveAll(userStudents.keySet());
+            studentRepository.saveAll(userStudents.values());
+        } catch (IOException ex){
+            throw new FileInputException("Could not read the file !", HttpStatus.EXPECTATION_FAILED);
+        }
     }
 
     @Override

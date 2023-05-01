@@ -3,6 +3,7 @@ package com.demo.app.controller;
 import com.demo.app.dto.message.ErrorResponse;
 import com.demo.app.exception.EntityNotFoundException;
 import com.demo.app.exception.FieldExistedException;
+import com.demo.app.exception.FileInputException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,10 @@ import java.util.Map;
 @ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request){
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+                                                                  HttpHeaders headers,
+                                                                  HttpStatus status,
+                                                                  WebRequest request){
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -42,5 +46,14 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         HttpStatus status = customEx.getStatus();
         return new ResponseEntity<>(new ErrorResponse(status, customEx.getMessage()), status);
     }
+
+    @ExceptionHandler(FileInputException.class)
+    public ResponseEntity<ErrorResponse> handleIOException(Exception ex){
+        FileInputException customEx = (FileInputException) ex;
+        HttpStatus status = customEx.getStatus();
+        return new ResponseEntity<>(new ErrorResponse(status, ex.getMessage()), status);
+    }
+
+
 
 }

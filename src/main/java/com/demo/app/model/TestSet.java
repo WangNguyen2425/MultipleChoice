@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -28,6 +29,12 @@ public class TestSet implements Serializable {
     @Column(name = "status")
     private boolean status = true;
 
+    @Column(name = "created_at")
+    private LocalDate createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDate updatedAt;
+
     @ManyToOne
     private Test test;
 
@@ -36,4 +43,13 @@ public class TestSet implements Serializable {
 
     @OneToMany(mappedBy = "testSet", cascade = CascadeType.ALL)
     private List<StudentTest> studentTests;
+
+    @PrePersist
+    private void prePersist(){
+        createdAt = LocalDate.now();
+    }
+    @PreUpdate
+    private void preUpdate(){
+        updatedAt = LocalDate.now();
+    }
 }

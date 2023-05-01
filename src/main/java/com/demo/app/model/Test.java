@@ -31,6 +31,12 @@ public class Test implements Serializable {
     @Column(name = "total_point")
     private double totalPoint;
 
+    @Column(name = "created_at")
+    private LocalDate createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDate updatedAt;
+
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
     private Set<TestSet> testSets;
 
@@ -43,4 +49,13 @@ public class Test implements Serializable {
 
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
     private List<ExamClass> examClasses;
+
+    @PrePersist
+    private void prePersist(){
+        createdAt = LocalDate.now();
+    }
+    @PreUpdate
+    private void preUpdate(){
+        updatedAt = LocalDate.now();
+    }
 }
