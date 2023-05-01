@@ -1,14 +1,14 @@
-package com.demo.app.dto.user;
+package com.demo.app.dto.auth;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class SignInAndUpDto {
+public class AuthenticationRequest {
 
     @NotBlank(message = "Please enter username !")
     private String username;

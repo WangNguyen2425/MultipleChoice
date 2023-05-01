@@ -1,7 +1,7 @@
 package com.demo.app.service.impl;
 
 import com.demo.app.config.security.PasswordEncoder;
-import com.demo.app.dto.user.SignInAndUpDto;
+import com.demo.app.dto.auth.AuthenticationRequest;
 import com.demo.app.exception.FieldExistedException;
 import com.demo.app.model.Role;
 import com.demo.app.model.User;
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private static final String USER_NOT_FOUND_MSG = "User with username: %s not found !";
 
     @Override
-    public User saveUser(SignInAndUpDto request) throws FieldExistedException {
+    public User saveUser(AuthenticationRequest request) throws FieldExistedException {
         if (userRepository.existsByUsername(request.getUsername())){
             throw new FieldExistedException("Username already taken !", HttpStatus.BAD_REQUEST);
         }

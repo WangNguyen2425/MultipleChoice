@@ -9,13 +9,13 @@ import com.demo.app.exception.FieldExistedException;
 import com.demo.app.exception.FileInputException;
 import com.demo.app.service.StudentService;
 import com.demo.app.util.ExcelUtils;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController

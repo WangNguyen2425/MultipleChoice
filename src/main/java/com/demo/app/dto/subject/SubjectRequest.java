@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
-
-import javax.validation.constraints.NotBlank;
-
+import jakarta.validation.constraints.NotBlank;
 
 @Getter
 @AllArgsConstructor

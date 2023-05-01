@@ -15,6 +15,7 @@ import com.demo.app.repository.StudentRepository;
 import com.demo.app.repository.UserRepository;
 import com.demo.app.service.StudentService;
 import com.demo.app.util.ExcelUtils;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -25,7 +26,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;

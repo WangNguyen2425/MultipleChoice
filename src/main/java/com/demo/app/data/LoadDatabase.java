@@ -5,11 +5,11 @@ import com.demo.app.model.Role;
 import com.demo.app.model.User;
 import com.demo.app.repository.RoleRepository;
 import com.demo.app.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Component

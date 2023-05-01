@@ -32,17 +32,10 @@ public class ModelMapperConfig {
         modelMapper.createTypeMap(String.class, LocalDate.class);
         modelMapper.addConverter(converter);
         modelMapper.getTypeMap(String.class, LocalDate.class).setProvider(localDateProvider);
-        modelMapper.createTypeMap(String.class, Gender.class).setConverter(context -> {
-            switch (context.getSource()){
-                case "male":
-                case "Male":
-                    return Gender.MALE;
-                case "female":
-                case "Female":
-                    return Gender.FEMALE;
-                default:
-                    return null;
-            }
+        modelMapper.createTypeMap(String.class, Gender.class).setConverter(context -> switch (context.getSource()) {
+            case "male", "Male" -> Gender.MALE;
+            case "female", "Female" -> Gender.FEMALE;
+            default -> null;
         });
 
         return modelMapper;

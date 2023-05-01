@@ -12,12 +12,12 @@ import com.demo.app.repository.RoleRepository;
 import com.demo.app.repository.TeacherRepository;
 import com.demo.app.repository.UserRepository;
 import com.demo.app.service.TeacherService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
