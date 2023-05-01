@@ -7,7 +7,6 @@ import com.demo.app.model.User;
 import com.demo.app.service.AuthService;
 import com.demo.app.util.JwtUtils;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,7 +21,6 @@ public class AuthServiceImpl implements AuthService {
 
     private final JwtUtils jwtUtils;
 
-    private final ModelMapper mapper;
 
     @Override
     public AuthenticationResponse login(AuthenticationRequest request){
@@ -31,8 +29,7 @@ public class AuthServiceImpl implements AuthService {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         User principal = (User) authentication.getPrincipal();
-        System.out.println(authentication.getPrincipal().toString());
-        UserResponse userResponse = mapper.map(principal, UserResponse.class);
+        var userResponse = new UserResponse(principal.getUsername(), principal.isStatus());
         String token = jwtUtils.generateJwtToken(authentication);
         return new AuthenticationResponse(userResponse, token);
     }

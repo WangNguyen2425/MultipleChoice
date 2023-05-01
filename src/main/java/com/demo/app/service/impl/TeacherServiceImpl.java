@@ -57,7 +57,7 @@ public class TeacherServiceImpl implements TeacherService {
     public List<TeacherResponse> getAllTeacher(){
         List<Teacher> teachers = teacherRepository.findByStatus(true);
         if (teachers.size() == 0) {
-            throw new EntityNotFoundException("Not found any students", HttpStatus.NOT_FOUND);
+            throw new EntityNotFoundException("Not found any teacher !", HttpStatus.NOT_FOUND);
         }
         return teachers.stream().map(teacher -> {
             TeacherResponse response = modelMapper.map(teacher, TeacherResponse.class);
@@ -100,7 +100,9 @@ public class TeacherServiceImpl implements TeacherService {
     @Transactional
     public void deleteTeacher(int teacherId) throws EntityNotFoundException{
         Teacher existTeacher = teacherRepository.findById(teacherId).
-                orElseThrow(() -> new EntityNotFoundException(String.format("Not found any teacher with id = %d", teacherId), HttpStatus.NOT_FOUND));
+                orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Not found any teacher with id = %d", teacherId), HttpStatus.NOT_FOUND)
+                );
         User user = existTeacher.getUser();
 
         userRepository.deleteRoleFromUser(user.getId());
@@ -110,19 +112,19 @@ public class TeacherServiceImpl implements TeacherService {
 
     private void checkIfUsernameExists(String username) throws FieldExistedException {
         if (userRepository.existsByUsername(username)) {
-            throw new FieldExistedException("Username already taken!", HttpStatus.BAD_REQUEST);
+            throw new FieldExistedException("Username already taken!", HttpStatus.CONFLICT);
         }
     }
 
     private void checkIfPhoneNumberExists(String phoneNumber) throws FieldExistedException {
         if (teacherRepository.existsByPhoneNumber(phoneNumber)) {
-            throw new FieldExistedException("Phone number already taken!", HttpStatus.BAD_REQUEST);
+            throw new FieldExistedException("Phone number already taken!", HttpStatus.CONFLICT);
         }
     }
 
     private void checkIfEmailExists(String email) throws FieldExistedException {
         if (teacherRepository.existsByEmail(email)) {
-            throw new FieldExistedException("Email already taken!", HttpStatus.BAD_REQUEST);
+            throw new FieldExistedException("Email already taken!", HttpStatus.CONFLICT);
         }
     }
 }

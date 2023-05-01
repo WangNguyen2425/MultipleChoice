@@ -157,19 +157,19 @@ public class StudentServiceImpl implements StudentService {
 
     private void checkIfUsernameExists(String username) throws FieldExistedException {
         if (userRepository.existsByUsername(username)) {
-            throw new FieldExistedException("Username already taken!", HttpStatus.BAD_REQUEST);
+            throw new FieldExistedException("Username already taken!", HttpStatus.CONFLICT);
         }
     }
 
     private void checkIfPhoneNumberExists(String phoneNumber) throws FieldExistedException {
         if (studentRepository.existsByPhoneNumber(phoneNumber)) {
-            throw new FieldExistedException("Phone number already taken!", HttpStatus.BAD_REQUEST);
+            throw new FieldExistedException("Phone number already taken!", HttpStatus.CONFLICT);
         }
     }
 
     private void checkIfEmailExists(String email) throws FieldExistedException {
         if (studentRepository.existsByEmail(email)) {
-            throw new FieldExistedException("Email already taken!", HttpStatus.BAD_REQUEST);
+            throw new FieldExistedException("Email already taken!", HttpStatus.CONFLICT);
         }
     }
 }

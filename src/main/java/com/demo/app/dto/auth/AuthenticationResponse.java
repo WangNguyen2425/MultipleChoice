@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public final class AuthenticationResponse {
+public class AuthenticationResponse {
 
     private UserResponse userResponse;
 
