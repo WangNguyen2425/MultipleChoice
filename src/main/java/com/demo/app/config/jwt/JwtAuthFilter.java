@@ -35,10 +35,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
         final String jwt = authHeader.substring(7);
-        final String userEmail = jwtUtils.extractUsername(jwt);
+        final String email = jwtUtils.extractUsername(jwt);
 
-        if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+        if(email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
             var isTokenValid = tokenRepository.findByToken(jwt).map(
                     token -> !token.isExpired() && !token.isRevoked()
