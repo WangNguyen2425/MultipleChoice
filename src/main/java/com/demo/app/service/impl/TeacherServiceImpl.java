@@ -78,7 +78,7 @@ public class TeacherServiceImpl implements TeacherService {
         if (!existTeacher.getPhoneNumber().equals(request.getPhoneNumber())) {
             checkIfPhoneNumberExists(request.getPhoneNumber());
         }
-        if (!existTeacher.getEmail().equals(request.getEmail())) {
+        if (!existTeacher.getUser().getEmail().equals(request.getEmail())) {
             checkIfEmailExists(request.getEmail());
         }
 
@@ -123,7 +123,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     private void checkIfEmailExists(String email) throws FieldExistedException {
-        if (teacherRepository.existsByEmail(email)) {
+        if (userRepository.existsByEmail(email)) {
             throw new FieldExistedException("Email already taken!", HttpStatus.CONFLICT);
         }
     }

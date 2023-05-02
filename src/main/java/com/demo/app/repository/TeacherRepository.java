@@ -10,7 +10,6 @@ import java.util.List;
 
 @Repository
 public interface TeacherRepository extends JpaRepository<Teacher, Integer> {
-    Boolean existsByEmail(String email);
     Boolean existsByPhoneNumber(String phoneNumber);
 
     @Query("select t from Teacher t join User u on t.user.id = u.id where u.status = :status")

@@ -1,18 +1,20 @@
 package com.demo.app.dto.auth;
 
-import com.demo.app.dto.user.UserResponse;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-@ToString
+@Builder
 public class AuthenticationResponse {
 
-    private UserResponse userResponse;
+    @JsonProperty("access_token")
+    private String accessToken;
 
-    private String token;
+    @JsonProperty("refresh_token")
+    private String refreshToken;
 
 
 }

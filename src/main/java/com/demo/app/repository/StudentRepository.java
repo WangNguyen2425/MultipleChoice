@@ -11,7 +11,6 @@ import java.util.List;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Integer> {
-    Boolean existsByEmail(String email);
     Boolean existsByPhoneNumber(String phoneNumber);
 
     @Query("select s from Student s join User u on s.user.id = u.id where u.status = :status")

@@ -14,6 +14,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 public class StudentTestDetail implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -21,10 +22,10 @@ public class StudentTestDetail implements Serializable {
     @Column(name = "status")
     private boolean status = true;
 
-    @Column(name = "question_mark", precision = 2, scale = 1)
+    @Column(name = "question_mark")
     private double questionMark;
 
-    @Column(name = "selected_answer", columnDefinition = "varchar(4)")
+    @Column(name = "selected_answer", length = 4)
     private String selectedAnswer;
 
     @ManyToOne

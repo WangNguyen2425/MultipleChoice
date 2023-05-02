@@ -33,20 +33,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private static final String USER_NOT_FOUND_MSG = "User with username: %s not found !";
 
     @Override
-    public User saveUser(AuthenticationRequest request) throws FieldExistedException {
-        if (userRepository.existsByUsername(request.getUsername())){
-            throw new FieldExistedException("Username already taken !", HttpStatus.BAD_REQUEST);
-        }
-        User user = modelMapper.map(request, User.class);
-
-        user.setPassword(passwordEncoder.passwordEncode().encode(request.getPassword()));
-
-        Role role = roleRepository.findByRoleName(Role.RoleType.ROLE_USER).get();
-        user.setRoles(Collections.singletonList(role));
-        return userRepository.save(user);
-    }
-
-    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, username)));

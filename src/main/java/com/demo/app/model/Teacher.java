@@ -12,7 +12,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "teacher", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "email", name = "uni_email"),
         @UniqueConstraint(columnNames = "phone_number", name = "uni_phone_number")
 })
 @Getter
@@ -33,9 +32,6 @@ public class Teacher implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "gender", length = 10)
     private Gender gender;
-
-    @Column(name = "email")
-    private String email;
 
     @Column(name = "phone_number")
     private String phoneNumber;

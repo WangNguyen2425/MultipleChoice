@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -25,23 +26,29 @@ public class LoadDatabase implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
+        initializeRoles();
+        initializeAdminUser();
+    }
+    private void initializeRoles(){
         long roleCount = roleRepository.count();
         if (roleCount == 0) {
-            roleRepository.save(new Role(Role.RoleType.ROLE_ADMIN));
-            roleRepository.save(new Role(Role.RoleType.ROLE_PRINCIPAL));
-            roleRepository.save(new Role(Role.RoleType.ROLE_TEACHER));
-            roleRepository.save(new Role(Role.RoleType.ROLE_STUDENT));
-            roleRepository.save(new Role(Role.RoleType.ROLE_USER));
+            List<Role> roles = new ArrayList<>();
+            for (Role.RoleType type : Role.RoleType.values()){
+                roles.add(new Role(type));
+            }
+            roleRepository.saveAll(roles);
         }
-
+    }
+    private void initializeAdminUser(){
         if (!userRepository.existsByUsername("admin")) {
-            User user = new User();
             List<Role> roles = roleRepository.findAll();
-            user.setUsername("admin");
-            user.setPassword(passwordEncoder.passwordEncode().encode("admin"));
-            user.setRoles(roles);
+            User user = User.builder()
+                    .username("admin")
+                    .email("admin123@gmail.com")
+                    .password(passwordEncoder.passwordEncode().encode("admin"))
+                    .roles(roles)
+                    .build();
             userRepository.save(user);
         }
-
     }
 }

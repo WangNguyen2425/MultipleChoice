@@ -1,61 +1,84 @@
 package com.demo.app.util;
 
-import com.demo.app.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.time.Instant;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
-import static java.time.temporal.ChronoUnit.DAYS;
 
 
 @Component
 public class JwtUtils {
 
     @Value("${app.jwt.secret}")
-    private String jwtSecretKey;
+    private String secretKey;
 
-    public String generateJwtToken(Authentication auth){
-        User principal = (User) auth.getPrincipal();
-        return Jwts.builder()
-                .setSubject(principal.getUsername())
-                .setIssuedAt(Date.from(Instant.now()))
-                .setExpiration(Date.from(Instant.now().plus(1, DAYS)))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
-                .compact();
+    @Value("${app.jwt.expiration}")
+    private long expiration;
 
+    @Value("${app.jwt.expiration.refresh}")
+    private long refreshExpiration;
+
+    public String extractUsername(String token){
+        return extractClaim(token, Claims::getSubject);
     }
 
-    public String getSubject(String token) {
-        return getClaims(token).getSubject();
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
     }
 
-    public boolean isTokenValid(String jwt, String username){
-        return getSubject(jwt).equals(username) && !isTokenExpired(jwt);
-
-    }
-
-    private Key getSigningKey(){
-        return Keys.hmacShaKeyFor(jwtSecretKey.getBytes());
-    }
-
-    private boolean isTokenExpired(String jwt){
-        Date today = Date.from(Instant.now());
-        return getClaims(jwt).getExpiration().before(today);
-    }
-
-    private Claims getClaims(String token){
+    private Claims extractAllClaims(String token){
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    public String generateToken(UserDetails userDetails){
+        return generateToken(new HashMap<>(), userDetails);
+    }
+    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails){
+        return buildToken(extraClaims, userDetails, expiration);
+    }
+    public String generateRefreshToken(UserDetails userDetails){
+        return buildToken(new HashMap<>(), userDetails, refreshExpiration);
+    }
+    private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration){
+        return Jwts.builder()
+                .setClaims(extraClaims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public boolean isTokenValid(String token, UserDetails userDetails){
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+    }
+    private boolean isTokenExpired(String token){
+        return extractExpiration(token).before(new Date());
+    }
+
+    private Key getSigningKey(){
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private Date extractExpiration(String token){
+        return extractClaim(token, Claims::getExpiration);
     }
 }

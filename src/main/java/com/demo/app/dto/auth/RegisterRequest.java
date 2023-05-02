@@ -1,19 +1,22 @@
-package com.demo.app.dto.user;
+package com.demo.app.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @Builder
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResponse {
+public class RegisterRequest {
 
     private String username;
 
     private String email;
 
-    private boolean status;
+    private String password;
+
+
+
 }
