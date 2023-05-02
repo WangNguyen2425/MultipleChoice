@@ -85,7 +85,7 @@ public class ExcelUtils {
                             student.setPhoneNumber(cell.getStringCellValue());
                             break;
                         case COLUMN_INDEX_EMAIL:
-                            student.setEmail(value.toString());
+                            user.setEmail(value.toString());
                     }
                     userStudents.put(user, student);
                 });

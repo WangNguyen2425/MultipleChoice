@@ -3,9 +3,7 @@ package com.demo.app.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,10 +15,13 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "[user]", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "username", name = "uni_username")
+        @UniqueConstraint(columnNames = "username", name = "uni_username"),
+        @UniqueConstraint(columnNames = "email", name = "uni_email")
 })
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class User implements Serializable, UserDetails {
 
@@ -30,6 +31,8 @@ public class User implements Serializable, UserDetails {
 
     @Column(name = "username")
     private String username;
+
+    private String email;
 
     @Column(name = "password")
     @JsonIgnore
@@ -43,6 +46,9 @@ public class User implements Serializable, UserDetails {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Teacher teacher;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Token> tokens;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role",
@@ -77,6 +83,4 @@ public class User implements Serializable, UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-
 }

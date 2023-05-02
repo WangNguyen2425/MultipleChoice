@@ -11,6 +11,8 @@ public class TeacherRequest {
 
     private String username;
 
+    private String email;
+
     private String password;
 
     private String fullName;
@@ -18,8 +20,6 @@ public class TeacherRequest {
     private String birthday;
 
     private String gender;
-
-    private String email;
 
     private String phoneNumber;
 

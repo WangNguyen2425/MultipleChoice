@@ -13,10 +13,12 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -30,6 +32,8 @@ public class SecurityConfig {
     private final AuthenticationEntryPoint entryPoint;
 
     private final JwtAuthFilter jwtAuthFilter;
+
+    private final LogoutHandler logoutHandler;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -60,7 +64,13 @@ public class SecurityConfig {
                 .authenticationProvider(daoAuthenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
-                .authenticationEntryPoint(entryPoint);
+                .authenticationEntryPoint(entryPoint)
+                .and()
+                .logout()
+                .logoutUrl("api/v*/auth/logout")
+                .addLogoutHandler(logoutHandler)
+                .logoutSuccessHandler(((request, response, authentication) -> SecurityContextHolder.clearContext()))
+        ;
         return http.build();
     }
 
