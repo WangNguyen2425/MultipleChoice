@@ -32,6 +32,7 @@ public class User implements Serializable, UserDetails {
     @Column(name = "username")
     private String username;
 
+    @Column(name = "email")
     private String email;
 
     @Column(name = "password")

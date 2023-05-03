@@ -31,25 +31,22 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleEntityNotFoundExceptions(Exception ex){
-        EntityNotFoundException customEx = (EntityNotFoundException) ex;
-        HttpStatus status = customEx.getStatus();
-        return new ErrorResponse(status, customEx.getMessage());
+    public ErrorResponse handleEntityNotFoundExceptions(EntityNotFoundException ex){
+        HttpStatus status = ex.getStatus();
+        return new ErrorResponse(status, ex.getMessage());
     }
 
     @ExceptionHandler(FieldExistedException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleFieldExistedExceptions(Exception ex){
-        FieldExistedException customEx = (FieldExistedException) ex;
-        HttpStatus status = customEx.getStatus();
-        return new ErrorResponse(status, customEx.getMessage());
+    public ErrorResponse handleFieldExistedExceptions(FieldExistedException ex){
+        HttpStatus status = ex.getStatus();
+        return new ErrorResponse(status, ex.getMessage());
     }
 
     @ExceptionHandler(FileInputException.class)
     @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
-    public ErrorResponse handleIOException(Exception ex){
-        FileInputException customEx = (FileInputException) ex;
-        HttpStatus status = customEx.getStatus();
+    public ErrorResponse handleIOException(FileInputException ex){
+        HttpStatus status = ex.getStatus();
         return new ErrorResponse(status, ex.getMessage());
     }
 

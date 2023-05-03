@@ -2,12 +2,9 @@ package com.demo.app.data;
 
 import com.demo.app.config.security.PasswordEncoder;
 import com.demo.app.model.Role;
-import com.demo.app.model.Token;
 import com.demo.app.model.User;
 import com.demo.app.repository.RoleRepository;
-import com.demo.app.repository.TokenRepository;
 import com.demo.app.repository.UserRepository;
-import com.demo.app.util.JwtUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -25,10 +22,6 @@ public class LoadDatabase implements CommandLineRunner {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
-
-    private final TokenRepository tokenRepository;
-
-    private final JwtUtils jwtUtils;
 
     @Override
     @Transactional
@@ -57,13 +50,6 @@ public class LoadDatabase implements CommandLineRunner {
                     .roles(roles)
                     .build();
             userRepository.save(user);
-            var savedUser = userRepository.save(user);
-            var jwtToken = jwtUtils.generateToken(user);
-            Token token = Token.builder()
-                    .user(savedUser)
-                    .token(jwtToken)
-                    .build();
-            tokenRepository.save(token);
         }
     }
 }
