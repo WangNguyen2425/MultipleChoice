@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User implements Serializable, UserDetails {
 
     @Id
