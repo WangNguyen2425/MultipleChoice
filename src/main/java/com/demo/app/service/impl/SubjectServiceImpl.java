@@ -1,29 +1,81 @@
 package com.demo.app.service.impl;
 
 import com.demo.app.dto.subject.SubjectRequest;
+import com.demo.app.dto.subject.SubjectResponse;
+import com.demo.app.exception.EntityNotFoundException;
 import com.demo.app.exception.FieldExistedException;
 import com.demo.app.model.Subject;
+import com.demo.app.repository.ChapterRepository;
+import com.demo.app.repository.QuestionRepository;
 import com.demo.app.repository.SubjectRepository;
 import com.demo.app.service.SubjectService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SubjectServiceImpl implements SubjectService {
 
-    private final ModelMapper modelMapper;
+    private final ModelMapper mapper;
 
     private final SubjectRepository subjectRepository;
+
+    private final ChapterRepository chapterRepository;
+
+    private final QuestionRepository questionRepository;
 
     @Override
     public void addSubject(SubjectRequest request) throws FieldExistedException{
         if(subjectRepository.existsByCode(request.getCode())){
             throw new FieldExistedException("Subject's code already taken !", HttpStatus.BAD_REQUEST);
         }
-        Subject subject = modelMapper.map(request, Subject.class);
+        Subject subject = mapper.map(request, Subject.class);
         subjectRepository.save(subject);
     }
+
+    @Override
+    public List<SubjectResponse> getAllSubjects() throws EntityNotFoundException{
+        List<Subject> subjects = subjectRepository.findAll();
+        if (subjects.size() == 0){
+            throw new EntityNotFoundException("Not found any subject !", HttpStatus.NOT_FOUND);
+        }
+        return subjects.stream().map((subject -> {
+            var subjectResponse = mapper.map(subject, SubjectResponse.class);
+            subjectResponse.setChapterQuantity(chapterRepository.count());
+            subjectResponse.setQuestionQuantity(questionRepository.count());
+            return subjectResponse;
+        })).collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateSubject(int subjectId, SubjectRequest request) throws EntityNotFoundException {
+        var existSubject = subjectRepository.findById(subjectId).orElseThrow(() -> {
+            throw new EntityNotFoundException("", HttpStatus.NOT_FOUND);
+        });
+        String updateCode = request.getCode();
+        if (!updateCode.equalsIgnoreCase(existSubject.getCode())){
+            if(subjectRepository.existsByCode(updateCode)){
+                throw new FieldExistedException("", HttpStatus.CONFLICT);
+            }
+        }
+        var subject = mapper.map(request, Subject.class);
+        subject.setId(existSubject.getId());
+        subject.setStatus(existSubject.isStatus());
+
+        subjectRepository.save(subject);
+    }
+
+   @Override
+   public void disableSubject(int subjectId){
+       var subject = subjectRepository.findById(subjectId).orElseThrow(() -> {
+           throw new EntityNotFoundException("", HttpStatus.NOT_FOUND);
+       });
+       subject.setStatus(false);
+       subjectRepository.save(subject);
+   }
 }

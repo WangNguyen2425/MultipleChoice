@@ -5,6 +5,7 @@ import com.demo.app.dto.teacher.TeacherRequest;
 import com.demo.app.dto.teacher.TeacherResponse;
 import com.demo.app.exception.FieldExistedException;
 import com.demo.app.service.TeacherService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class TeacherController {
     private final TeacherService teacherService;
 
     @PostMapping(path = "/add")
-    public ResponseEntity<?> addNewTeacher(@RequestBody TeacherRequest request) throws FieldExistedException {
+    public ResponseEntity<?> addNewTeacher(@RequestBody @Valid TeacherRequest request) throws FieldExistedException {
         teacherService.saveTeacher(request);
         String message = String.format("Teacher %s have been saved successfully !", request.getFullName());
         return new ResponseEntity<>(new ResponseMessage(message), HttpStatus.CREATED);
@@ -34,7 +35,7 @@ public class TeacherController {
     }
 
     @PutMapping(path = "/update/{id}")
-    public ResponseEntity<?> updateTeacher(@PathVariable("id") int teacherId, @RequestBody TeacherRequest request){
+    public ResponseEntity<?> updateTeacher(@PathVariable("id") int teacherId, @RequestBody @Valid TeacherRequest request){
         teacherService.updateTeacher(teacherId, request);
         String message = String.format("Teacher with id = %d updated successfully !", teacherId);
         return new ResponseEntity<>(new ResponseMessage(message), HttpStatus.OK);
