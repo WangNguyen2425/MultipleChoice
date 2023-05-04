@@ -54,7 +54,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->  {
                     auth.requestMatchers("/api/v*/auth/**").permitAll();
                     auth.requestMatchers("/api/v*/teacher/**", "/api/v*/student/**").hasRole("ADMIN");
-                    auth.requestMatchers("/api/v*/subject/**").hasRole("TEACHER");
+                    auth.requestMatchers("/api/v*/subject/**").hasAnyRole("TEACHER");
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session ->
