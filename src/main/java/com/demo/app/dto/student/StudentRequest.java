@@ -30,7 +30,6 @@ public class StudentRequest {
 
     private String gender;
 
-
     @Pattern(regexp = "(84|0[3|5789])+([0-9]{8})\\b", message = "Phone number is invalid")
     private String phoneNumber;
 

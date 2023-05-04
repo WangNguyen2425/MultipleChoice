@@ -126,7 +126,7 @@ public class StudentServiceImpl implements StudentService {
             checkIfEmailExists(request.getEmail());
         }
 
-        Student student = modelMapper.map(request, Student.class);
+        var student = modelMapper.map(request, Student.class);
         student.setJoinDate(existStudent.getJoinDate());
         student.setUser(existStudent.getUser());
         student.setId(existStudent.getId());

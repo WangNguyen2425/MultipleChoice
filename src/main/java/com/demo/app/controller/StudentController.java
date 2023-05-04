@@ -5,7 +5,6 @@ import com.demo.app.dto.student.StudentPageRequest;
 import com.demo.app.dto.student.StudentPageResponse;
 import com.demo.app.dto.student.StudentRequest;
 import com.demo.app.dto.student.StudentResponse;
-import com.demo.app.exception.FieldExistedException;
 import com.demo.app.exception.FileInputException;
 import com.demo.app.service.StudentService;
 import com.demo.app.util.ExcelUtils;
@@ -37,7 +36,7 @@ public class StudentController {
     }
 
     @PostMapping(path = "/add")
-    public ResponseEntity<?> addNewStudent(@RequestBody @Valid StudentRequest request) throws FieldExistedException {
+    public ResponseEntity<?> addNewStudent(@RequestBody @Valid StudentRequest request){
         studentService.saveStudent(request);
         String message = String.format("Student %s have been saved successfully !", request.getFullName());
         return new ResponseEntity<>(new ResponseMessage(message), HttpStatus.CREATED);
