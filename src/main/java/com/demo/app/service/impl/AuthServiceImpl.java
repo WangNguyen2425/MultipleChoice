@@ -81,12 +81,12 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public AuthenticationResponse login(AuthenticationRequest request) {
         manager.authenticate(new UsernamePasswordAuthenticationToken(
-                request.getEmail(),
+                request.getUsername(),
                 request.getPassword()
         ));
 
-        var user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> {
-            throw new EntityNotFoundException("", HttpStatus.NOT_FOUND);
+        var user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> {
+            throw new EntityNotFoundException("Username not found !", HttpStatus.NOT_FOUND);
         });
         var jwtToken = jwtUtils.generateToken(user);
         var refreshToken = jwtUtils.generateRefreshToken(user);
