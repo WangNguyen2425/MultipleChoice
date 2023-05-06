@@ -79,7 +79,7 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
     private String verificationEmailUrl(HttpServletRequest request) {
-        return "https://" +request.getServerName()+":"
+        return "http://" +request.getServerName()+":"
                 +request.getServerPort()+request.getContextPath();
     }
 

@@ -53,6 +53,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(auth ->  {
                     auth.requestMatchers("/api/v*/auth/**").permitAll();
+                    auth.requestMatchers("/verify-email").permitAll();
                     auth.requestMatchers("/api/v*/teacher/**", "/api/v*/student/**").hasRole("ADMIN");
                     auth.requestMatchers("/api/v*/subject/**").hasAnyRole("TEACHER");
                     auth.anyRequest().authenticated();
