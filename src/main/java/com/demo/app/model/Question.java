@@ -33,8 +33,8 @@ public class Question implements Serializable {
     @Column(name = "created_date")
     private LocalDate createdDate;
 
-    @Column(name = "status")
-    private boolean status = true;
+    @Column(name = "is_enabled")
+    private boolean enabled;
 
     @ManyToOne
     private Chapter chapter;

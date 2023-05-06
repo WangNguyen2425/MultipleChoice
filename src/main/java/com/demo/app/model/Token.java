@@ -26,22 +26,22 @@ public class Token implements Serializable {
     private TokenType type;
 
     @Column(name = "is_expired")
-    private boolean isExpired;
+    private boolean expired;
 
     @Column(name = "is_revoked")
-    private boolean isRevoked;
+    private boolean revoked;
 
     @PrePersist
     private void prePersist(){
-        type = TokenType.BEARER;
-        isRevoked = false;
-        isExpired = false;
+        revoked = false;
+        expired = false;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     public enum TokenType{
-        BEARER
+        BEARER,
+        OTP
     }
 }

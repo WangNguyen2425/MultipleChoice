@@ -1,14 +1,18 @@
 package com.demo.app.service.impl;
 
+import com.demo.app.dto.chapter.ChapterRequest;
+import com.demo.app.dto.chapter.ChapterResponse;
 import com.demo.app.dto.subject.SubjectRequest;
 import com.demo.app.dto.subject.SubjectResponse;
 import com.demo.app.exception.EntityNotFoundException;
 import com.demo.app.exception.FieldExistedException;
+import com.demo.app.model.Chapter;
 import com.demo.app.model.Subject;
 import com.demo.app.repository.ChapterRepository;
 import com.demo.app.repository.QuestionRepository;
 import com.demo.app.repository.SubjectRepository;
 import com.demo.app.service.SubjectService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -65,7 +69,7 @@ public class SubjectServiceImpl implements SubjectService {
         }
         var subject = mapper.map(request, Subject.class);
         subject.setId(existSubject.getId());
-        subject.setStatus(existSubject.isStatus());
+        subject.setEnabled(existSubject.isEnabled());
 
         subjectRepository.save(subject);
     }
@@ -75,7 +79,42 @@ public class SubjectServiceImpl implements SubjectService {
        var subject = subjectRepository.findById(subjectId).orElseThrow(() -> {
            throw new EntityNotFoundException("", HttpStatus.NOT_FOUND);
        });
-       subject.setStatus(false);
+       subject.setEnabled(false);
        subjectRepository.save(subject);
+   }
+
+   @Override
+   @Transactional
+   public List<ChapterResponse> getAllSubjectChapters(String code) throws EntityNotFoundException {
+        var subject = subjectRepository.findByCode(code).orElseThrow(() -> {
+           throw new EntityNotFoundException(String.format("Cannot find any chapter with code %s", code), HttpStatus.NOT_FOUND);
+        });
+        List<Chapter> chapters = chapterRepository.findBySubjectId(subject.getId());
+        return chapters.stream().map(chapter -> ChapterResponse.builder()
+                .title(chapter.getTitle())
+                .order(String.format("Chapter %d: ", chapter.getOrder()))
+                .build()).collect(Collectors.toList());
+   }
+
+   @Override
+   @Transactional
+   public void addSubjectChapter(String code, ChapterRequest request) throws EntityNotFoundException{
+       var subject = subjectRepository.findByCode(code).orElseThrow(() -> {
+           throw new EntityNotFoundException(String.format("Cannot find any chapter with code %s", code), HttpStatus.NOT_FOUND);
+       });
+       var chapter = mapper.map(request, Chapter.class);
+       chapter.setSubject(subject);
+       chapterRepository.save(chapter);
+   }
+
+
+   @Override
+   public void updateSubjectChapter(int chapterId, ChapterRequest request){
+       var chapter = chapterRepository.findById(chapterId).orElseThrow(() -> {
+           throw new EntityNotFoundException(String.format("Cannot find any chapter with id %d", chapterId), HttpStatus.NOT_FOUND);
+       });
+       chapter.setTitle(request.getTitle());
+       chapter.setOrder(request.getOrder());
+       chapterRepository.save(chapter);
    }
 }

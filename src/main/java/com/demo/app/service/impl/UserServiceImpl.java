@@ -13,7 +13,6 @@ public class UserServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-
     private static final String USER_NOT_FOUND_MSG = "Username: %s not found !";
 
     @Override

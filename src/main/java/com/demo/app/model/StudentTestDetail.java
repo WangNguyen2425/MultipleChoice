@@ -19,8 +19,8 @@ public class StudentTestDetail implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "status")
-    private boolean status = true;
+    @Column(name = "is_enabled")
+    private boolean enabled;
 
     @Column(name = "question_mark")
     private double questionMark;

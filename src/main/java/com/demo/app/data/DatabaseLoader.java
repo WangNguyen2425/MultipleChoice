@@ -15,7 +15,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class LoadDatabase implements CommandLineRunner {
+public class DatabaseLoader implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
 
@@ -44,9 +44,9 @@ public class LoadDatabase implements CommandLineRunner {
             List<Role> roles = roleRepository.findAll();
             User user = User.builder()
                     .username("admin")
-                    .email("admin123@gmail.com")
+                    .email("knkuro00@gmail.com")
                     .password(passwordEncoder.passwordEncode().encode("admin"))
-                    .status(true)
+                    .enabled(true)
                     .roles(roles)
                     .build();
             userRepository.save(user);

@@ -25,8 +25,8 @@ public class TestSet implements Serializable {
     @Column(name = "test_no")
     private int testNo;
 
-    @Column(name = "status")
-    private boolean status = true;
+    @Column(name = "is_enabled")
+    private boolean enabled;
 
     @Column(name = "created_at")
     private LocalDate createdAt;

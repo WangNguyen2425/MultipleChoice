@@ -27,8 +27,8 @@ public class StudentTest implements Serializable {
     @Lob
     private String image;
 
-    @Column(name = "status")
-    private boolean status = true;
+    @Column(name = "is_enabled")
+    private boolean enabled;
 
     @Column(name = "test_date")
     private LocalDate testDate;

@@ -25,8 +25,8 @@ public class Chapter implements Serializable {
     @Column(name = "[order]")
     private int order;
 
-    @Column(name = "status")
-    private boolean status = true;
+    @Column(name = "is_enabled")
+    private boolean enabled;
 
     @ManyToOne
     private Subject subject;
