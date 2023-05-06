@@ -25,8 +25,8 @@ public class Answer implements Serializable {
     @Column(name = "is_corrected")
     private boolean isCorrected;
 
-    @Column(name = "status")
-    private boolean status = true;
+    @Column(name = "is_enabled")
+    private boolean enabled;
 
     @ManyToOne
     private Question question;

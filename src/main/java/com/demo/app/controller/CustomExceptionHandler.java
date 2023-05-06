@@ -4,6 +4,7 @@ import com.demo.app.dto.message.ErrorResponse;
 import com.demo.app.exception.EntityNotFoundException;
 import com.demo.app.exception.FieldExistedException;
 import com.demo.app.exception.FileInputException;
+import com.demo.app.exception.InvalidVerificationTokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -50,6 +51,11 @@ public class CustomExceptionHandler {
         return new ErrorResponse(status, ex.getMessage());
     }
 
-
+    @ExceptionHandler(InvalidVerificationTokenException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleInvalidVerificationTokenException(InvalidVerificationTokenException ex){
+        HttpStatus status = ex.getStatus();
+        return new ErrorResponse(status, ex.getMessage());
+    }
 
 }

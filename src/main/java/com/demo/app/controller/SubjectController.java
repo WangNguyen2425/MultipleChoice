@@ -1,5 +1,6 @@
 package com.demo.app.controller;
 
+import com.demo.app.dto.chapter.ChapterRequest;
 import com.demo.app.dto.message.ResponseMessage;
 import com.demo.app.dto.subject.SubjectRequest;
 import com.demo.app.service.SubjectService;
@@ -40,6 +41,21 @@ public class SubjectController {
         return new ResponseEntity<>(new ResponseMessage("Update subject successfully !"), HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping(path = "/{code}/chapters")
+    public ResponseEntity<?> getAllSubjectChapters(@PathVariable(name = "code") String code){
+        return ResponseEntity.ok().body(subjectService.getAllSubjectChapters(code));
+    }
 
 
+    @PostMapping(path = "/{code}/chapter/add")
+    public ResponseEntity<?> addSubjectChapter(@PathVariable(name = "code") String code, @RequestBody @Valid final ChapterRequest request){
+        subjectService.addSubjectChapter(code, request);
+        return new ResponseEntity<>(new ResponseMessage("Add subject's chapter successfully !"), HttpStatus.CREATED);
+    }
+
+    @PutMapping(path = "/chapter/update/{id}")
+    public ResponseEntity<?> updateChapter(@PathVariable(name = "id") int chapterId, @RequestBody @Valid final ChapterRequest request){
+        subjectService.updateSubjectChapter(chapterId, request);
+        return new ResponseEntity<>(new ResponseMessage("Update subject's chapter successfully !"), HttpStatus.OK);
+    }
 }

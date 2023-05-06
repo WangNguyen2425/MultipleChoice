@@ -1,9 +1,12 @@
 package com.demo.app.service;
 
+import com.demo.app.dto.chapter.ChapterRequest;
+import com.demo.app.dto.chapter.ChapterResponse;
 import com.demo.app.dto.subject.SubjectRequest;
 import com.demo.app.dto.subject.SubjectResponse;
 import com.demo.app.exception.EntityNotFoundException;
 import com.demo.app.exception.FieldExistedException;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 
@@ -15,4 +18,12 @@ public interface SubjectService {
     void updateSubject(int subjectId, SubjectRequest request) throws EntityNotFoundException;
 
     void disableSubject(int subjectId);
+
+    @Transactional
+    List<ChapterResponse> getAllSubjectChapters(String code) throws EntityNotFoundException;
+
+    @Transactional
+    void addSubjectChapter(String code, ChapterRequest request) throws EntityNotFoundException;
+
+    void updateSubjectChapter(int chapterId, ChapterRequest request);
 }

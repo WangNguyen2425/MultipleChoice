@@ -16,7 +16,7 @@ import com.demo.app.repository.UserRepository;
 import com.demo.app.service.StudentService;
 import com.demo.app.util.ExcelUtils;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,7 +31,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
@@ -100,7 +100,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<StudentResponse> getAllStudents() throws EntityNotFoundException {
-        List<Student> students = studentRepository.findByStatus(true);
+        List<Student> students = studentRepository.findByEnabled(true);
         if (students.size() == 0) {
             throw new EntityNotFoundException("Not found any students", HttpStatus.NOT_FOUND);
         }
@@ -138,7 +138,7 @@ public class StudentServiceImpl implements StudentService {
     public void disableStudent(int studentId) throws EntityNotFoundException {
         Student existStudent = studentRepository.findById(studentId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Not found any student with id = %d !", studentId), HttpStatus.NOT_FOUND));
-        existStudent.getUser().setStatus(false);
+        existStudent.getUser().setEnabled(false);
         studentRepository.save(existStudent);
     }
 
@@ -148,8 +148,8 @@ public class StudentServiceImpl implements StudentService {
         Student existStudent = studentRepository.findById(studentId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Not found any student with id = %d !", studentId), HttpStatus.NOT_FOUND));
         User user = existStudent.getUser();
-
-        userRepository.deleteRoleFromUser(user.getId());
+        user.setRoles(null);
+        userRepository.save(user);
         studentRepository.delete(existStudent);
         userRepository.delete(user);
 

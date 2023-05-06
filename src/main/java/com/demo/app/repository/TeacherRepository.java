@@ -12,7 +12,7 @@ import java.util.List;
 public interface TeacherRepository extends JpaRepository<Teacher, Integer> {
     Boolean existsByPhoneNumber(String phoneNumber);
 
-    @Query("select t from Teacher t join User u on t.user.id = u.id where u.status = :status")
-    List<Teacher> findByStatus(@Param("status") boolean status);
+    @Query("select t from Teacher t join User u on t.user.id = u.id where u.enabled = :enabled")
+    List<Teacher> findByEnabled(@Param("enabled") boolean enabled);
 }
 

@@ -34,8 +34,8 @@ public class Subject implements Serializable {
     @Column(name = "credit")
     private int credit;
 
-    @Column(name = "status")
-    private boolean status = true;
+    @Column(name = "is_enabled")
+    private boolean enabled;
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
     private List<Chapter> chapters;

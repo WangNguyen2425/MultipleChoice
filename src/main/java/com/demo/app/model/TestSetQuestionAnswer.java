@@ -21,8 +21,8 @@ public class TestSetQuestionAnswer implements Serializable {
     @Column(name = "answer_no")
     private int answerNo;
 
-    @Column(name = "status")
-    private boolean status = true;
+    @Column(name = "is_enabled")
+    private boolean enabled;
 
     @ManyToOne
     private TestSetQuestion testSetQuestion;

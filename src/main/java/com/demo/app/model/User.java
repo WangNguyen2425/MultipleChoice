@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,12 +36,15 @@ public class User implements Serializable, UserDetails {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "password")
     @JsonIgnore
+    @Column(name = "password")
     private String password;
 
-    @Column(name = "status")
-    private boolean status = true;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "is_enabled")
+    private boolean enabled;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Student student;
@@ -56,6 +60,12 @@ public class User implements Serializable, UserDetails {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
+
+    @PrePersist
+    private void prePersist(){
+        createdAt = LocalDateTime.now();
+        enabled = this.username.equals("admin");
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

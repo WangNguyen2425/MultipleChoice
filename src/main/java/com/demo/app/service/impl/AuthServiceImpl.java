@@ -4,8 +4,10 @@ import com.demo.app.config.security.PasswordEncoder;
 import com.demo.app.dto.auth.AuthenticationRequest;
 import com.demo.app.dto.auth.AuthenticationResponse;
 import com.demo.app.dto.auth.RegisterRequest;
+import com.demo.app.event.RegisterCompleteEvent;
 import com.demo.app.exception.EntityNotFoundException;
 import com.demo.app.exception.FieldExistedException;
+import com.demo.app.exception.InvalidVerificationTokenException;
 import com.demo.app.model.Role;
 import com.demo.app.model.Token;
 import com.demo.app.model.User;
@@ -20,6 +22,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -47,22 +50,25 @@ public class AuthServiceImpl implements AuthService {
 
     private final TokenRepository tokenRepository;
 
+    private final ApplicationEventPublisher publisher;
     @Override
     @Transactional
-    public AuthenticationResponse register(RegisterRequest request) {
-        if(userRepository.existsByEmail(request.getEmail())){
+    public AuthenticationResponse register(RegisterRequest registerRequest, HttpServletRequest request) {
+        if(userRepository.existsByEmail(registerRequest.getEmail())){
             throw new FieldExistedException("Email already taken!", HttpStatus.CONFLICT);
         }
-        if(userRepository.existsByUsername(request.getUsername())){
+        if(userRepository.existsByUsername(registerRequest.getUsername())){
             throw new FieldExistedException("Username already taken!", HttpStatus.CONFLICT);
         }
 
         List<Role> roles = Collections.singletonList(roleRepository.findByRoleName(Role.RoleType.ROLE_USER).get());
-        User user = mapper.map(request, User.class);
+        User user = mapper.map(registerRequest, User.class);
         user.setRoles(roles);
-        user.setPassword(encode(request.getPassword()));
+        user.setPassword(encode(registerRequest.getPassword()));
 
         var savedUser = userRepository.save(user);
+        publisher.publishEvent(new RegisterCompleteEvent(savedUser, verificationEmailUrl(request)));
+
         var jwtToken = jwtUtils.generateToken(user);
         var refreshToken = jwtUtils.generateRefreshToken(user);
         saveUserToken(savedUser,jwtToken);
@@ -71,6 +77,23 @@ public class AuthServiceImpl implements AuthService {
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+    private String verificationEmailUrl(HttpServletRequest request) {
+        return "https://" +request.getServerName()+":"
+                +request.getServerPort()+request.getContextPath();
+    }
+
+
+    @Override
+    @Transactional
+    public void activateUserAccount(String verifyToken) throws InvalidVerificationTokenException{
+        Token token = tokenRepository.findByTokenAndExpiredFalse(verifyToken).orElseThrow(() -> {
+            throw new EntityNotFoundException("Invalid token !", HttpStatus.FORBIDDEN);
+        });
+        token.getUser().setEnabled(true);
+        token.setRevoked(true);
+        token.setExpired(true);
+        tokenRepository.save(token);
     }
 
     private String encode(String password) {
@@ -85,7 +108,7 @@ public class AuthServiceImpl implements AuthService {
                 request.getPassword()
         ));
 
-        var user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> {
+        var user = userRepository.findByUsernameAndEnabledIsTrue(request.getUsername()).orElseThrow(() -> {
             throw new EntityNotFoundException("Username not found !", HttpStatus.NOT_FOUND);
         });
         var jwtToken = jwtUtils.generateToken(user);
@@ -100,8 +123,9 @@ public class AuthServiceImpl implements AuthService {
 
     private void saveUserToken(User user, String jwtToken){
         var token = Token.builder()
-                .user(user)
                 .token(jwtToken)
+                .type(Token.TokenType.BEARER)
+                .user(user)
                 .build();
         tokenRepository.save(token);
     }

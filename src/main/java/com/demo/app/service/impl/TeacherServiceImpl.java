@@ -55,7 +55,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public List<TeacherResponse> getAllTeacher(){
-        List<Teacher> teachers = teacherRepository.findByStatus(true);
+        List<Teacher> teachers = teacherRepository.findByEnabled(true);
         if (teachers.size() == 0) {
             throw new EntityNotFoundException("Not found any teacher !", HttpStatus.NOT_FOUND);
         }
@@ -92,7 +92,7 @@ public class TeacherServiceImpl implements TeacherService {
     public void disableTeacher(int teacherId) throws EntityNotFoundException{
         Teacher existTeacher = teacherRepository.findById(teacherId).
                 orElseThrow(() -> new EntityNotFoundException(String.format("Not found any teacher with id = %d", teacherId), HttpStatus.NOT_FOUND));
-        existTeacher.getUser().setStatus(false);
+        existTeacher.getUser().setEnabled(false);
         teacherRepository.save(existTeacher);
     }
 
@@ -104,8 +104,8 @@ public class TeacherServiceImpl implements TeacherService {
                         String.format("Not found any teacher with id = %d", teacherId), HttpStatus.NOT_FOUND)
                 );
         User user = existTeacher.getUser();
-
-        userRepository.deleteRoleFromUser(user.getId());
+        user.setRoles(null);
+        userRepository.save(user);
         teacherRepository.delete(existTeacher);
         userRepository.delete(user);
     }
