@@ -26,4 +26,6 @@ public interface SubjectService {
     void addSubjectChapter(String code, ChapterRequest request) throws EntityNotFoundException;
 
     void updateSubjectChapter(int chapterId, ChapterRequest request);
+
+    void disableChapter(int chapterId);
 }

@@ -89,7 +89,7 @@ public class SubjectServiceImpl implements SubjectService {
         var subject = subjectRepository.findByCode(code).orElseThrow(() -> {
            throw new EntityNotFoundException(String.format("Cannot find any chapter with code %s", code), HttpStatus.NOT_FOUND);
         });
-        List<Chapter> chapters = chapterRepository.findBySubjectId(subject.getId());
+        List<Chapter> chapters = chapterRepository.findBySubjectIdAndEnabledTrue(subject.getId());
         return chapters.stream().map(chapter -> ChapterResponse.builder()
                 .title(chapter.getTitle())
                 .order(String.format("Chapter %d: ", chapter.getOrder()))
@@ -117,4 +117,14 @@ public class SubjectServiceImpl implements SubjectService {
        chapter.setOrder(request.getOrder());
        chapterRepository.save(chapter);
    }
+
+   @Override
+   public void disableChapter(int chapterId){
+       var chapter = chapterRepository.findById(chapterId).orElseThrow(() -> {
+           throw new EntityNotFoundException(String.format("Cannot find any chapter with id %d", chapterId), HttpStatus.NOT_FOUND);
+       });
+       chapter.setEnabled(false);
+       chapterRepository.save(chapter);
+   }
+
 }

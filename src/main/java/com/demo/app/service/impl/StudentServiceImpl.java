@@ -20,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -72,30 +71,32 @@ public class StudentServiceImpl implements StudentService {
         checkIfPhoneNumberExists(request.getPhoneNumber());
 
         List<Role> roles = roleRepository.findAllByRoleNameIn(Arrays.asList(Role.RoleType.ROLE_USER, Role.RoleType.ROLE_STUDENT));
-
         User user = modelMapper.map(request, User.class);
         user.setPassword(passwordEncoder.passwordEncode().encode(request.getPassword()));
         user.setRoles(roles);
         user.getStudent().setUser(user);
+        user.setEnabled(true);
         userRepository.save(user);
     }
 
     @Override
     public StudentPageResponse getAllStudents(int pageNo, int pageSize, String sortBy, String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        var sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        var pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<Student> students = studentRepository.findAll(pageable);
-        List<StudentResponse> studentResponses = students.stream().map(student -> modelMapper.map(student, StudentResponse.class)).collect(Collectors.toList());
+        var studentResponses = students.stream().map(
+                student -> modelMapper.map(student, StudentResponse.class)
+        ).collect(Collectors.toList());
 
-        StudentPageResponse response = new StudentPageResponse();
-        response.setStudentDtos(studentResponses);
-        response.setPageNo(students.getNumber());
-        response.setPageSize(students.getSize());
-        response.setTotalElements(students.getTotalElements());
-        response.setTotalPages(students.getTotalPages());
-        response.setFirst(students.isFirst());
-        response.setLast(students.isLast());
-        return response;
+        return StudentPageResponse.builder()
+                .studentDtos(studentResponses)
+                .pageNo(students.getNumber())
+                .pageSize(students.getSize())
+                .totalElements(students.getTotalElements())
+                .totalPages(students.getTotalPages())
+                .isFirst(students.isFirst())
+                .isLast(students.isLast())
+                .build();
     }
 
     @Override
@@ -136,8 +137,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void disableStudent(int studentId) throws EntityNotFoundException {
-        Student existStudent = studentRepository.findById(studentId)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Not found any student with id = %d !", studentId), HttpStatus.NOT_FOUND));
+        var existStudent = studentRepository.findById(studentId).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Not found any student with id = %d !", studentId), HttpStatus.NOT_FOUND)
+        );
         existStudent.getUser().setEnabled(false);
         studentRepository.save(existStudent);
     }
@@ -145,10 +147,12 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public void deleteStudent(int studentId) throws EntityNotFoundException {
-        Student existStudent = studentRepository.findById(studentId)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Not found any student with id = %d !", studentId), HttpStatus.NOT_FOUND));
+        var existStudent = studentRepository.findById(studentId).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Not found any student with id = %d !", studentId), HttpStatus.NOT_FOUND)
+        );
         User user = existStudent.getUser();
         user.setRoles(null);
+
         userRepository.save(user);
         studentRepository.delete(existStudent);
         userRepository.delete(user);

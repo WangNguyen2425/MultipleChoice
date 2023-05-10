@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-public class VerifyEmailController {
+public class EmailController {
     private final AuthService authService;
 
     @GetMapping(path = "/verify-email")

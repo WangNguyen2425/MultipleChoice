@@ -1,6 +1,5 @@
 package com.demo.app.data;
 
-import com.demo.app.model.User;
 import com.demo.app.repository.TokenRepository;
 import com.demo.app.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -10,7 +9,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -26,8 +24,8 @@ public class AppScheduler {
     @Transactional
     @Scheduled(fixedDelay = 5, timeUnit = TimeUnit.MINUTES)
     public void cleanupUnverifiedAccounts(){
-        LocalDateTime waitedTime = LocalDateTime.now().minusMinutes(5);
-        List<User> unverifiedUsers = userRepository.findByEnabledFalseAndCreatedAtBefore(waitedTime);
+        var waitedTime = LocalDateTime.now().minusMinutes(5);
+        var unverifiedUsers = userRepository.findByEnabledFalseAndCreatedAtBefore(waitedTime);
         unverifiedUsers.forEach(user -> {
             tokenRepository.deleteAllByUser(user.getId());
             user.setRoles(null);
