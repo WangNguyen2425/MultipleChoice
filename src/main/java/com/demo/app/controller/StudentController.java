@@ -1,7 +1,7 @@
 package com.demo.app.controller;
 
 import com.demo.app.dto.message.ResponseMessage;
-import com.demo.app.dto.student.StudentPageRequest;
+import com.demo.app.dto.page.PageRequest;
 import com.demo.app.dto.student.StudentPageResponse;
 import com.demo.app.dto.student.StudentRequest;
 import com.demo.app.dto.student.StudentResponse;
@@ -43,8 +43,8 @@ public class StudentController {
     }
 
     @GetMapping(path = "/page")
-    public ResponseEntity<StudentPageResponse> getPageStudents(@RequestBody StudentPageRequest request) {
-        StudentPageResponse response = studentService.getAllStudents(
+    public ResponseEntity<StudentPageResponse> getStudentPages(@RequestBody PageRequest request) {
+        var response = studentService.getAllStudents(
                 request.getPageNo(),
                 request.getPageSize(),
                 request.getSortBy(),
@@ -54,7 +54,7 @@ public class StudentController {
 
     @GetMapping(path = "/list")
     public ResponseEntity<List<StudentResponse>> getAllStudents() {
-        List<StudentResponse> studentResponses = studentService.getAllStudents();
+        var studentResponses = studentService.getAllStudents();
         return ResponseEntity.status(HttpStatus.OK).body(studentResponses);
     }
 

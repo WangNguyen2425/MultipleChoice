@@ -46,7 +46,6 @@ public class SubjectController {
         return ResponseEntity.ok().body(subjectService.getAllSubjectChapters(code));
     }
 
-
     @PostMapping(path = "/{code}/chapter/add")
     public ResponseEntity<?> addSubjectChapter(@PathVariable(name = "code") String code, @RequestBody @Valid final ChapterRequest request){
         subjectService.addSubjectChapter(code, request);
@@ -56,6 +55,12 @@ public class SubjectController {
     @PutMapping(path = "/chapter/update/{id}")
     public ResponseEntity<?> updateChapter(@PathVariable(name = "id") int chapterId, @RequestBody @Valid final ChapterRequest request){
         subjectService.updateSubjectChapter(chapterId, request);
-        return new ResponseEntity<>(new ResponseMessage("Update subject's chapter successfully !"), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage("Update chapter successfully !"), HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/chapter/disable/{id}")
+    public ResponseEntity<?> disableChapter(@PathVariable(name = "id") int chapterId){
+        subjectService.disableChapter(chapterId);
+        return new ResponseEntity<>(new ResponseMessage("Disable chapter successfully !"), HttpStatus.OK);
     }
 }

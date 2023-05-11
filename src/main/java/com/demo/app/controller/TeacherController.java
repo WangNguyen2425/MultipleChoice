@@ -30,7 +30,7 @@ public class TeacherController {
 
     @GetMapping(path = "/list")
     public ResponseEntity<List<TeacherResponse>> getAllTeachers() {
-        List<TeacherResponse> teacherResponses = teacherService.getAllTeacher();
+        var teacherResponses = teacherService.getAllTeacher();
         return ResponseEntity.status(HttpStatus.OK).body(teacherResponses);
     }
 

@@ -23,7 +23,8 @@ public class Question implements Serializable {
     @Column(name = "topic_text")
     private String topicText;
 
-    @Column(name = "topic_image")
+    @Lob
+    @Column(name = "topic_image", length = 100000)
     private byte[] topicImage;
 
     @Enumerated(EnumType.STRING)
@@ -51,5 +52,6 @@ public class Question implements Serializable {
     @PrePersist
     private void prePersist() {
         createdDate = LocalDate.now();
+        enabled = true;
     }
 }

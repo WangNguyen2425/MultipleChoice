@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-public class CustomExceptionHandler {
+public class AppExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

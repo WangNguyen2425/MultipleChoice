@@ -1,11 +1,11 @@
-package com.demo.app.dto.student;
+package com.demo.app.dto.page;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class StudentPageRequest {
+public class PageRequest {
 
     private int pageNo;
 
