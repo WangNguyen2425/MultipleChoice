@@ -40,6 +40,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager manager;
 
     private final ModelMapper mapper;
+
     private final PasswordEncoder passwordEncoder;
 
     private final JwtUtils jwtUtils;
