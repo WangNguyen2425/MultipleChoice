@@ -50,7 +50,7 @@ public class RegisterCompleteEventListener implements ApplicationListener<Regist
                 "<p> Thank you <br> Users Registration Portal Service";
         MimeMessage message = mailSender.createMimeMessage();
         var messageHelper = new MimeMessageHelper(message);
-        messageHelper.setFrom("kien.nt112002@gmail.com", "verification Code Generator");
+        messageHelper.setFrom("kien.nt112002@gmail.com", "Verification Code Generator");
         messageHelper.setTo(user.getEmail());
         messageHelper.setSubject("Email Verification");
         messageHelper.setText(mailContent, true);

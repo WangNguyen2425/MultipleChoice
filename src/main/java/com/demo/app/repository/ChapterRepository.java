@@ -11,5 +11,5 @@ public interface ChapterRepository extends JpaRepository<Chapter, Integer> {
 
     List<Chapter> findBySubjectIdAndEnabledTrue(int subjectId);
 
-
+    int countBySubjectId(int subjectId);
 }

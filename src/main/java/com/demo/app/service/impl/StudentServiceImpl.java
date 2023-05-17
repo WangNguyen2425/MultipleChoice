@@ -108,6 +108,7 @@ public class StudentServiceImpl implements StudentService {
         return students.stream().map(student -> {
             StudentResponse response = modelMapper.map(student, StudentResponse.class);
             response.setUsername(student.getUser().getUsername());
+            response.setEmail(student.getUser().getEmail());
             return response;
         }).collect(Collectors.toList());
     }
@@ -131,7 +132,10 @@ public class StudentServiceImpl implements StudentService {
         student.setJoinDate(existStudent.getJoinDate());
         student.setUser(existStudent.getUser());
         student.setId(existStudent.getId());
-
+        var user = student.getUser();
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setUsername(request.getUsername());
         studentRepository.save(student);
     }
 
