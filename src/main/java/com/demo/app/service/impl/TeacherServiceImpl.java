@@ -49,6 +49,7 @@ public class TeacherServiceImpl implements TeacherService {
         String encodePassword = passwordEncoder.passwordEncode().encode(request.getPassword());
         user.setPassword(encodePassword);
         user.setRoles(roles);
+        user.setEnabled(true);
         user.getTeacher().setUser(user);
         userRepository.save(user);
     }
@@ -62,6 +63,7 @@ public class TeacherServiceImpl implements TeacherService {
         return teachers.stream().map(teacher -> {
             var response = mapper.map(teacher, TeacherResponse.class);
             response.setUsername(teacher.getUser().getUsername());
+            response.setEmail(teacher.getUser().getEmail());
             return response;
         }).collect(Collectors.toList());
     }
@@ -85,6 +87,10 @@ public class TeacherServiceImpl implements TeacherService {
         Teacher teacher = mapper.map(request, Teacher.class);
         teacher.setId(existTeacher.getId());
         teacher.setUser(existTeacher.getUser());
+        var user = teacher.getUser();
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setUsername(request.getUsername());
         teacherRepository.save(teacher);
     }
 

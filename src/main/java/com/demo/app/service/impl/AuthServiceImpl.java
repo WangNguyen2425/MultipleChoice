@@ -110,7 +110,7 @@ public class AuthServiceImpl implements AuthService {
         ));
 
         var user = userRepository.findByUsernameAndEnabledIsTrue(request.getUsername()).orElseThrow(() -> {
-            throw new EntityNotFoundException("Username not found !", HttpStatus.NOT_FOUND);
+            throw new EntityNotFoundException("Username not found !", HttpStatus.BAD_REQUEST);
         });
         var jwtToken = jwtUtils.generateToken(user);
         var refreshToken = jwtUtils.generateRefreshToken(user);
@@ -153,7 +153,7 @@ public class AuthServiceImpl implements AuthService {
         final String username = jwtUtils.extractUsername(refreshToken);
         if(username != null){
             var user = userRepository.findByUsername(username).orElseThrow(() -> {
-                throw new EntityNotFoundException("User not found !", HttpStatus.NOT_FOUND);
+                throw new EntityNotFoundException("User not found !", HttpStatus.BAD_REQUEST);
             });
             if(jwtUtils.isTokenValid(refreshToken, user)){
                 var accessToken = jwtUtils.generateToken(user);

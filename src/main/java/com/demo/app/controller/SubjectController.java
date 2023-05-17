@@ -41,7 +41,7 @@ public class SubjectController {
         return new ResponseEntity<>(new ResponseMessage("Update subject successfully !"), HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping(path = "/{code}/chapters")
+    @GetMapping(path = "/{code}/chapter/list")
     public ResponseEntity<?> getAllSubjectChapters(@PathVariable(name = "code") String code){
         return ResponseEntity.ok().body(subjectService.getAllSubjectChapters(code));
     }

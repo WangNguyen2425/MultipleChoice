@@ -50,7 +50,7 @@ public class SubjectServiceImpl implements SubjectService {
         }
         return subjects.stream().map((subject -> {
             var subjectResponse = mapper.map(subject, SubjectResponse.class);
-            subjectResponse.setChapterQuantity(chapterRepository.count());
+            subjectResponse.setChapterQuantity(chapterRepository.countBySubjectId(subject.getId()));
             subjectResponse.setQuestionQuantity(questionRepository.count());
             return subjectResponse;
         })).collect(Collectors.toList());
