@@ -29,7 +29,7 @@ public class Chapter implements Serializable {
     @Column(name = "is_enabled")
     private boolean enabled;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Subject subject;
 
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)

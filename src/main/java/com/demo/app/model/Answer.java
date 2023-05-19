@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "answer")
@@ -30,5 +31,10 @@ public class Answer implements Serializable {
 
     @ManyToOne
     private Question question;
+
+    @PrePersist
+    private void prePersist() {
+        enabled = true;
+    }
 
 }

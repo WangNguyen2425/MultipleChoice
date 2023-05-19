@@ -1,4 +1,4 @@
-package com.demo.app.controller;
+package com.demo.app.exception;
 
 import com.demo.app.dto.message.ErrorResponse;
 import com.demo.app.exception.EntityNotFoundException;

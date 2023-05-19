@@ -37,7 +37,7 @@ public class Question implements Serializable {
     @Column(name = "is_enabled")
     private boolean enabled;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Chapter chapter;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)

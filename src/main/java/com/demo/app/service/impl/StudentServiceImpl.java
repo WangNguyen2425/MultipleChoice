@@ -1,8 +1,8 @@
 package com.demo.app.service.impl;
 
 import com.demo.app.config.security.PasswordEncoder;
+import com.demo.app.dto.page.PageResponse;
 import com.demo.app.dto.student.StudentRequest;
-import com.demo.app.dto.student.StudentPageResponse;
 import com.demo.app.dto.student.StudentResponse;
 import com.demo.app.exception.EntityNotFoundException;
 import com.demo.app.exception.FieldExistedException;
@@ -80,7 +80,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentPageResponse getAllStudents(int pageNo, int pageSize, String sortBy, String sortDir) {
+    public PageResponse<StudentResponse> getAllStudents(int pageNo, int pageSize, String sortBy, String sortDir) {
         var sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         var pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<Student> students = studentRepository.findAll(pageable);
@@ -88,8 +88,8 @@ public class StudentServiceImpl implements StudentService {
                 student -> modelMapper.map(student, StudentResponse.class)
         ).collect(Collectors.toList());
 
-        return StudentPageResponse.builder()
-                .studentDtos(studentResponses)
+        return PageResponse.<StudentResponse>builder()
+                .objects(studentResponses)
                 .pageNo(students.getNumber())
                 .pageSize(students.getSize())
                 .totalElements(students.getTotalElements())

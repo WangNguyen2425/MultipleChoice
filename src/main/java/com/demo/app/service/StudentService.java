@@ -1,7 +1,7 @@
 package com.demo.app.service;
 
+import com.demo.app.dto.page.PageResponse;
 import com.demo.app.dto.student.StudentRequest;
-import com.demo.app.dto.student.StudentPageResponse;
 import com.demo.app.dto.student.StudentResponse;
 import com.demo.app.exception.EntityNotFoundException;
 import com.demo.app.exception.FieldExistedException;
@@ -16,7 +16,7 @@ public interface StudentService {
 
     void saveStudent(StudentRequest request) throws FieldExistedException;
 
-    StudentPageResponse getAllStudents(int pageNo, int pageSize, String sortBy, String sortDir);
+    PageResponse<StudentResponse> getAllStudents(int pageNo, int pageSize, String sortBy, String sortDir);
 
     List<StudentResponse> getAllStudents();
 
