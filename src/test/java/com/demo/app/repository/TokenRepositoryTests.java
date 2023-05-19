@@ -2,7 +2,6 @@ package com.demo.app.repository;
 
 import com.demo.app.ProjectDesignIApplication;
 import org.junit.Test;
-import org.assertj.core.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
