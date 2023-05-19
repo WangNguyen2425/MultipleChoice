@@ -16,11 +16,10 @@ public class ModelMapperConfig {
     public ModelMapper modelMapper(){
         var mapper = new ModelMapper();
         mapper.getConfiguration().setSkipNullEnabled(true);
-
         convertLocalDate(mapper);
         convertGender(mapper);
         convertLevel(mapper);
-
+        convertBoolean(mapper);
         return mapper;
     }
 
@@ -56,6 +55,14 @@ public class ModelMapperConfig {
             case "easy", "Easy", "EASY" -> Question.Level.EASY;
             case "normal", "Normal", "NORMAL" -> Question.Level.NORMAL;
             case "difficult", "Difficult", "DIFFICULT" -> Question.Level.DIFFICULT;
+            default -> null;
+        });
+    }
+
+    private void convertBoolean(ModelMapper mapper){
+        mapper.createTypeMap(String.class, Boolean.class).setConverter(context -> switch (context.getSource()) {
+            case "True", "TRUE", "true", "1", "Correct" -> true;
+            case "False", "FALSE", "false", "0", "Incorrect" -> false;
             default -> null;
         });
     }

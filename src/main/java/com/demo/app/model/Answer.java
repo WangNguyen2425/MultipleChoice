@@ -1,8 +1,6 @@
 package com.demo.app.model;
 
-
 import jakarta.persistence.*;
-
 import lombok.*;
 
 import java.io.Serializable;
@@ -30,5 +28,10 @@ public class Answer implements Serializable {
 
     @ManyToOne
     private Question question;
+
+    @PrePersist
+    private void prePersist() {
+        enabled = true;
+    }
 
 }

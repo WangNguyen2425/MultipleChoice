@@ -1,10 +1,14 @@
 package com.demo.app.controller;
 
+import com.demo.app.dto.answer.AnswerRequest;
 import com.demo.app.dto.message.ResponseMessage;
 import com.demo.app.dto.page.PageRequest;
 import com.demo.app.dto.question.QuestionRequest;
 import com.demo.app.exception.FileInputException;
 import com.demo.app.service.QuestionService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,20 +17,22 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/v1")
+@RequestMapping(path = "/api/v1/question")
+@Tag(name = "Question", description = "Question APIs Management")
 @RequiredArgsConstructor
 public class QuestionController {
 
     private final QuestionService questionService;
 
-    @PostMapping(path = "/{chapterId}/question/add",
+    @PostMapping(path = "/add",
             consumes = {
                     MediaType.APPLICATION_JSON_VALUE,
                     MediaType.MULTIPART_FORM_DATA_VALUE
             })
-    public ResponseEntity<?> addQuestion(@PathVariable("chapterId") int chapterId,
+    public ResponseEntity<?> addQuestion(@RequestParam("chapterId") int chapterId,
                                          @RequestPart(name = "topicText") String topicText,
                                          @RequestPart(name = "topicImageFile") MultipartFile topicImageFile,
                                          @RequestPart(name = "level") String level) throws FileInputException {
@@ -43,14 +49,20 @@ public class QuestionController {
         }
     }
 
-    @GetMapping(path = "/{code}/question/list")
-    public ResponseEntity<?> getAllQuestionsBySubject(@PathVariable(name = "code") String code){
-
-        return null;
+    @PostMapping(path = "{questionId}/answers/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> addQuestionAnswers(@PathVariable int questionId, @RequestBody @Valid @NotNull final List<AnswerRequest> requests) {
+        questionService.addQuestionAnswers(questionId, requests);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Add answers for question successfully !"));
     }
 
-    @GetMapping(path = "/{code}/question/page")
-    public ResponseEntity<?> getQuestionPagesBySubject(@PathVariable(name = "code") String code, @RequestBody PageRequest request){
+    @GetMapping(path = "/list")
+    public ResponseEntity<?> getAllQuestionsBySubjectCode(@RequestParam(name = "code") String code){
+        return ResponseEntity.status(HttpStatus.OK).body(questionService.getAllQuestionsBySubjectCode(code));
+    }
+
+    @GetMapping(path = "/page")
+    public ResponseEntity<?> getQuestionPagesBySubjectCode(@RequestParam(name = "code") String code, @RequestBody PageRequest request){
+
         return null;
     }
 

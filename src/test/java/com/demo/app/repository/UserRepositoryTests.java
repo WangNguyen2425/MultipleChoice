@@ -11,6 +11,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
+
 @DataJpaTest
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = ProjectDesignIApplication.class)
@@ -51,6 +53,13 @@ public class UserRepositoryTests {
     public void testExistsByEmail(){
         boolean existed = userRepository.existsByEmail("knkuro00@gmail.com");
         Assertions.assertThat(existed).isTrue();
+    }
+
+    @Test
+    public void testFindByEnabledFalseAndCreatedAtBefore(){
+        var waitedTime = LocalDateTime.now().minusMinutes(5);
+        var expectUser = userRepository.findByEnabledFalseAndCreatedAtBefore(waitedTime);
+        Assertions.assertThat(expectUser).isNotNull();
     }
 
 }
