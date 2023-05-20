@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode()
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Question implements Serializable {
 
     @Id
@@ -22,14 +22,17 @@ public class Question implements Serializable {
     private int id;
 
     @Column(name = "topic_text")
+    @EqualsAndHashCode.Include
     private String topicText;
 
     @Lob
     @Column(name = "topic_image", length = 100000)
+    @EqualsAndHashCode.Include
     private byte[] topicImage;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "level")
+    @EqualsAndHashCode.Include
     private Level level;
 
     @Column(name = "created_date")

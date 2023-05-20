@@ -21,4 +21,6 @@ public interface QuestionService {
     List<QuestionResponse> getAllQuestionsBySubjectCode(String code);
 
     PageResponse<QuestionResponse> getQuestionPagesBySubjectCode(String code, int pageNo, int pageSize, String sortBy, String sortDir);
+
+    void updateQuestion(int questionId, QuestionRequest request);
 }
