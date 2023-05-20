@@ -72,9 +72,9 @@ public class QuestionController {
 
     @PutMapping(path = "/update/{id}")
     public ResponseEntity<?> updateQuestion(@PathVariable(name = "id") int questionId,
-                                            @RequestPart(name = "topicText") String topicText,
+                                            @RequestPart(name = "topicText") @Valid @NotNull String topicText,
                                             @RequestPart(name = "topicImageFile") MultipartFile topicImageFile,
-                                            @RequestPart(name = "level") String level){
+                                            @RequestPart(name = "level") @Valid @NotNull String level){
         var request = QuestionRequest.builder()
                 .topicText(topicText)
                 .topicImageFile(topicImageFile)
