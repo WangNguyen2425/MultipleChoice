@@ -80,7 +80,7 @@ public class QuestionController {
                 .topicImageFile(topicImageFile)
                 .level(level)
                 .build();
-
-        return null;
+        questionService.updateQuestion(questionId, request);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Update question successfully !"));
     }
 }
