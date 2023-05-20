@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode()
 public class Question implements Serializable {
 
     @Id
@@ -54,4 +55,6 @@ public class Question implements Serializable {
         createdDate = LocalDate.now();
         enabled = true;
     }
+
+
 }

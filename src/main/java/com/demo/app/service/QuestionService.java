@@ -2,6 +2,7 @@ package com.demo.app.service;
 
 
 import com.demo.app.dto.answer.AnswerRequest;
+import com.demo.app.dto.page.PageResponse;
 import com.demo.app.dto.question.QuestionRequest;
 import com.demo.app.dto.question.QuestionResponse;
 import jakarta.transaction.Transactional;
@@ -18,4 +19,6 @@ public interface QuestionService {
 
     @Transactional
     List<QuestionResponse> getAllQuestionsBySubjectCode(String code);
+
+    PageResponse<QuestionResponse> getQuestionPagesBySubjectCode(String code, int pageNo, int pageSize, String sortBy, String sortDir);
 }
