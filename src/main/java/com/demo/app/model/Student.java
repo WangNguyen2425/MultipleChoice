@@ -10,7 +10,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "student", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"phone_number"}, name = "uni_phone_number")
+        @UniqueConstraint(columnNames = {"phone_number"}, name = "uni_phone_number"),
+        @UniqueConstraint(columnNames = {"code"}, name = "uni_code")
 })
 @Getter
 @Setter
@@ -24,6 +25,9 @@ public class Student implements Serializable {
 
     @Column(name = "full_name")
     private String fullName;
+
+    @Column(name = "code")
+    private String code;
 
     @Column(name = "birthday")
     private LocalDate birthday;

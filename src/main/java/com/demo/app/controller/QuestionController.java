@@ -49,7 +49,9 @@ public class QuestionController {
         }
     }
 
-    @PostMapping(path = "{questionId}/answers/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "{questionId}/answers/add",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addQuestionAnswers(@PathVariable int questionId, @RequestBody @Valid @NotNull final List<AnswerRequest> requests) {
         questionService.addQuestionAnswers(questionId, requests);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Add answers for question successfully !"));
@@ -62,8 +64,23 @@ public class QuestionController {
 
     @GetMapping(path = "/page")
     public ResponseEntity<?> getQuestionPagesBySubjectCode(@RequestParam(name = "code") String code, @RequestBody PageRequest request){
-
-        return null;
+        var response = questionService.getQuestionPagesBySubjectCode(
+                code, request.getPageNo(), request.getPageSize(), request.getSortBy(), request.getSortDir()
+        );
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @PutMapping(path = "/update/{id}")
+    public ResponseEntity<?> updateQuestion(@PathVariable(name = "id") int questionId,
+                                            @RequestPart(name = "topicText") @Valid @NotNull String topicText,
+                                            @RequestPart(name = "topicImageFile") MultipartFile topicImageFile,
+                                            @RequestPart(name = "level") @Valid @NotNull String level){
+        var request = QuestionRequest.builder()
+                .topicText(topicText)
+                .topicImageFile(topicImageFile)
+                .level(level)
+                .build();
+        questionService.updateQuestion(questionId, request);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Update question successfully !"));
+    }
 }
