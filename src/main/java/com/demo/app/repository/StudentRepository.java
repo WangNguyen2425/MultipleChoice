@@ -15,4 +15,5 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
     @Query("select s from Student s join User u on s.user.id = u.id where u.enabled = :enabled")
     List<Student> findByEnabled(@Param("enabled") Boolean enabled);
+
 }
