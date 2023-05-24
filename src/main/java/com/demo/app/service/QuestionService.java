@@ -23,4 +23,7 @@ public interface QuestionService {
     PageResponse<QuestionResponse> getQuestionPagesBySubjectCode(String code, int pageNo, int pageSize, String sortBy, String sortDir);
 
     void updateQuestion(int questionId, QuestionRequest request);
+
+    @Transactional
+    void disableQuestion(int questionId);
 }

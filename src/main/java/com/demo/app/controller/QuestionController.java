@@ -83,4 +83,10 @@ public class QuestionController {
         questionService.updateQuestion(questionId, request);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Update question successfully !"));
     }
+
+    @DeleteMapping(path = "/disable/{id}")
+    public ResponseEntity<?> disableQuestion(@PathVariable(name = "id") int questionId){
+        questionService.disableQuestion(questionId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
 }
