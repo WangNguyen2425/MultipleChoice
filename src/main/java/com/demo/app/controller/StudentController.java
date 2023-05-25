@@ -8,6 +8,10 @@ import com.demo.app.dto.student.StudentResponse;
 import com.demo.app.exception.FileInputException;
 import com.demo.app.service.StudentService;
 import com.demo.app.util.ExcelUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/v1/student")
+@Tag(name = "Student",description = "Student APIs Management")
 @AllArgsConstructor
 public class StudentController {
 
@@ -52,14 +57,36 @@ public class StudentController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @Operation(
+            summary = "return all students",
+            description = "return all list of all information of students",
+            method = "GET",
+            responses = @ApiResponse(
+                    responseCode = "200",
+                    description = "Return all informations of students successfully"
+            )
+    )
     @GetMapping(path = "/list")
     public ResponseEntity<List<StudentResponse>> getAllStudents() {
         var studentResponses = studentService.getAllStudents();
         return ResponseEntity.status(HttpStatus.OK).body(studentResponses);
     }
 
+    @Operation(
+            summary = "Update Information For A Student",
+            description = "Update information student by id and informations are needed to updated in request body",
+            method = "PUT",
+            responses = @ApiResponse(
+                    responseCode = "200",
+                    description = "Updated successfully"
+            )
+    )
     @PutMapping(path = "/update/{id}")
-    public ResponseEntity<?> updateStudent(@PathVariable(name = "id") int studentId, @RequestBody StudentRequest request) {
+    public ResponseEntity<?> updateStudent(
+            @Parameter(
+                    name = "id"
+            ) @PathVariable(name = "id") int studentId,
+            @RequestBody StudentRequest request) {
         studentService.updateStudent(studentId, request);
         String message = String.format("Student with id = %d updated successfully !", studentId);
         return new ResponseEntity<>(new ResponseMessage(message), HttpStatus.OK);
