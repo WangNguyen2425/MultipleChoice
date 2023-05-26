@@ -31,7 +31,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -109,9 +108,8 @@ public class AuthServiceImpl implements AuthService {
                 request.getPassword()
         ));
 
-        var user = userRepository.findByUsernameAndEnabledIsTrue(request.getUsername()).orElseThrow(() -> {
-            throw new EntityNotFoundException("Username not found !", HttpStatus.BAD_REQUEST);
-        });
+        var user = userRepository.findByUsernameAndEnabledIsTrue(request.getUsername()).orElseThrow(
+                () -> new EntityNotFoundException("Username not found !", HttpStatus.BAD_REQUEST));
         var jwtToken = jwtUtils.generateToken(user);
         var refreshToken = jwtUtils.generateRefreshToken(user);
         revokeAllUserTokens(user);
@@ -152,9 +150,8 @@ public class AuthServiceImpl implements AuthService {
         final String refreshToken = authHeader.substring(7);
         final String username = jwtUtils.extractUsername(refreshToken);
         if(username != null){
-            var user = userRepository.findByUsername(username).orElseThrow(() -> {
-                throw new EntityNotFoundException("User not found !", HttpStatus.BAD_REQUEST);
-            });
+            var user = userRepository.findByUsername(username).orElseThrow(
+                    () -> new EntityNotFoundException("User not found !", HttpStatus.BAD_REQUEST));
             if(jwtUtils.isTokenValid(refreshToken, user)){
                 var accessToken = jwtUtils.generateToken(user);
                 revokeAllUserTokens(user);
