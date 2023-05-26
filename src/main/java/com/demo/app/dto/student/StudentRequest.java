@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
+import org.hibernate.validator.constraints.Length;
 
 
 @Getter
@@ -33,5 +33,8 @@ public class StudentRequest {
     @Pattern(regexp = "(84|0[3|5789])+([0-9]{8})\\b", message = "Phone number is invalid")
     private String phoneNumber;
 
+    @NotBlank(message = "Please enter code !")
+    @Length(max = 8)
+    private String code;
 
 }

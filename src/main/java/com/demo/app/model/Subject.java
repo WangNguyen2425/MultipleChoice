@@ -42,4 +42,9 @@ public class Subject implements Serializable {
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
     private List<ExamClass> examClasses;
+
+    @PrePersist
+    private void prePersist(){
+        enabled = true;
+    }
 }

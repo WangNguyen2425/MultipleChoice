@@ -9,7 +9,9 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
-@Table(name = "exam_class")
+@Table(name = "exam_class", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "code", name = "uni_code")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,6 +27,9 @@ public class ExamClass implements Serializable {
 
     @Column(name = "room_name")
     private String roomName;
+
+    @Column(name = "code")
+    private String code;
 
     @Column(name = "created_date")
     private LocalDate createdDate;
@@ -50,6 +55,7 @@ public class ExamClass implements Serializable {
     @PrePersist
     private void prePersist() {
         createdDate = LocalDate.now();
+        enabled = true;
     }
 
 }

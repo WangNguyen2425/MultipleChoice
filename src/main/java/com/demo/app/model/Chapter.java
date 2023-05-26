@@ -15,6 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 public class Chapter implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -28,9 +29,14 @@ public class Chapter implements Serializable {
     @Column(name = "is_enabled")
     private boolean enabled;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Subject subject;
 
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)
     private Set<Question> questions;
+
+    @PrePersist
+    private void prePersist(){
+        enabled = true;
+    }
 }

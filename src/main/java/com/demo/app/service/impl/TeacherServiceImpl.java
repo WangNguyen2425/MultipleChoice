@@ -34,7 +34,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final ModelMapper modelMapper;
+    private final ModelMapper mapper;
 
     @Override
     @Transactional
@@ -43,12 +43,13 @@ public class TeacherServiceImpl implements TeacherService {
         checkIfEmailExists(request.getEmail());
         checkIfPhoneNumberExists(request.getPhoneNumber());
 
-        List<Role> roles = roleRepository.findAllByRoleNameIn(Arrays.asList(Role.RoleType.ROLE_USER, Role.RoleType.ROLE_TEACHER));
+        var roles = roleRepository.findAllByRoleNameIn(Arrays.asList(Role.RoleType.ROLE_USER, Role.RoleType.ROLE_TEACHER));
 
-        User user = modelMapper.map(request, User.class);
+        var user = mapper.map(request, User.class);
         String encodePassword = passwordEncoder.passwordEncode().encode(request.getPassword());
         user.setPassword(encodePassword);
         user.setRoles(roles);
+        user.setEnabled(true);
         user.getTeacher().setUser(user);
         userRepository.save(user);
     }
@@ -60,8 +61,9 @@ public class TeacherServiceImpl implements TeacherService {
             throw new EntityNotFoundException("Not found any teacher !", HttpStatus.NOT_FOUND);
         }
         return teachers.stream().map(teacher -> {
-            TeacherResponse response = modelMapper.map(teacher, TeacherResponse.class);
+            var response = mapper.map(teacher, TeacherResponse.class);
             response.setUsername(teacher.getUser().getUsername());
+            response.setEmail(teacher.getUser().getEmail());
             return response;
         }).collect(Collectors.toList());
     }
@@ -69,7 +71,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     @Transactional
     public void updateTeacher(int teacherId, TeacherRequest request) throws EntityNotFoundException, FieldExistedException{
-        Teacher existTeacher = teacherRepository.findById(teacherId).
+        var existTeacher = teacherRepository.findById(teacherId).
                 orElseThrow(() -> new EntityNotFoundException(String.format("Teacher %s not found !", request.getFullName()), HttpStatus.NOT_FOUND));
 
         if (!existTeacher.getUser().getUsername().equals(request.getUsername())) {
@@ -82,15 +84,19 @@ public class TeacherServiceImpl implements TeacherService {
             checkIfEmailExists(request.getEmail());
         }
 
-        Teacher teacher = modelMapper.map(request, Teacher.class);
+        Teacher teacher = mapper.map(request, Teacher.class);
         teacher.setId(existTeacher.getId());
         teacher.setUser(existTeacher.getUser());
+        var user = teacher.getUser();
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setUsername(request.getUsername());
         teacherRepository.save(teacher);
     }
 
     @Override
     public void disableTeacher(int teacherId) throws EntityNotFoundException{
-        Teacher existTeacher = teacherRepository.findById(teacherId).
+        var existTeacher = teacherRepository.findById(teacherId).
                 orElseThrow(() -> new EntityNotFoundException(String.format("Not found any teacher with id = %d", teacherId), HttpStatus.NOT_FOUND));
         existTeacher.getUser().setEnabled(false);
         teacherRepository.save(existTeacher);
@@ -99,11 +105,11 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     @Transactional
     public void deleteTeacher(int teacherId) throws EntityNotFoundException{
-        Teacher existTeacher = teacherRepository.findById(teacherId).
+        var existTeacher = teacherRepository.findById(teacherId).
                 orElseThrow(() -> new EntityNotFoundException(
                         String.format("Not found any teacher with id = %d", teacherId), HttpStatus.NOT_FOUND)
                 );
-        User user = existTeacher.getUser();
+        var user = existTeacher.getUser();
         user.setRoles(null);
         userRepository.save(user);
         teacherRepository.delete(existTeacher);

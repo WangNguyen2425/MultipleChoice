@@ -1,17 +1,17 @@
-package com.demo.app.dto.student;
+package com.demo.app.dto.page;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class StudentPageResponse {
+@AllArgsConstructor
+@Builder
+public class PageResponse<T> {
 
-    private List<StudentResponse> studentDtos;
+    private List<T> objects;
 
     private int pageNo;
 
@@ -24,5 +24,4 @@ public class StudentPageResponse {
     private boolean isFirst;
 
     private boolean isLast;
-
 }

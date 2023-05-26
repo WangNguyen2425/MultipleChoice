@@ -1,10 +1,6 @@
-package com.demo.app.controller;
+package com.demo.app.exception;
 
 import com.demo.app.dto.message.ErrorResponse;
-import com.demo.app.exception.EntityNotFoundException;
-import com.demo.app.exception.FieldExistedException;
-import com.demo.app.exception.FileInputException;
-import com.demo.app.exception.InvalidVerificationTokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-public class CustomExceptionHandler {
+public class AppExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

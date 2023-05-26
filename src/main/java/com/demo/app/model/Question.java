@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Question implements Serializable {
 
     @Id
@@ -21,13 +22,17 @@ public class Question implements Serializable {
     private int id;
 
     @Column(name = "topic_text")
+    @EqualsAndHashCode.Include
     private String topicText;
 
-    @Column(name = "topic_image")
+    @Lob
+    @Column(name = "topic_image", length = 100000)
+    @EqualsAndHashCode.Include
     private byte[] topicImage;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "level")
+    @EqualsAndHashCode.Include
     private Level level;
 
     @Column(name = "created_date")
@@ -36,7 +41,7 @@ public class Question implements Serializable {
     @Column(name = "is_enabled")
     private boolean enabled;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Chapter chapter;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
@@ -51,5 +56,8 @@ public class Question implements Serializable {
     @PrePersist
     private void prePersist() {
         createdDate = LocalDate.now();
+        enabled = true;
     }
+
+
 }
