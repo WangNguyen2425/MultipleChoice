@@ -65,7 +65,6 @@ public class User implements Serializable, UserDetails {
     @PrePersist
     private void prePersist(){
         createdAt = LocalDateTime.now();
-        enabled = this.username.equals("admin");
     }
 
     @Override

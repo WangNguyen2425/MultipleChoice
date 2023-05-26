@@ -42,7 +42,7 @@ public class AuthController {
                     ),
                     @ApiResponse(
                             responseCode = "401",
-                            description = "Username not found !",
+                            description = "Unauthorized / Invalid Token !",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
                     )
             }
