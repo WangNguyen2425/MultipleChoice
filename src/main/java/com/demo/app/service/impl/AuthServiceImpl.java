@@ -65,6 +65,7 @@ public class AuthServiceImpl implements AuthService {
         var user = mapper.map(registerRequest, User.class);
         user.setRoles(roles);
         user.setPassword(encode(registerRequest.getPassword()));
+        user.setEnabled(false);
         var savedUser = userRepository.save(user);
 
         publisher.publishEvent(new RegisterCompleteEvent(savedUser, verificationEmailUrl(request)));

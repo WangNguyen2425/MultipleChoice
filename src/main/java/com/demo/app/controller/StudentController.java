@@ -35,8 +35,8 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    @GetMapping(path = "/import")
-    public ResponseEntity<?> importExcelFile(@RequestBody final MultipartFile file) throws FileInputException {
+    @PostMapping(path = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> importExcelFile(@RequestPart final MultipartFile file) throws FileInputException {
         studentService.saveStudentsExcelFile(file);
         String message = "Uploaded the file successfully: " + file.getOriginalFilename();
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
