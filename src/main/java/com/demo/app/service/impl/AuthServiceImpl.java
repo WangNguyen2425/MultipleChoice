@@ -62,12 +62,12 @@ public class AuthServiceImpl implements AuthService {
             throw new FieldExistedException("Username already taken!", HttpStatus.CONFLICT);
         }
 
-        List<Role> roles = Collections.singletonList(roleRepository.findByRoleName(Role.RoleType.ROLE_USER).get());
-        User user = mapper.map(registerRequest, User.class);
+        var roles = Collections.singletonList(roleRepository.findByRoleName(Role.RoleType.ROLE_USER).get());
+        var user = mapper.map(registerRequest, User.class);
         user.setRoles(roles);
         user.setPassword(encode(registerRequest.getPassword()));
-
         var savedUser = userRepository.save(user);
+
         publisher.publishEvent(new RegisterCompleteEvent(savedUser, verificationEmailUrl(request)));
 
         var jwtToken = jwtUtils.generateToken(user);
@@ -88,9 +88,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public void activateUserAccount(String verifyToken) throws InvalidVerificationTokenException{
-        Token token = tokenRepository.findByTokenAndExpiredFalse(verifyToken).orElseThrow(() -> {
-            throw new EntityNotFoundException("Invalid token !", HttpStatus.FORBIDDEN);
-        });
+        var token = tokenRepository.findByTokenAndExpiredFalse(verifyToken).orElseThrow(
+                () -> new EntityNotFoundException("Invalid token !", HttpStatus.FORBIDDEN)
+        );
         token.getUser().setEnabled(true);
         token.setRevoked(true);
         token.setExpired(true);

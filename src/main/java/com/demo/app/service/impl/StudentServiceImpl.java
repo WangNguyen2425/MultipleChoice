@@ -25,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -45,11 +46,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void saveStudentsExcelFile(MultipartFile file) throws FileInputException, FieldExistedException {
+        if (!ExcelUtils.hasExcelFormat(file)) {
+            throw new FileInputException("Please upload an excel file!", HttpStatus.BAD_REQUEST);
+        }
         try {
             Map<User, Student> userStudents = ExcelUtils.excelFileToUserStudents(file);
-
             List<Role> roles = roleRepository.findAllByRoleNameIn(Arrays.asList(Role.RoleType.ROLE_USER, Role.RoleType.ROLE_STUDENT));
-
             userStudents.forEach((user, student) -> {
                 user.setRoles(roles);
                 String encodePassword = passwordEncoder.passwordEncode().encode(user.getPassword());
@@ -62,6 +64,18 @@ public class StudentServiceImpl implements StudentService {
             throw new FileInputException("Could not read the file !", HttpStatus.EXPECTATION_FAILED);
         }
     }
+
+    @Override
+    public ByteArrayInputStream exportStudentsExcel() throws FileInputException {
+        try {
+            var students = studentRepository.findAll();
+            return ExcelUtils.studentsToExcelFile(students);
+        } catch (IOException ex){
+            throw new FileInputException("Could not write the file !", HttpStatus.EXPECTATION_FAILED);
+        }
+    }
+
+
 
     @Override
     @Transactional

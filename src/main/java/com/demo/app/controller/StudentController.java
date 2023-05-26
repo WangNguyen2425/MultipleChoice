@@ -7,7 +7,6 @@ import com.demo.app.dto.student.StudentRequest;
 import com.demo.app.dto.student.StudentResponse;
 import com.demo.app.exception.FileInputException;
 import com.demo.app.service.StudentService;
-import com.demo.app.util.ExcelUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,11 +16,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -34,13 +37,18 @@ public class StudentController {
 
     @GetMapping(path = "/import")
     public ResponseEntity<?> importExcelFile(@RequestBody final MultipartFile file) throws FileInputException {
-        if (!ExcelUtils.hasExcelFormat(file)) {
-            String message = "Please upload an excel file!";
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message));
-        }
         studentService.saveStudentsExcelFile(file);
         String message = "Uploaded the file successfully: " + file.getOriginalFilename();
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+    }
+
+    @GetMapping(path = "/export")
+    public ResponseEntity<?> exportExcelFile() throws IOException {
+        String filename = "students.xlsx";
+        var file = new InputStreamResource(studentService.exportStudentsExcel());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                .contentType(MediaType.parseMediaType("application/vnd.ms-excel")).body(file);
     }
 
     @Operation(
@@ -52,10 +60,7 @@ public class StudentController {
                             mediaType = "json/application",
                             schema = @Schema(
                                     implementation = StudentRequest.class,
-                                    description = "Informations need to be sent to create s new student"
-                            ),
-                            examples = @ExampleObject(
-                                    value = ""
+                                    description = "Information's need to be sent to create s new student"
                             )
                     ),
                     required = true
@@ -67,9 +72,6 @@ public class StudentController {
                             mediaType = "json/application",
                             schema = @Schema(
                                     implementation = ResponseMessage.class
-                            ),
-                            examples = @ExampleObject(
-                                    value = ""
                             )
                     )
             )
@@ -127,17 +129,10 @@ public class StudentController {
     )
     @PutMapping(path = "/update/{id}")
     public ResponseEntity<?> updateStudent(
-            @Parameter(
-                    name = "id",
+            @Parameter(name = "id",
                     description = "This is the ID student need to be updated",
-                    example = "1"
-            ) @PathVariable(name = "id") int studentId,
-            @Parameter(
-                    name = "Authorization",
-                    description = "Used to authorization",
-                    example = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY4NDMzNjA3NCwiZXhwIjoxNjg0NDIyNDc0fQ.3w2BB_yC-vDryZpwHUH-FCvNdE3xK55vzY4wFoCBH7Y"
-            )
-            @RequestHeader(name = "Authorization") String Authorization,
+                    example = "1")
+            @PathVariable(name = "id") int studentId,
             @RequestBody StudentRequest request) {
         studentService.updateStudent(studentId, request);
         String message = String.format("Student with id = %d updated successfully !", studentId);
@@ -150,14 +145,8 @@ public class StudentController {
             method = "DELETE"
     )
     @DeleteMapping(path = "/disable/{id}")
-    public ResponseEntity<?> disableStudent(@Parameter(
-            description = "This is ID of student need to be deleted",
-            example = "1"
-    ) @PathVariable(name = "id") int studentId,@Parameter(
-            name = "Authorization",
-            description = "Used to authorize",
-            example = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY4NDMzNjA3NCwiZXhwIjoxNjg0NDIyNDc0fQ.3w2BB_yC-vDryZpwHUH-FCvNdE3xK55vzY4wFoCBH7Y"
-    ) @RequestHeader("Authorization") String Authorization) {
+    public ResponseEntity<?> disableStudent(@Parameter(description = "This is ID of student need to be deleted", example = "1")
+                                            @PathVariable(name = "id") int studentId) {
         studentService.disableStudent(studentId);
         return ResponseEntity.noContent().build();
     }
