@@ -1,6 +1,7 @@
 package com.demo.app.service.impl;
 
 import com.demo.app.dto.answer.AnswerRequest;
+import com.demo.app.dto.answer.AnswerResponse;
 import com.demo.app.dto.page.PageResponse;
 import com.demo.app.dto.question.QuestionRequest;
 import com.demo.app.dto.question.QuestionResponse;
@@ -77,7 +78,11 @@ public class QuestionServiceImpl implements QuestionService {
         );
         Set<Question> questions = new HashSet<>();
         subject.getChapters().forEach(chapter -> questions.addAll(chapter.getQuestions()));
-        return questions.stream().map(question -> mapper.map(question, QuestionResponse.class)).collect(Collectors.toList());
+        return questions.stream().map(question -> {
+            var response = mapper.map(question, QuestionResponse.class);
+            question.getAnswers().forEach(answer -> response.getAnswers().add(mapper.map(answer, AnswerResponse.class)));
+            return response;
+        }).collect(Collectors.toList());
     }
 
     @Override
@@ -86,12 +91,14 @@ public class QuestionServiceImpl implements QuestionService {
         var sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         var pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<Question> questions = questionRepository.findAll(pageable);
-        var questionsResponse = questions.stream().map(
-                question -> mapper.map(question, QuestionResponse.class)
-        ).collect(Collectors.toList());
+        List<QuestionResponse> questionsResponses = questions.stream().map(question -> {
+            var response = mapper.map(question, QuestionResponse.class);
+            question.getAnswers().forEach(answer -> response.getAnswers().add(mapper.map(answer, AnswerResponse.class)));
+            return response;
+        }).collect(Collectors.toList());
 
         return PageResponse.<QuestionResponse>builder()
-                .objects(questionsResponse)
+                .objects(questionsResponses)
                 .pageNo(questions.getNumber())
                 .pageSize(questions.getSize())
                 .totalElements(questions.getTotalElements())
@@ -115,6 +122,16 @@ public class QuestionServiceImpl implements QuestionService {
         }
         questionRepository.save(existedQuestion);
 
+    }
+
+    @Override
+    @Transactional
+    public void disableQuestion(int questionId){
+        var question = questionRepository.findById(questionId).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Not found any question with id: %d !", questionId), HttpStatus.NOT_FOUND)
+        );
+        question.setEnabled(false);
+        questionRepository.save(question);
     }
 
 }
