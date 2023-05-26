@@ -58,6 +58,20 @@ public class AuthController {
     @Operation(
             summary = "Sign up",
             description = "Sign up with username,email and password",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "There are group of information need to user register",
+                    content = @Content(
+                            mediaType = "json/application",
+                            schema = @Schema(
+                                    implementation = RegisterRequest.class,
+                                    example = ""
+                            ),
+                            examples = @ExampleObject(
+                                    description = "ẽamp",
+                                    value = ""
+                            )
+                    )
+            ),
             responses = {
                     @ApiResponse(
                             responseCode = "200",
