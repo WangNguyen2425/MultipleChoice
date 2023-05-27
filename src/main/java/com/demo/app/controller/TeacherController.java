@@ -28,6 +28,8 @@ import java.util.List;
 @Tag(name = "Teacher")
 public class TeacherController {
 
+    private final String EXAMPLE_INFORMATION_NOT_FOUND = "{\"message\":\"information not found\"}";
+
     private final TeacherService teacherService;
 
 
@@ -41,31 +43,35 @@ public class TeacherController {
                             mediaType = "json/application",
                             schema = @Schema(
                                     description = "This is structure of data teacher register",
-                                    implementation = TeacherRequest.class,
-                                    example = ""
+                                    implementation = TeacherRequest.class
+                            ),
+                            examples = @ExampleObject(
+                                    value = ""
                             )
                     )
             ),
-            responses = @ApiResponse(
-                    description = "New teacher is created successfully",
-                    responseCode = "200",
-                    content = @Content(
-                            mediaType = "json/application",
-                            schema = @Schema(
-                                    implementation = ResponseMessage.class,
-                                    example = ""
+            responses = {
+                    @ApiResponse(
+                            description = "New teacher is created successfully",
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = "json/application",
+                                    schema = @Schema(
+                                            implementation = ResponseMessage.class
+                                    ),
+                                    examples = @ExampleObject(
+                                            value = "Teacher %s have been saved successfully !"
+                                    )
                             )
+                    ),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "Information is duplicated"
                     )
-            )
+            }
     )
     @PostMapping(path = "/add")
-    public ResponseEntity<?> addNewTeacher(@Parameter(
-            description = "Information to create new teacher",
-            schema = @Schema(
-                    implementation = TeacherRequest.class
-            ),
-            example = ""
-    ) @RequestBody @Valid TeacherRequest request) throws FieldExistedException {
+    public ResponseEntity<?> addNewTeacher(@RequestBody @Valid TeacherRequest request) throws FieldExistedException {
         teacherService.saveTeacher(request);
         String message = String.format("Teacher %s have been saved successfully !", request.getFullName());
         return new ResponseEntity<>(new ResponseMessage(message), HttpStatus.CREATED);
@@ -92,7 +98,7 @@ public class TeacherController {
                             )
                     ),
                     @ApiResponse(
-                            description = "There is no teacher in database",
+                            description = "No information in database",
                             responseCode = "404",
                             content = @Content(
                                     mediaType = "json/application",
@@ -100,7 +106,7 @@ public class TeacherController {
                                             implementation = ResponseMessage.class
                                     ),
                                     examples = @ExampleObject(
-                                            value = "Teacher is empty"
+                                            value = "{\"message\":\"Data not found\"}"
                                     )
                             )
                     )
@@ -112,7 +118,7 @@ public class TeacherController {
         if (teacherResponses.size()!=0){
             return ResponseEntity.status(HttpStatus.OK).body(teacherResponses);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage("Teacher is empty"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage("Data not found"));
         }
     }
 
@@ -134,7 +140,31 @@ public class TeacherController {
             ),
             responses = {
                     @ApiResponse(
-
+                            responseCode = "200",
+                            description = "Updated successfully",
+                            content = @Content(
+                                    mediaType = "json/application",
+                                    schema = @Schema(
+                                            implementation = ResponseMessage.class
+                                    ),
+                                    examples = @ExampleObject(
+                                            value = "{\"meaasege\":\"Teacher with id = %d updated successfully !\"}"
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Information not found",
+                            content = @Content(
+                                    mediaType = "json/application",
+                                    schema = @Schema(
+                                            implementation = ResponseMessage.class
+                                    ),
+                                    examples = @ExampleObject(
+                                            description = "Information is incorrect",
+                                            value = EXAMPLE_INFORMATION_NOT_FOUND
+                                    )
+                            )
                     )
             }
     )
@@ -148,11 +178,53 @@ public class TeacherController {
         return new ResponseEntity<>(new ResponseMessage(message), HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "Delete teacher",
+            description = "Delete teacher in Database",
+            method = "DELETE",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "Delete successfully"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Information not found",
+                            content = @Content(
+                                    mediaType = "json/application",
+                                    schema = @Schema(
+                                            implementation = ResponseMessage.class
+                                    ),
+                                    examples = @ExampleObject(
+                                            description = "Information is incorrect",
+                                            value = EXAMPLE_INFORMATION_NOT_FOUND
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized",
+                            content = @Content(
+                                    schema = @Schema(
+                                            implementation = String.class
+                                    ),
+                                    examples = @ExampleObject(
+                                            description = "Unauthorized",
+                                            value = "Error: Unauthorized"
+                                    )
+                            )
+                    )
+            }
+    )
     @DeleteMapping(path = "/disable/{id}")
-    public ResponseEntity<?> disableTeacher(@PathVariable("id") int teacherId){
+    public ResponseEntity<?> disableTeacher(@Parameter(
+            description = "Student ID need to be deleted",
+            example = "1"
+    ) @PathVariable("id") int teacherId){
         teacherService.disableTeacher(teacherId);
         return ResponseEntity.noContent().build();
     }
+
 
     @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity<?> deleteTeacher(@PathVariable("id") int teacherId){
