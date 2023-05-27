@@ -53,7 +53,7 @@ public class ModelMapperConfig {
     private void convertLevel(ModelMapper mapper){
         mapper.createTypeMap(String.class, Question.Level.class).setConverter(context -> switch (context.getSource()) {
             case "easy", "Easy", "EASY" -> Question.Level.EASY;
-            case "normal", "Normal", "NORMAL" -> Question.Level.NORMAL;
+            case "medium", "Medium", "MEDIUM" -> Question.Level.MEDIUM;
             case "difficult", "Difficult", "DIFFICULT" -> Question.Level.DIFFICULT;
             default -> null;
         });
