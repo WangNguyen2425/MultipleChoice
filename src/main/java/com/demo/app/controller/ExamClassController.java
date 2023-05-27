@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/api/v1/class")
 @RequiredArgsConstructor
+@CrossOrigin(allowedHeaders = "*")
 public class ExamClassController {
 
     private final ExamClassService examClassService;

@@ -2,7 +2,6 @@ package com.demo.app.service.impl;
 
 import com.demo.app.dto.answer.AnswerRequest;
 import com.demo.app.dto.answer.AnswerResponse;
-import com.demo.app.dto.page.PageResponse;
 import com.demo.app.dto.question.QuestionRequest;
 import com.demo.app.dto.question.QuestionResponse;
 import com.demo.app.exception.EntityNotFoundException;
@@ -16,9 +15,6 @@ import com.demo.app.service.QuestionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -84,28 +80,7 @@ public class QuestionServiceImpl implements QuestionService {
         }).collect(Collectors.toList());
     }
 
-    @Override
-    @Transactional
-    public PageResponse<QuestionResponse> getQuestionPagesBySubjectCode(String code, int pageNo, int pageSize, String sortBy, String sortDir){
-        var sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        var pageable = PageRequest.of(pageNo, pageSize, sort);
-        Page<Question> questions = questionRepository.findAll(pageable);
-        List<QuestionResponse> questionsResponses = questions.stream().map(question -> {
-            var response = mapper.map(question, QuestionResponse.class);
-            question.getAnswers().forEach(answer -> response.getAnswers().add(mapper.map(answer, AnswerResponse.class)));
-            return response;
-        }).collect(Collectors.toList());
 
-        return PageResponse.<QuestionResponse>builder()
-                .objects(questionsResponses)
-                .pageNo(questions.getNumber())
-                .pageSize(questions.getSize())
-                .totalElements(questions.getTotalElements())
-                .totalPages(questions.getTotalPages())
-                .isFirst(questions.isFirst())
-                .isLast(questions.isLast())
-                .build();
-    }
 
     @Override
     @Transactional

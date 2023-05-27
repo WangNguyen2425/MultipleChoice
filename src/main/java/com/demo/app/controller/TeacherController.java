@@ -2,7 +2,6 @@ package com.demo.app.controller;
 
 import com.demo.app.dto.message.ResponseMessage;
 import com.demo.app.dto.teacher.TeacherRequest;
-import com.demo.app.dto.teacher.TeacherResponse;
 import com.demo.app.exception.FieldExistedException;
 import com.demo.app.service.TeacherService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,10 +10,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jdk.jfr.ContentType;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +23,7 @@ import java.util.List;
 @RequestMapping(path = "/api/v1/teacher")
 @AllArgsConstructor
 @Tag(name = "Teacher")
+@CrossOrigin(allowedHeaders = "*")
 public class TeacherController {
 
     private final String EXAMPLE_INFORMATION_NOT_FOUND = "{\"message\":\"information not found\"}";
@@ -44,9 +42,6 @@ public class TeacherController {
                             schema = @Schema(
                                     description = "This is structure of data teacher register",
                                     implementation = TeacherRequest.class
-                            ),
-                            examples = @ExampleObject(
-                                    value = ""
                             )
                     )
             ),
@@ -91,9 +86,6 @@ public class TeacherController {
                                     schema = @Schema(
                                             description = "return a list of teacher",
                                             implementation = List.class
-                                    ),
-                                    examples = @ExampleObject(
-                                            value = ""
                                     )
                             )
                     ),
@@ -132,9 +124,6 @@ public class TeacherController {
                             mediaType = "json/application",
                             schema = @Schema(
                                     implementation = TeacherRequest.class
-                            ),
-                            examples = @ExampleObject(
-                                    value = ""
                             )
                     )
             ),
@@ -148,7 +137,7 @@ public class TeacherController {
                                             implementation = ResponseMessage.class
                                     ),
                                     examples = @ExampleObject(
-                                            value = "{\"meaasege\":\"Teacher with id = %d updated successfully !\"}"
+                                            value = "{\"message\":\"Teacher with id = %d updated successfully !\"}"
                                     )
                             )
                     ),

@@ -28,6 +28,7 @@ import java.util.List;
 @RequestMapping(path = "/api/v1/student")
 @Tag(name = "Student", description = "Student APIs Management")
 @AllArgsConstructor
+@CrossOrigin(allowedHeaders = "*")
 public class StudentController {
     private final String EXAMPLE_LIST_STUDENT_RESPONSES = "[{\"id\":11,\"username\":\"AliceBouder00\",\"fullName\":\"Alice Boudering\",\"birthday\":\"2002-08-03\",\"phoneNumber\":\"0987654654\",\"email\":\"alicee@gmail.com\",\"code\":\"2.0205435E7\",\"gender\":\"FEMALE\"},{\"id\":12,\"username\":\"JohnBuford00\",\"fullName\":\"John Buford\",\"birthday\":\"2000-07-08\",\"phoneNumber\":\"0987654312\",\"email\":\"johnny00@gmail.com\",\"code\":\"2.0184235E7\",\"gender\":\"MALE\"}]";
     private final String EXAMPLE_STUDENT_INFORMATION_CREATE_AND_UPDATE = "{\"username\":\"ThanhKien00\",\"email\":\"knkuro00@gmail.com\",\"password\":\"kien123\",\"fullName\":\"Nguyen Thanh Kien\",\"birthday\":\"2002-01-01\",\"gender\":\"MALE\",\"phoneNumber\":\"0987654321\",\"code\":\"20203478\"}";
@@ -96,16 +97,6 @@ public class StudentController {
         String message = String.format("Student %s have been saved successfully !", request.getFullName());
         return new ResponseEntity<>(new ResponseMessage(message), HttpStatus.CREATED);
     }
-
-//    @GetMapping(path = "/page")
-//    public ResponseEntity<PageResponse<StudentResponse>> getStudentPages(@RequestBody PageRequest request) {
-//        var response = studentService.getAllStudents(
-//                request.getPageNo(),
-//                request.getPageSize(),
-//                request.getSortBy(),
-//                request.getSortDir());
-//        return ResponseEntity.status(HttpStatus.OK).body(response);
-//    }
 
     @Operation(
             summary = "Return all students",
@@ -285,10 +276,4 @@ public class StudentController {
         studentService.disableStudent(studentId);
         return ResponseEntity.noContent().build();
     }
-
-//    @DeleteMapping(path = "/delete/{id}")
-//    public ResponseEntity<?> deleteStudent(@PathVariable(name = "id") int studentId) {
-//        studentService.deleteStudent(studentId);
-//        return ResponseEntity.noContent().build();
-//    }
 }
