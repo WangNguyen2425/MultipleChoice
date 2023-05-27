@@ -27,6 +27,7 @@ import java.io.IOException;
 @RequestMapping(path = "/api/v1/auth")
 @Tag(name = "Authentication", description = "Login and Register User's account")
 @RequiredArgsConstructor
+@CrossOrigin(allowedHeaders = "*")
 public class AuthController {
 
     private final AuthService authService;
@@ -67,7 +68,7 @@ public class AuthController {
                                     example = ""
                             ),
                             examples = @ExampleObject(
-                                    description = "ẽamp",
+                                    description = "",
                                     value = ""
                             )
                     )

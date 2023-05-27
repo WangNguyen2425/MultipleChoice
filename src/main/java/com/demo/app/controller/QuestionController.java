@@ -2,7 +2,6 @@ package com.demo.app.controller;
 
 import com.demo.app.dto.answer.AnswerRequest;
 import com.demo.app.dto.message.ResponseMessage;
-import com.demo.app.dto.page.PageRequest;
 import com.demo.app.dto.question.QuestionRequest;
 import com.demo.app.exception.FileInputException;
 import com.demo.app.service.QuestionService;
@@ -23,6 +22,7 @@ import java.util.List;
 @RequestMapping(path = "/api/v1/question")
 @Tag(name = "Question", description = "Question APIs Management")
 @RequiredArgsConstructor
+@CrossOrigin(allowedHeaders = "*")
 public class QuestionController {
 
     private final QuestionService questionService;
@@ -62,13 +62,6 @@ public class QuestionController {
         return ResponseEntity.status(HttpStatus.OK).body(questionService.getAllQuestionsBySubjectCode(code));
     }
 
-    @GetMapping(path = "/page")
-    public ResponseEntity<?> getQuestionPagesBySubjectCode(@RequestParam(name = "code") String code, @RequestBody PageRequest request){
-        var response = questionService.getQuestionPagesBySubjectCode(
-                code, request.getPageNo(), request.getPageSize(), request.getSortBy(), request.getSortDir()
-        );
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
 
     @PutMapping(path = "/update/{id}")
     public ResponseEntity<?> updateQuestion(@PathVariable(name = "id") int questionId,

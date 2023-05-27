@@ -1,6 +1,5 @@
 package com.demo.app.service;
 
-import com.demo.app.dto.page.PageResponse;
 import com.demo.app.dto.student.StudentRequest;
 import com.demo.app.dto.student.StudentResponse;
 import com.demo.app.exception.EntityNotFoundException;
@@ -19,13 +18,10 @@ public interface StudentService {
 
     void saveStudent(StudentRequest request) throws FieldExistedException;
 
-    PageResponse<StudentResponse> getAllStudents(int pageNo, int pageSize, String sortBy, String sortDir);
-
     List<StudentResponse> getAllStudents();
 
     void updateStudent(int studentId, StudentRequest request) throws EntityNotFoundException;
 
     void disableStudent(int studentId) throws EntityNotFoundException;
 
-    void deleteStudent(int studentId) throws EntityNotFoundException;
 }

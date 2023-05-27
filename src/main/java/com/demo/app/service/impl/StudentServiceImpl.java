@@ -1,7 +1,6 @@
 package com.demo.app.service.impl;
 
 import com.demo.app.config.security.PasswordEncoder;
-import com.demo.app.dto.page.PageResponse;
 import com.demo.app.dto.student.StudentRequest;
 import com.demo.app.dto.student.StudentResponse;
 import com.demo.app.exception.EntityNotFoundException;
@@ -18,16 +17,15 @@ import com.demo.app.util.ExcelUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -93,25 +91,6 @@ public class StudentServiceImpl implements StudentService {
         userRepository.save(user);
     }
 
-    @Override
-    public PageResponse<StudentResponse> getAllStudents(int pageNo, int pageSize, String sortBy, String sortDir) {
-        var sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        var pageable = PageRequest.of(pageNo, pageSize, sort);
-        Page<Student> students = studentRepository.findAll(pageable);
-        var studentResponses = students.stream().map(
-                student -> modelMapper.map(student, StudentResponse.class)
-        ).collect(Collectors.toList());
-
-        return PageResponse.<StudentResponse>builder()
-                .objects(studentResponses)
-                .pageNo(students.getNumber())
-                .pageSize(students.getSize())
-                .totalElements(students.getTotalElements())
-                .totalPages(students.getTotalPages())
-                .isFirst(students.isFirst())
-                .isLast(students.isLast())
-                .build();
-    }
 
     @Override
     public List<StudentResponse> getAllStudents() throws EntityNotFoundException {
@@ -160,21 +139,6 @@ public class StudentServiceImpl implements StudentService {
         );
         existStudent.getUser().setEnabled(false);
         studentRepository.save(existStudent);
-    }
-
-    @Override
-    @Transactional
-    public void deleteStudent(int studentId) throws EntityNotFoundException {
-        var existStudent = studentRepository.findById(studentId).orElseThrow(
-                () -> new EntityNotFoundException(String.format("Not found any student with id = %d !", studentId), HttpStatus.NOT_FOUND)
-        );
-        User user = existStudent.getUser();
-        user.setRoles(null);
-
-        userRepository.save(user);
-        studentRepository.delete(existStudent);
-        userRepository.delete(user);
-
     }
 
     private void checkIfUsernameExists(String username) throws FieldExistedException {
