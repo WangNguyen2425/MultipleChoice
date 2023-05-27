@@ -5,6 +5,7 @@ import lombok.*;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -49,7 +50,7 @@ public class Question implements Serializable {
 
     public enum Level {
         EASY,
-        NORMAL,
+        MEDIUM,
         DIFFICULT
     }
 
@@ -59,5 +60,16 @@ public class Question implements Serializable {
         enabled = true;
     }
 
-
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", topicText='" + topicText + '\'' +
+                ", topicImage=" + Arrays.toString(topicImage) +
+                ", level=" + level +
+                ", createdDate=" + createdDate +
+                ", enabled=" + enabled +
+                ", answers=" + answers +
+                '}';
+    }
 }
