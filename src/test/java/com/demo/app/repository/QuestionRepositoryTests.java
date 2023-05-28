@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -24,10 +25,15 @@ public class QuestionRepositoryTests {
     public void testFindQuestionBySubjectChapterOrder(){
         var code = "IT4110";
         var chapterOrders = List.of(new Integer[]{1, 2, 3, 4});
-        var questions = questionRepository.findQuestionBySubjectChapterOrder(code, chapterOrders);
+        var pageable = PageRequest.of(0, 10);
+        var questions = questionRepository.findQuestionBySubjectChapterOrder(code, chapterOrders, pageable);
         Assertions.assertThat(questions).isNotNull();
+        int count = 0;
         for (var question : questions){
             System.out.println(question);
+            count++;
         }
+        System.out.println(count);
+        Assertions.assertThat(count).isEqualTo(10);
     }
 }
