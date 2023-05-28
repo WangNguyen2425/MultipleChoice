@@ -17,4 +17,6 @@ public class TestRequest {
 
     private int questionQuantity;
 
+    private String testDay;
+
 }
