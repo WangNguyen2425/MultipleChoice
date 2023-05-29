@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 public class ModelMapperConfig {
 
     @Bean
-    public ModelMapper modelMapper(){
+    public ModelMapper modelMapper() {
         var mapper = new ModelMapper();
         mapper.getConfiguration().setSkipNullEnabled(true);
         convertLocalDate(mapper);
@@ -23,17 +23,17 @@ public class ModelMapperConfig {
         return mapper;
     }
 
-    private void convertLocalDate(ModelMapper mapper){
-        Provider<LocalDate> localDateProvider = new AbstractProvider<>() {
+    private void convertLocalDate(ModelMapper mapper) {
+        var localDateProvider = new AbstractProvider<LocalDate>() {
             @Override
             protected LocalDate get() {
                 return LocalDate.now();
             }
         };
-        Converter<String, LocalDate> converter = new AbstractConverter<>() {
+        var converter = new AbstractConverter<String, LocalDate>() {
             @Override
             protected LocalDate convert(String source) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 return LocalDate.parse(source, formatter);
             }
         };
@@ -42,29 +42,32 @@ public class ModelMapperConfig {
         mapper.getTypeMap(String.class, LocalDate.class).setProvider(localDateProvider);
     }
 
-    private void convertGender(ModelMapper mapper){
-        mapper.createTypeMap(String.class, Gender.class).setConverter(context -> switch (context.getSource()) {
-            case "male", "Male" -> Gender.MALE;
-            case "female", "Female" -> Gender.FEMALE;
-            default -> null;
-        });
+    private void convertGender(ModelMapper mapper) {
+        mapper.createTypeMap(String.class, Gender.class).setConverter(
+                context -> switch (context.getSource()) {
+                    case "male", "Male" -> Gender.MALE;
+                    case "female", "Female" -> Gender.FEMALE;
+                    default -> null;
+                });
     }
 
-    private void convertLevel(ModelMapper mapper){
-        mapper.createTypeMap(String.class, Question.Level.class).setConverter(context -> switch (context.getSource()) {
-            case "easy", "Easy", "EASY" -> Question.Level.EASY;
-            case "medium", "Medium", "MEDIUM" -> Question.Level.MEDIUM;
-            case "difficult", "Difficult", "DIFFICULT" -> Question.Level.DIFFICULT;
-            default -> null;
-        });
+    private void convertLevel(ModelMapper mapper) {
+        mapper.createTypeMap(String.class, Question.Level.class).setConverter(
+                context -> switch (context.getSource()) {
+                    case "easy", "Easy", "EASY" -> Question.Level.EASY;
+                    case "medium", "Medium", "MEDIUM" -> Question.Level.MEDIUM;
+                    case "difficult", "Difficult", "DIFFICULT" -> Question.Level.DIFFICULT;
+                    default -> null;
+                });
     }
 
-    private void convertBoolean(ModelMapper mapper){
-        mapper.createTypeMap(String.class, Boolean.class).setConverter(context -> switch (context.getSource()) {
-            case "True", "TRUE", "true", "1", "Correct" -> true;
-            case "False", "FALSE", "false", "0", "Incorrect" -> false;
-            default -> null;
-        });
+    private void convertBoolean(ModelMapper mapper) {
+        mapper.createTypeMap(String.class, Boolean.class).setConverter(
+                context -> switch (context.getSource()) {
+                    case "True", "TRUE", "true", "1", "Correct" -> true;
+                    case "False", "FALSE", "false", "0", "Incorrect" -> false;
+                    default -> null;
+                });
     }
 
 }

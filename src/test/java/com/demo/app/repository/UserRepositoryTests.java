@@ -62,4 +62,9 @@ public class UserRepositoryTests {
         Assertions.assertThat(expectUser).isNotNull();
     }
 
+    @Test
+    public void testExistByEmailOrUsername(){
+
+    }
+
 }

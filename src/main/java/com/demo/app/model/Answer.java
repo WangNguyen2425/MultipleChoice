@@ -29,6 +29,9 @@ public class Answer implements Serializable {
     @ManyToOne
     private Question question;
 
+    @OneToOne(mappedBy = "answer", cascade = CascadeType.ALL)
+    private TestSetQuestionAnswer testSetQuestionAnswer;
+
     @PrePersist
     private void prePersist() {
         enabled = true;

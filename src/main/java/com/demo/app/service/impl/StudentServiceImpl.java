@@ -40,9 +40,10 @@ public class StudentServiceImpl implements StudentService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final ModelMapper modelMapper;
+    private final ModelMapper mapper;
 
     @Override
+    @Transactional
     public void saveStudentsExcelFile(MultipartFile file) throws FileInputException, FieldExistedException {
         if (!ExcelUtils.hasExcelFormat(file)) {
             throw new FileInputException("Please upload an excel file!", HttpStatus.BAD_REQUEST);
@@ -51,6 +52,11 @@ public class StudentServiceImpl implements StudentService {
             Map<User, Student> userStudents = ExcelUtils.excelFileToUserStudents(file);
             List<Role> roles = roleRepository.findAllByRoleNameIn(Arrays.asList(Role.RoleType.ROLE_USER, Role.RoleType.ROLE_STUDENT));
             userStudents.forEach((user, student) -> {
+                if (userRepository.existsByEmailOrUsername(user.getEmail(), user.getUsername()) ||
+                        studentRepository.existsByPhoneNumber(student.getPhoneNumber()) ||
+                        studentRepository.existsByCode(student.getCode())) {
+                    throw new FieldExistedException("Some field in excel file already existed !", HttpStatus.CONFLICT);
+                }
                 user.setRoles(roles);
                 String encodePassword = passwordEncoder.passwordEncode().encode(user.getPassword());
                 user.setPassword(encodePassword);
@@ -58,7 +64,7 @@ public class StudentServiceImpl implements StudentService {
             });
             userRepository.saveAll(userStudents.keySet());
             studentRepository.saveAll(userStudents.values());
-        } catch (IOException ex){
+        } catch (IOException ex) {
             throw new FileInputException("Could not read the file !", HttpStatus.EXPECTATION_FAILED);
         }
     }
@@ -68,11 +74,10 @@ public class StudentServiceImpl implements StudentService {
         try {
             var students = studentRepository.findAll();
             return ExcelUtils.studentsToExcelFile(students);
-        } catch (IOException ex){
+        } catch (IOException ex) {
             throw new FileInputException("Could not write the file !", HttpStatus.EXPECTATION_FAILED);
         }
     }
-
 
 
     @Override
@@ -83,7 +88,7 @@ public class StudentServiceImpl implements StudentService {
         checkIfPhoneNumberExists(request.getPhoneNumber());
 
         List<Role> roles = roleRepository.findAllByRoleNameIn(Arrays.asList(Role.RoleType.ROLE_USER, Role.RoleType.ROLE_STUDENT));
-        User user = modelMapper.map(request, User.class);
+        User user = mapper.map(request, User.class);
         user.setPassword(passwordEncoder.passwordEncode().encode(request.getPassword()));
         user.setRoles(roles);
         user.getStudent().setUser(user);
@@ -99,7 +104,7 @@ public class StudentServiceImpl implements StudentService {
             throw new EntityNotFoundException("Not found any students", HttpStatus.NOT_FOUND);
         }
         return students.stream().map(student -> {
-            StudentResponse response = modelMapper.map(student, StudentResponse.class);
+            StudentResponse response = mapper.map(student, StudentResponse.class);
             response.setUsername(student.getUser().getUsername());
             response.setEmail(student.getUser().getEmail());
             return response;
@@ -121,7 +126,7 @@ public class StudentServiceImpl implements StudentService {
             checkIfEmailExists(request.getEmail());
         }
 
-        var student = modelMapper.map(request, Student.class);
+        var student = mapper.map(request, Student.class);
         student.setJoinDate(existStudent.getJoinDate());
         student.setUser(existStudent.getUser());
         student.setId(existStudent.getId());

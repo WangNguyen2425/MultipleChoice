@@ -26,4 +26,8 @@ public class TestSetQuestionAnswer implements Serializable {
 
     @ManyToOne
     private TestSetQuestion testSetQuestion;
+
+    @OneToOne
+    @JoinColumn(referencedColumnName = "id", name = "answer_id")
+    private Answer answer;
 }

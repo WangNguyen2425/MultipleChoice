@@ -43,6 +43,9 @@ public class Subject implements Serializable {
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
     private List<ExamClass> examClasses;
 
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
+    private List<Test> tests;
+
     @PrePersist
     private void prePersist(){
         enabled = true;

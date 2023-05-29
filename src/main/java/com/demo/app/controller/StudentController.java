@@ -59,7 +59,7 @@ public class StudentController {
             method = "POST",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(
-                            mediaType = "json/application",
+                            mediaType = "application/json",
                             schema = @Schema(
                                     implementation = StudentRequest.class,
                                     description = "Information's need to be sent to create s new student"
@@ -75,7 +75,7 @@ public class StudentController {
                             responseCode = "201",
                             description = "New Student is created successfully",
                             content = @Content(
-                                    mediaType = "json/application",
+                                    mediaType = "application/json",
                                     schema = @Schema(
                                             implementation = ResponseMessage.class,
                                             description = "Create a new student"
@@ -91,7 +91,7 @@ public class StudentController {
                     )
             }
     )
-    @PostMapping(path = "/add")
+    @PostMapping(path = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addNewStudent(@RequestBody @Valid StudentRequest request) {
         studentService.saveStudent(request);
         String message = String.format("Student %s have been saved successfully !", request.getFullName());
@@ -107,7 +107,7 @@ public class StudentController {
                             responseCode = "200",
                             description = "Return all information of students successfully",
                             content = @Content(
-                                    mediaType = "json/application",
+                                    mediaType = "application/json",
                                     schema = @Schema(
                                             implementation = List.class,
                                             description = "Return a list"
@@ -122,7 +122,7 @@ public class StudentController {
                             responseCode = "404",
                             description = "There is no student in database",
                             content = @Content(
-                                    mediaType = "json/application",
+                                    mediaType = "application/json",
                                     schema = @Schema(
                                             implementation = ResponseMessage.class,
                                             description = "Information is incorrect"
@@ -162,7 +162,7 @@ public class StudentController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Information student update",
                     content = @Content(
-                            mediaType = "json/application",
+                            mediaType = "application/json",
                             schema = @Schema(
                                     implementation = StudentRequest.class,
                                     description = "Information student update"
@@ -178,7 +178,7 @@ public class StudentController {
                             responseCode = "200",
                             description = "Updated successfully",
                             content = @Content(
-                                    mediaType = "json/application",
+                                    mediaType = "application/json",
                                     schema = @Schema(
                                             implementation = ResponseMessage.class
                                     ),
@@ -193,7 +193,7 @@ public class StudentController {
                             responseCode = "404",
                             description = "Information not found",
                             content = @Content(
-                                    mediaType = "json/application",
+                                    mediaType = "application/json",
                                     schema = @Schema(
                                           implementation = ResponseMessage.class
                                     ),
@@ -244,7 +244,7 @@ public class StudentController {
                             responseCode = "404",
                             description = "Information not found",
                             content = @Content(
-                                    mediaType = "json/application",
+                                    mediaType = "application/json",
                                     schema = @Schema(
                                             implementation = ResponseMessage.class
                                     ),
