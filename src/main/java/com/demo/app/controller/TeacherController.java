@@ -38,7 +38,7 @@ public class TeacherController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "These are group of information used for teacher register",
                     content = @Content(
-                            mediaType = "json/application",
+                            mediaType = "application/json",
                             schema = @Schema(
                                     description = "This is structure of data teacher register",
                                     implementation = TeacherRequest.class
@@ -50,7 +50,7 @@ public class TeacherController {
                             description = "New teacher is created successfully",
                             responseCode = "200",
                             content = @Content(
-                                    mediaType = "json/application",
+                                    mediaType = "application/json",
                                     schema = @Schema(
                                             implementation = ResponseMessage.class
                                     ),
@@ -82,7 +82,7 @@ public class TeacherController {
                             description = "Return all information of teachers successfully",
                             responseCode = "200",
                             content = @Content(
-                                    mediaType = "json/application",
+                                    mediaType = "application/json",
                                     schema = @Schema(
                                             description = "return a list of teacher",
                                             implementation = List.class
@@ -93,7 +93,7 @@ public class TeacherController {
                             description = "No information in database",
                             responseCode = "404",
                             content = @Content(
-                                    mediaType = "json/application",
+                                    mediaType = "application/json",
                                     schema = @Schema(
                                             implementation = ResponseMessage.class
                                     ),
@@ -107,11 +107,7 @@ public class TeacherController {
     @GetMapping(path = "/list")
     public ResponseEntity<?> getAllTeachers() {
         var teacherResponses = teacherService.getAllTeacher();
-        if (teacherResponses.size()!=0){
-            return ResponseEntity.status(HttpStatus.OK).body(teacherResponses);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage("Data not found"));
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(teacherResponses);
     }
 
 
@@ -121,7 +117,7 @@ public class TeacherController {
             method = "PUT",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(
-                            mediaType = "json/application",
+                            mediaType = "application/json",
                             schema = @Schema(
                                     implementation = TeacherRequest.class
                             )
@@ -132,7 +128,7 @@ public class TeacherController {
                             responseCode = "200",
                             description = "Updated successfully",
                             content = @Content(
-                                    mediaType = "json/application",
+                                    mediaType = "application/json",
                                     schema = @Schema(
                                             implementation = ResponseMessage.class
                                     ),
@@ -145,7 +141,7 @@ public class TeacherController {
                             responseCode = "404",
                             description = "Information not found",
                             content = @Content(
-                                    mediaType = "json/application",
+                                    mediaType = "application/json",
                                     schema = @Schema(
                                             implementation = ResponseMessage.class
                                     ),
@@ -180,7 +176,7 @@ public class TeacherController {
                             responseCode = "404",
                             description = "Information not found",
                             content = @Content(
-                                    mediaType = "json/application",
+                                    mediaType = "application/json",
                                     schema = @Schema(
                                             implementation = ResponseMessage.class
                                     ),

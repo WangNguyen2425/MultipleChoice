@@ -50,12 +50,29 @@ public class Test implements Serializable {
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
     private List<ExamClass> examClasses;
 
+    @ManyToOne
+    private Subject subject;
+
     @PrePersist
     private void prePersist(){
         createdAt = LocalDate.now();
+        totalPoint = 100.0d;
+        enabled = true;
     }
     @PreUpdate
     private void preUpdate(){
         updatedAt = LocalDate.now();
+    }
+
+    @Override
+    public String toString() {
+        return "Test{" +
+                "id=" + id +
+                ", enabled=" + enabled +
+                ", testDay=" + testDay +
+                ", totalPoint=" + totalPoint +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }

@@ -1,27 +1,22 @@
 package com.demo.app.dto.test;
 
-import com.demo.app.dto.question.QuestionResponse;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import java.util.List;
+import lombok.*;
 
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class TestResponse {
 
-    private List<QuestionResponse> questionResponses;
+    private int id;
 
-    private String subjectTitle;
+    private String createdAt;
 
-    private String subjectCode;
+    private String updatedAt;
 
-    private int questionQuantity;
+    private double totalPoint;
 
     private String testDay;
-
 }
