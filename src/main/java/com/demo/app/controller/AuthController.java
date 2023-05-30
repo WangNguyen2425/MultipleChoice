@@ -62,7 +62,7 @@ public class AuthController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "There are group of information need to user register",
                     content = @Content(
-                            mediaType = "json/application",
+                            mediaType = "application/json",
                             schema = @Schema(
                                     implementation = RegisterRequest.class,
                                     example = ""
