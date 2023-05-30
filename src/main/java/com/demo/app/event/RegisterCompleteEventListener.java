@@ -9,7 +9,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-import jakarta.mail.internet.MimeMessage;
 
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;
@@ -44,13 +43,13 @@ public class RegisterCompleteEventListener implements ApplicationListener<Regist
 
     private void sendVerifyEmail(String url) throws MessagingException, UnsupportedEncodingException {
         String mailContent = "<p> Hi, "+ user.getUsername()+ ", </p>"+
-                "<p>Thank you for registering with us,"+"" +
+                "<p>Thank you for registering with us,"+
                 "Please, follow the link below to complete your registration.</p>"+
                 "<a href=\"" +url+ "\">Verify your email to activate your account</a>"+
                 "<p> Thank you <br> Users Registration Portal Service";
-        MimeMessage message = mailSender.createMimeMessage();
+        var message = mailSender.createMimeMessage();
         var messageHelper = new MimeMessageHelper(message);
-        messageHelper.setFrom("kien.nt112002@gmail.com", "Verification Code Generator");
+        messageHelper.setFrom("knkuro00@gmail.com", "Verification Code Generator");
         messageHelper.setTo(user.getEmail());
         messageHelper.setSubject("Email Verification");
         messageHelper.setText(mailContent, true);

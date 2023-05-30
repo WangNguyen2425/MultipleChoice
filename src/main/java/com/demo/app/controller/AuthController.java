@@ -25,9 +25,9 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping(path = "/api/v1/auth")
-@Tag(name = "Authentication", description = "Login and Register User's account")
 @RequiredArgsConstructor
 @CrossOrigin(allowedHeaders = "*")
+@Tag(name = "Authentication", description = "Login and Register User's account")
 public class AuthController {
 
     private final AuthService authService;
@@ -62,14 +62,9 @@ public class AuthController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "There are group of information need to user register",
                     content = @Content(
-                            mediaType = "json/application",
+                            mediaType = "application/json",
                             schema = @Schema(
-                                    implementation = RegisterRequest.class,
-                                    example = ""
-                            ),
-                            examples = @ExampleObject(
-                                    description = "",
-                                    value = ""
+                                    implementation = RegisterRequest.class
                             )
                     )
             ),
@@ -89,7 +84,9 @@ public class AuthController {
     @PostMapping(path = "/signup")
     public ResponseEntity<?> registerUser(@RequestBody @Valid final RegisterRequest registerRequest, final HttpServletRequest request) throws FieldExistedException {
         var authResponse = authService.register(registerRequest, request);
-        return ResponseEntity.ok().body(authResponse);
+        return ResponseEntity.ok()
+                .header("token", authResponse.getAccessToken())
+                .body(new ResponseMessage("Sign in successfully !"));
     }
 
     @PostMapping(path = "/refresh-token")
