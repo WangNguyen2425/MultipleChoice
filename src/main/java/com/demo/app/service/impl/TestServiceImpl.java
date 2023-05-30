@@ -5,6 +5,7 @@ import com.demo.app.dto.question.QuestionResponse;
 import com.demo.app.dto.test.TestRequest;
 import com.demo.app.dto.test.TestDetailResponse;
 import com.demo.app.dto.test.TestResponse;
+import com.demo.app.dto.testset.TestSetRequest;
 import com.demo.app.exception.EntityNotFoundException;
 import com.demo.app.model.Question;
 import com.demo.app.model.Test;
@@ -83,6 +84,12 @@ public class TestServiceImpl implements TestService {
         return tests.stream().map(
                 test -> mapper.map(test, TestResponse.class)
         ).collect(Collectors.toList());
+    }
+
+    public void createTestSetFromTest(int testId, TestSetRequest request){
+        Test test = testRepository.findById(testId).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Test with id: %d not found !", testId), HttpStatus.NOT_FOUND));
+
     }
 
 }
