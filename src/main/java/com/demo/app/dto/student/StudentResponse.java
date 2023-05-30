@@ -19,7 +19,7 @@ public class StudentResponse {
 
     private String birthday;
 
-    private String Gender;
+    private String gender;
 
     private String phoneNumber;
 
