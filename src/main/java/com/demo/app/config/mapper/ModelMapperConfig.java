@@ -45,8 +45,8 @@ public class ModelMapperConfig {
     private void convertGender(ModelMapper mapper) {
         mapper.createTypeMap(String.class, Gender.class).setConverter(
                 context -> switch (context.getSource()) {
-                    case "male", "Male" -> Gender.MALE;
-                    case "female", "Female" -> Gender.FEMALE;
+                    case "male", "Male", "MALE" -> Gender.MALE;
+                    case "female", "Female", "FEMALE" -> Gender.FEMALE;
                     default -> null;
                 });
     }

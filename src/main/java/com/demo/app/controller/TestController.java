@@ -3,6 +3,7 @@ package com.demo.app.controller;
 import com.demo.app.dto.message.ResponseMessage;
 import com.demo.app.dto.test.TestRequest;
 import com.demo.app.dto.test.TestDetailResponse;
+import com.demo.app.dto.testset.TestSetRequest;
 import com.demo.app.exception.EntityNotFoundException;
 import com.demo.app.service.TestService;
 import jakarta.validation.Valid;
@@ -41,7 +42,7 @@ public class TestController {
     }
 
     @PostMapping(path = "/test-set/create/{id}")
-    public ResponseEntity<?> createTestSetFromTest(@PathVariable(name = "id") int testId){
+    public ResponseEntity<?> createTestSetFromTest(@PathVariable(name = "id") int testId, @RequestBody @Valid final TestSetRequest request){
         return null;
     }
 
