@@ -30,4 +30,9 @@ public class TestSetQuestionAnswer implements Serializable {
     @OneToOne
     @JoinColumn(referencedColumnName = "id", name = "answer_id")
     private Answer answer;
+
+    @PrePersist
+    private void prePersist(){
+        enabled = true;
+    }
 }

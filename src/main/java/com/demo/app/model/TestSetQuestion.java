@@ -37,4 +37,9 @@ public class TestSetQuestion implements Serializable {
     @OneToMany(mappedBy = "testSetQuestion", cascade = CascadeType.ALL)
     private List<TestSetQuestionAnswer> testSetQuestionAnswers;
 
+    @PrePersist
+    private void prePersist(){
+        enabled = true;
+    }
+
 }

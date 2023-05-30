@@ -45,7 +45,7 @@ public class Test implements Serializable {
             joinColumns = @JoinColumn(name = "test_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "question_id", referencedColumnName = "id")
     )
-    private Set<Question> questions;
+    private List<Question> questions;
 
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
     private List<ExamClass> examClasses;

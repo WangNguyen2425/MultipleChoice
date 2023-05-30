@@ -7,11 +7,8 @@ import com.demo.app.dto.test.TestDetailResponse;
 import com.demo.app.dto.test.TestResponse;
 import com.demo.app.dto.testset.TestSetRequest;
 import com.demo.app.exception.EntityNotFoundException;
-import com.demo.app.model.Question;
-import com.demo.app.model.Test;
-import com.demo.app.repository.QuestionRepository;
-import com.demo.app.repository.SubjectRepository;
-import com.demo.app.repository.TestRepository;
+import com.demo.app.model.*;
+import com.demo.app.repository.*;
 import com.demo.app.service.TestService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +19,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +33,12 @@ public class TestServiceImpl implements TestService {
     private final SubjectRepository subjectRepository;
 
     private final TestRepository testRepository;
+
+    private final TestSetRepository testSetRepository;
+
+    private final TestSetQuestionRepository testSetQuestionRepository;
+
+    private final TestSetQuestionAnswerRepository testSetQuestionAnswerRepository;
 
     private final ModelMapper mapper;
 
@@ -66,7 +71,7 @@ public class TestServiceImpl implements TestService {
         );
         var questions = response.getQuestionResponses().stream().map(
                 questionResponse -> mapper.map(questionResponse, Question.class)
-        ).collect(Collectors.toSet());
+        ).collect(Collectors.toList());
         var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         var test = Test.builder()
                 .testDay(LocalDate.parse(response.getTestDay(), formatter))
@@ -86,10 +91,56 @@ public class TestServiceImpl implements TestService {
         ).collect(Collectors.toList());
     }
 
+    @Override
+    @Transactional
     public void createTestSetFromTest(int testId, TestSetRequest request){
-        Test test = testRepository.findById(testId).orElseThrow(
+        var test = testRepository.findById(testId).orElseThrow(
                 () -> new EntityNotFoundException(String.format("Test with id: %d not found !", testId), HttpStatus.NOT_FOUND));
+        var questionNo = 0;
+        for (var testNo = 1; testNo <= request.getTestSetQuantity(); ++testNo){
+            var testSet = saveBlankTestSet(testNo, test);
+            Collections.shuffle(test.getQuestions());
 
+            for (var question : test.getQuestions()){
+                var testSetQuestion = saveBlankTestSetQuestion(questionNo, testSet, question);
+                saveAllTestSetQuestionAnswer(testSetQuestion, question);
+                questionNo++;
+            }
+            questionNo = 0;
+        }
+    }
+
+    private TestSet saveBlankTestSet(int testNo, Test test){
+        var testSet = TestSet.builder()
+                .testNo(testNo)
+                .test(test)
+                .build();
+        return testSetRepository.save(testSet);
+    }
+
+    private TestSetQuestion saveBlankTestSetQuestion(int questionNo, TestSet testSet, Question question){
+        var testSetQuestion = com.demo.app.model.TestSetQuestion.builder()
+                .questionNo(questionNo)
+                .question(question)
+                .testSet(testSet)
+                .build();
+        return testSetQuestionRepository.save(testSetQuestion);
+    }
+
+    private void saveAllTestSetQuestionAnswer(TestSetQuestion testSetQuestion, Question question){
+        int answerNo = 0;
+        var testSetQuestionAnswers = new ArrayList<TestSetQuestionAnswer>();
+        Collections.shuffle(question.getAnswers());
+        for (var answer : question.getAnswers()){
+            answerNo++;
+            var testSetQuestionAnswer = TestSetQuestionAnswer.builder()
+                    .answerNo(answerNo)
+                    .testSetQuestion(testSetQuestion)
+                    .answer(answer)
+                    .build();
+            testSetQuestionAnswers.add(testSetQuestionAnswer);
+        }
+        testSetQuestionAnswerRepository.saveAll(testSetQuestionAnswers);
     }
 
 }
