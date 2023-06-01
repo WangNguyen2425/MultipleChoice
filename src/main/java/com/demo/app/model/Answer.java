@@ -2,6 +2,7 @@ package com.demo.app.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Nationalized;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,6 +20,7 @@ public class Answer implements Serializable {
     private int id;
 
     @Column(name = "content")
+    @Nationalized
     private String content;
 
     @Column(name = "is_corrected")
