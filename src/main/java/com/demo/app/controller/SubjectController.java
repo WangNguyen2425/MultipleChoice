@@ -5,14 +5,14 @@ import com.demo.app.dto.message.ResponseMessage;
 import com.demo.app.dto.subject.SubjectRequest;
 import com.demo.app.service.SubjectService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/api/v1/subject")
-@AllArgsConstructor
+@RequiredArgsConstructor
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 public class SubjectController {
 
