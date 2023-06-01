@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TestServiceImpl implements TestService {
 
+    private static final int TEST_NO_ROOT_NUMBER = 100;
+
     private final QuestionRepository questionRepository;
 
     private final SubjectRepository subjectRepository;
@@ -56,6 +58,7 @@ public class TestServiceImpl implements TestService {
             return response;
         }).collect(Collectors.toList());
         return TestDetailResponse.builder()
+                .questionQuantity(request.getQuestionQuantity())
                 .testDay(request.getTestDay())
                 .subjectCode(subject.getCode())
                 .subjectTitle(subject.getTitle())
@@ -84,7 +87,7 @@ public class TestServiceImpl implements TestService {
 
     @Override
     @Transactional
-    public List<TestResponse> getAllTests(){
+    public List<TestResponse> getAllTests() {
         var tests = testRepository.findByEnabledIsTrue();
         return tests.stream().map(
                 test -> mapper.map(test, TestResponse.class)
@@ -93,15 +96,19 @@ public class TestServiceImpl implements TestService {
 
     @Override
     @Transactional
-    public void createTestSetFromTest(int testId, TestSetRequest request){
+    public void createTestSetFromTest(int testId, TestSetRequest request) {
         var test = testRepository.findById(testId).orElseThrow(
                 () -> new EntityNotFoundException(String.format("Test with id: %d not found !", testId), HttpStatus.NOT_FOUND));
         var questionNo = 0;
-        for (var testNo = 1; testNo <= request.getTestSetQuantity(); ++testNo){
-            var testSet = saveBlankTestSet(testNo, test);
+        for (var testNo = 1; testNo <= request.getTestSetQuantity(); ++testNo) {
+            var testNoRootNumber = TEST_NO_ROOT_NUMBER;
+            if (testSetRepository.existsByTestAndTestNo(test, testNo + testNoRootNumber)){
+                testNoRootNumber = ((testNoRootNumber / 100) + 1) * testNoRootNumber;
+            }
+            var testSet = saveBlankTestSet(testNo + testNoRootNumber, test);
             Collections.shuffle(test.getQuestions());
 
-            for (var question : test.getQuestions()){
+            for (var question : test.getQuestions()) {
                 var testSetQuestion = saveBlankTestSetQuestion(questionNo, testSet, question);
                 saveAllTestSetQuestionAnswer(testSetQuestion, question);
                 questionNo++;
@@ -110,7 +117,7 @@ public class TestServiceImpl implements TestService {
         }
     }
 
-    private TestSet saveBlankTestSet(int testNo, Test test){
+    private TestSet saveBlankTestSet(int testNo, Test test) {
         var testSet = TestSet.builder()
                 .testNo(testNo)
                 .test(test)
@@ -118,7 +125,7 @@ public class TestServiceImpl implements TestService {
         return testSetRepository.save(testSet);
     }
 
-    private TestSetQuestion saveBlankTestSetQuestion(int questionNo, TestSet testSet, Question question){
+    private TestSetQuestion saveBlankTestSetQuestion(int questionNo, TestSet testSet, Question question) {
         var testSetQuestion = com.demo.app.model.TestSetQuestion.builder()
                 .questionNo(questionNo)
                 .question(question)
@@ -127,11 +134,11 @@ public class TestServiceImpl implements TestService {
         return testSetQuestionRepository.save(testSetQuestion);
     }
 
-    private void saveAllTestSetQuestionAnswer(TestSetQuestion testSetQuestion, Question question){
+    private void saveAllTestSetQuestionAnswer(TestSetQuestion testSetQuestion, Question question) {
         int answerNo = 0;
         var testSetQuestionAnswers = new ArrayList<TestSetQuestionAnswer>();
         Collections.shuffle(question.getAnswers());
-        for (var answer : question.getAnswers()){
+        for (var answer : question.getAnswers()) {
             answerNo++;
             var testSetQuestionAnswer = TestSetQuestionAnswer.builder()
                     .answerNo(answerNo)

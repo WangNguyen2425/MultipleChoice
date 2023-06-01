@@ -28,7 +28,7 @@ import java.util.List;
 @RequestMapping(path = "/api/v1/student")
 @Tag(name = "Student", description = "Student APIs Management")
 @AllArgsConstructor
-@CrossOrigin(allowedHeaders = "*")
+@CrossOrigin(allowedHeaders = "*", origins = "*")
 public class StudentController {
     private final String EXAMPLE_LIST_STUDENT_RESPONSES = "[{\"id\":11,\"username\":\"AliceBouder00\",\"fullName\":\"Alice Boudering\",\"birthday\":\"2002-08-03\",\"phoneNumber\":\"0987654654\",\"email\":\"alicee@gmail.com\",\"code\":\"2.0205435E7\",\"gender\":\"FEMALE\"},{\"id\":12,\"username\":\"JohnBuford00\",\"fullName\":\"John Buford\",\"birthday\":\"2000-07-08\",\"phoneNumber\":\"0987654312\",\"email\":\"johnny00@gmail.com\",\"code\":\"2.0184235E7\",\"gender\":\"MALE\"}]";
     private final String EXAMPLE_STUDENT_INFORMATION_CREATE_AND_UPDATE = "{\"username\":\"ThanhKien00\",\"email\":\"knkuro00@gmail.com\",\"password\":\"kien123\",\"fullName\":\"Nguyen Thanh Kien\",\"birthday\":\"2002-01-01\",\"gender\":\"MALE\",\"phoneNumber\":\"0987654321\",\"code\":\"20203478\"}";

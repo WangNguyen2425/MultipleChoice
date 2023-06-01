@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping(path = "/api/v1/question")
 @Tag(name = "Question", description = "Question APIs Management")
 @RequiredArgsConstructor
-@CrossOrigin(allowedHeaders = "*")
+@CrossOrigin(allowedHeaders = "*", origins = "*")
 public class QuestionController {
 
     private final QuestionService questionService;

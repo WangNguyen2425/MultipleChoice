@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "answer")
@@ -29,8 +30,8 @@ public class Answer implements Serializable {
     @ManyToOne
     private Question question;
 
-    @OneToOne(mappedBy = "answer", cascade = CascadeType.ALL)
-    private TestSetQuestionAnswer testSetQuestionAnswer;
+    @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL)
+    private List<TestSetQuestionAnswer> testSetQuestionAnswers;
 
     @PrePersist
     private void prePersist() {
