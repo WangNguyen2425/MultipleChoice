@@ -21,6 +21,7 @@ public class ExamClassController {
     @PostMapping("/create")
     public ResponseEntity<?> createExamClass(@RequestBody ClassRequest request){
         examClassService.createExamClass(request);
+        //Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage("Create Exam Class successfully !"));
     }
 
