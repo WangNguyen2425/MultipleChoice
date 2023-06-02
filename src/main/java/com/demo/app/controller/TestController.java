@@ -5,29 +5,23 @@ import com.demo.app.dto.test.TestRequest;
 import com.demo.app.dto.test.TestDetailResponse;
 import com.demo.app.dto.testset.TestSetRequest;
 import com.demo.app.exception.EntityNotFoundException;
-import com.demo.app.model.AnswerObject;
-import com.demo.app.model.InfoObject;
 import com.demo.app.model.MyObject;
 import com.demo.app.service.TestService;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.FileReader;
 import java.nio.file.Files;
 
 import java.nio.file.Paths;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.util.Scanner;
 
 @RestController
 @RequestMapping(path = "/api/v1/test")
@@ -68,29 +62,34 @@ public class TestController {
 
     public ResponseEntity<?> chamdiem(){
         String filePath = "data.json";
-
-        // Tạo một đối tượng ObjectMapper
         ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                // Đọc nội dung file JSON thành một chuỗi
-                String jsonContent = new String(Files.readAllBytes(Paths.get(filePath)));
+        MyObject myObject = new MyObject();
+        try {
+            String CMD =
+                    "cmd /c python app.py %s";
+            CMD = String.format(CMD, "f13.jpg");
+            Process process = Runtime.getRuntime().exec(CMD);
+//            int exitCode = process.waitFor();
+//            if (exitCode == 0) {
+//                File file = new File(filePath);
+//                objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+//                objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
+//                objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true);
+//                myObject = objectMapper.readValue(file, MyObject.class);
+////                file.delete();
+//                return ResponseEntity.status(HttpStatus.CREATED).body(myObject);
+//            } else {
+//                System.out.println("Quá trình chưa hoàn thành. Mã thoát: " + exitCode);
+//            }
+//
+//            return ResponseEntity.status(HttpStatus.CREATED).body(myObject);
 
-                // Tạo đối tượng MyObject từ chuỗi JSON
-                MyObject myObject = new MyObject(jsonContent);
 
-                // Thao tác với đối tượng myObject
-                InfoObject info = myObject.getInfo();
-                AnswerObject answer = myObject.getAnswer();
-
-                // Truy cập các trường trong info và answer
-                // ...
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage("ok"));
+        } catch (Exception e) {
+            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage("error"));
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage("error"));
     }
 
 }

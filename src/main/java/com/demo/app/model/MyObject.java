@@ -1,32 +1,28 @@
 package com.demo.app.model;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.List;
+
+
+@NoArgsConstructor
+@Getter
+@Setter
 public class MyObject {
-    @JsonProperty("info")
-    private InfoObject info;
+    private String sbd;
+    private String mdt;
+    private List<ListAnswerObj> listAnswer;
 
-    @JsonProperty("answer")
-    private AnswerObject answer;
-
-    // Getter và Setter
-
-    public InfoObject getInfo() {
-        return info;
+    public MyObject(String sbd, String mdt, List<ListAnswerObj> listAnswer) {
+        this.sbd = sbd;
+        this.mdt = mdt;
+        this.listAnswer = listAnswer;
     }
-
-    public void setInfo(InfoObject info) {
-        this.info = info;
-    }
-
-    public AnswerObject getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(AnswerObject answer) {
-        this.answer = answer;
-    }
-
 }
+
 
 

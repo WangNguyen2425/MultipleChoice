@@ -658,18 +658,31 @@ if __name__ == '__main__':
 
     # ========================== LẤY RA ĐÁP ÁN =========================
     # Số câu hỏi trong đề thi
-    number_answer = 10
+    number_answer = 60
     # Lấy ra đáp án trong phiếu trả lời
     result_answer = get_answer(img, number_answer)
     # Lấy ra thông tin thí sinh ( Số báo danh và mã đề thi )
     result_info = get_info(img)
+    # print(result_answer)
+    my_array = []
+    for key, value in result_answer.items():
+        item = {
+            "stt": int(key),
+            "answer": value
+        }
+        my_array.append(item)
+  
     result = {
-        "info": result_info,
-        "answer": result_answer
+        "sbd": result_info["SBD"],
+        "mdt": result_info["MDT"],
+        "listAnswer": my_array
     }
-    json_data = json.dumps(result)
-    # print(json_data)
+    
+    # json_data = json.dumps(result)
+
     # Ghi dữ liệu từ điển vào tệp tin JSON
     with open("data.json", "w") as file:
-        json.dump(json_data, file)
+        json.dump(result, file)
     # return json_data
+   
+
