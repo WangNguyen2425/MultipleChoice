@@ -42,6 +42,7 @@ public class TestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage(String.format("Created Set of test with id %d successfully !", testId)));
     }
 
-    
+    @DeleteMapping(path = "/disable/{id}")
+    public ResponseEntity<?>
 
 }
