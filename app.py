@@ -658,7 +658,7 @@ if __name__ == '__main__':
 
     # ========================== LẤY RA ĐÁP ÁN =========================
     # Số câu hỏi trong đề thi
-    number_answer = 60
+    number_answer = 40
     # Lấy ra đáp án trong phiếu trả lời
     result_answer = get_answer(img, number_answer)
     # Lấy ra thông tin thí sinh ( Số báo danh và mã đề thi )
@@ -683,6 +683,7 @@ if __name__ == '__main__':
     # Ghi dữ liệu từ điển vào tệp tin JSON
     with open("data.json", "w") as file:
         json.dump(result, file)
+        # print(json.dump(result, file))
     # return json_data
    
 

@@ -57,35 +57,32 @@ public class TestController {
     @GetMapping(path="/chamdiem")
 
     public ResponseEntity<?> chamdiem(){
-        String filePath = "data.json";
-        ObjectMapper objectMapper = new ObjectMapper();
-        MyObject myObject = new MyObject();
+
         try {
             String CMD =
                     "cmd /c python app.py %s";
             CMD = String.format(CMD, "f13.jpg");
+            String filePath = "data.json";
+            ObjectMapper objectMapper = new ObjectMapper();
+            MyObject myObject;
             Process process = Runtime.getRuntime().exec(CMD);
+            File file = new File(filePath);
+            myObject = objectMapper.readValue(file, MyObject.class);
+//            process.destroy();
+            return ResponseEntity.status(HttpStatus.CREATED).body(myObject);
 //            int exitCode = process.waitFor();
 //            if (exitCode == 0) {
 //                File file = new File(filePath);
-//                objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//                objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
-//                objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true);
 //                myObject = objectMapper.readValue(file, MyObject.class);
-////                file.delete();
 //                return ResponseEntity.status(HttpStatus.CREATED).body(myObject);
 //            } else {
 //                System.out.println("Quá trình chưa hoàn thành. Mã thoát: " + exitCode);
 //            }
-//
-//            return ResponseEntity.status(HttpStatus.CREATED).body(myObject);
-
 
         } catch (Exception e) {
             e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage("error"));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage("error"));
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage("error"));
     }
 
 }
