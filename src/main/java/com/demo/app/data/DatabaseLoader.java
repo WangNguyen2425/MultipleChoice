@@ -25,7 +25,7 @@ public class DatabaseLoader implements CommandLineRunner {
 
     @Override
     @Transactional
-    public void run(String... args) {
+    public void run(String... args){
         initializeRoles();
         initializeAdminUser();
     }
