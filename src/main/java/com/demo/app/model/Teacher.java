@@ -3,6 +3,7 @@ package com.demo.app.model;
 import jakarta.persistence.*;
 
 import lombok.*;
+import org.hibernate.annotations.Nationalized;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -24,6 +25,7 @@ public class Teacher implements Serializable {
     private int id;
 
     @Column(name = "full_name")
+    @Nationalized
     private String fullName;
 
     @Column(name = "birthday")
