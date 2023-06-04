@@ -1,6 +1,7 @@
 package com.demo.app.controller;
 
 import com.demo.app.dto.message.ResponseMessage;
+import com.demo.app.dto.test.TestDetailRequest;
 import com.demo.app.dto.test.TestRequest;
 import com.demo.app.dto.test.TestDetailResponse;
 import com.demo.app.dto.testset.TestSetRequest;
@@ -54,9 +55,22 @@ public class TestController {
     }
 
 
+
+
+    @PutMapping(path = "/update/{id}")
+    public  ResponseEntity<?> updateTest(@PathVariable(name = "id") int testId, @Valid final TestDetailRequest request){
+        testService.updateTest(testId, request);
+        return new ResponseEntity<>(new ResponseMessage("Update test successful !"), HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/disable/{id}")
+    public ResponseEntity<?> disableTest(@PathVariable(name = "id") int testId){
+        testService.disableTest(testId);
+        return new ResponseEntity<>(new ResponseMessage("Disable test successfully !"), HttpStatus.OK);
+    }
     @GetMapping(path="/chamdiem")
 
-    public ResponseEntity<?> chamdiem(){
+    public ResponseEntity<?> chamdiem() {
 
         try {
             String CMD =
@@ -84,5 +98,4 @@ public class TestController {
             return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage("error"));
         }
     }
-
 }
