@@ -16,9 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 
 import java.nio.file.Paths;
@@ -69,21 +67,15 @@ public class TestController {
         return new ResponseEntity<>(new ResponseMessage("Disable test successfully !"), HttpStatus.OK);
     }
     @GetMapping(path="/chamdiem")
-
-    public ResponseEntity<?> chamdiem() {
-
-        try {
-            String CMD =
-                    "cmd /c python app.py %s";
-            CMD = String.format(CMD, "f13.jpg");
-            String filePath = "data.json";
-            ObjectMapper objectMapper = new ObjectMapper();
-            MyObject myObject;
-            Process process = Runtime.getRuntime().exec(CMD);
-            File file = new File(filePath);
-            myObject = objectMapper.readValue(file, MyObject.class);
-//            process.destroy();
-            return ResponseEntity.status(HttpStatus.CREATED).body(myObject);
+    public ResponseEntity<?> chamdiem() throws IOException, InterruptedException {
+//        try {
+//            String CMD =
+//                    "cmd /c python app.py %s %d";
+//            CMD = String.format(CMD, "f13.jpg", 25);
+//            String filePath = "data.json";
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            MyObject myObject;
+//            Process process = Runtime.getRuntime().exec(CMD);
 //            int exitCode = process.waitFor();
 //            if (exitCode == 0) {
 //                File file = new File(filePath);
@@ -92,10 +84,32 @@ public class TestController {
 //            } else {
 //                System.out.println("Quá trình chưa hoàn thành. Mã thoát: " + exitCode);
 //            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage("error"));
+//        }
+//        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage("OK"));
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage("error"));
+        Thread thread = new Thread(new MyRunnable());
+        thread.start();
+        thread.join();
+        String filePath = "data.json";
+        File file = new File(filePath);
+        ObjectMapper objectMapper = new ObjectMapper();
+        MyObject myObject = objectMapper.readValue(file, MyObject.class);
+        return ResponseEntity.status(HttpStatus.CREATED).body(myObject);
+    }
+    public class MyRunnable implements Runnable {
+        public void run(){
+            String CMD =
+                    "cmd /c python app.py %s %d";
+            CMD = String.format(CMD, "f13.jpg", 20);
+            try {
+                Process process = Runtime.getRuntime().exec(CMD);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

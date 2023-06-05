@@ -643,6 +643,7 @@ if __name__ == '__main__':
     # Đọc ảnh đầu vào ( chưa cắt )
     parser = argparse.ArgumentParser(description='Process some integers.')
     parser.add_argument('input', help='input')
+    parser.add_argument('number_answer', help='number')
     args = parser.parse_args()
 
     path = './Data/Test/' + args.input
@@ -658,7 +659,7 @@ if __name__ == '__main__':
 
     # ========================== LẤY RA ĐÁP ÁN =========================
     # Số câu hỏi trong đề thi
-    number_answer = 40
+    number_answer = int(args.number_answer)
     # Lấy ra đáp án trong phiếu trả lời
     result_answer = get_answer(img, number_answer)
     # Lấy ra thông tin thí sinh ( Số báo danh và mã đề thi )
@@ -671,13 +672,13 @@ if __name__ == '__main__':
             "answer": value
         }
         my_array.append(item)
-  
+
     result = {
         "sbd": result_info["SBD"],
         "mdt": result_info["MDT"],
         "listAnswer": my_array
     }
-    
+
     # json_data = json.dumps(result)
 
     # Ghi dữ liệu từ điển vào tệp tin JSON
@@ -685,5 +686,3 @@ if __name__ == '__main__':
         json.dump(result, file)
         # print(json.dump(result, file))
     # return json_data
-   
-
