@@ -46,7 +46,7 @@ public class StudentController {
 
     @GetMapping(path = "/export")
     public ResponseEntity<?> exportExcelFile() throws IOException {
-        String filename = "Students-" + System.currentTimeMillis() + ".xlsx";
+        String filename = "Students" + System.currentTimeMillis() + ".xlsx";
         var file = new InputStreamResource(studentService.exportStudentsExcel());
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)

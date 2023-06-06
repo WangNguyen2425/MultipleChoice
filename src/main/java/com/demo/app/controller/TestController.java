@@ -67,30 +67,7 @@ public class TestController {
         return new ResponseEntity<>(new ResponseMessage("Disable test successfully !"), HttpStatus.OK);
     }
     @GetMapping(path="/chamdiem")
-    public ResponseEntity<?> chamdiem() throws IOException, InterruptedException {
-//        try {
-//            String CMD =
-//                    "cmd /c python app.py %s %d";
-//            CMD = String.format(CMD, "f13.jpg", 25);
-//            String filePath = "data.json";
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            MyObject myObject;
-//            Process process = Runtime.getRuntime().exec(CMD);
-//            int exitCode = process.waitFor();
-//            if (exitCode == 0) {
-//                File file = new File(filePath);
-//                myObject = objectMapper.readValue(file, MyObject.class);
-//                return ResponseEntity.status(HttpStatus.CREATED).body(myObject);
-//            } else {
-//                System.out.println("Quá trình chưa hoàn thành. Mã thoát: " + exitCode);
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage("error"));
-//        }
-//        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage("OK"));
-
+    public ResponseEntity<?> getModelAI() throws IOException, InterruptedException {
         Thread thread = new Thread(new MyRunnable());
         thread.start();
         while (thread.isAlive());
@@ -104,7 +81,7 @@ public class TestController {
         public void run(){
             String CMD =
                     "cmd /c python app.py %s %d";
-            CMD = String.format(CMD, "f13.jpg", 120);
+            CMD = String.format(CMD, "a7.jpg", 60);
             try {
                 File fileTxt = new File("result.txt");
                 if(fileTxt.exists() && !fileTxt.isDirectory()) {
