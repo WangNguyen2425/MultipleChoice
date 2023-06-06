@@ -640,6 +640,11 @@ def get_info(img):
 
 
 if __name__ == '__main__':
+    if os.path.exists("result.txt"):
+        os.remove("result.txt")
+    if os.path.exists("data.json"):
+        os.remove("data.json")
+
     # Đọc ảnh đầu vào ( chưa cắt )
     parser = argparse.ArgumentParser(description='Process some integers.')
     parser.add_argument('input', help='input')
@@ -686,3 +691,8 @@ if __name__ == '__main__':
         json.dump(result, file)
         # print(json.dump(result, file))
     # return json_data
+
+    f = open("result.txt", "w")
+    f.write("OK")
+    f.close()
+  

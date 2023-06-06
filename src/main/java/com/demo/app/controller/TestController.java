@@ -93,7 +93,7 @@ public class TestController {
 
         Thread thread = new Thread(new MyRunnable());
         thread.start();
-        thread.join();
+        while (thread.isAlive());
         String filePath = "data.json";
         File file = new File(filePath);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -104,9 +104,21 @@ public class TestController {
         public void run(){
             String CMD =
                     "cmd /c python app.py %s %d";
-            CMD = String.format(CMD, "f13.jpg", 20);
+            CMD = String.format(CMD, "f13.jpg", 120);
             try {
+                File fileTxt = new File("result.txt");
+                if(fileTxt.exists() && !fileTxt.isDirectory()) {
+                    fileTxt.delete();
+                }
+                File fileJson = new File("data.json");
+                if(fileJson.exists() && !fileJson.isDirectory()) {
+                    fileJson.delete();
+                }
                 Process process = Runtime.getRuntime().exec(CMD);
+                while (true) {
+                    File f = new File("result.txt");
+                    if (f.exists()) return;
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
