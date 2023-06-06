@@ -51,5 +51,12 @@ public class StudentTestController {
     }
 
 
+    @PostMapping(path = "/marking")
+    public ResponseEntity<?> markingStudentTest() {
+
+        return null;
+    }
+
+
 
 }

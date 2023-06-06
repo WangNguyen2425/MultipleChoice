@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -19,9 +20,8 @@ public class ExamClassController {
     private final ExamClassService examClassService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createExamClass(@RequestBody ClassRequest request){
-        examClassService.createExamClass(request);
-        //Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public ResponseEntity<?> createExamClass(@RequestBody ClassRequest request, Principal principal){
+        examClassService.createExamClass(request, principal);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage("Create Exam Class successfully !"));
     }
 
