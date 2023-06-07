@@ -31,6 +31,9 @@ public class Student implements Serializable {
     @Column(name = "code")
     private String code;
 
+    @Column(name = "course")
+    private int course;
+
     @Column(name = "birthday")
     private LocalDate birthday;
 

@@ -17,6 +17,8 @@ public class StudentResponse {
 
     private String fullName;
 
+    private int course;
+
     private String birthday;
 
     private String gender;

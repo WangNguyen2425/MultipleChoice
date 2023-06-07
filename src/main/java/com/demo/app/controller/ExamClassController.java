@@ -3,6 +3,7 @@ package com.demo.app.controller;
 import com.demo.app.dto.examClass.ClassRequest;
 import com.demo.app.dto.message.ResponseMessage;
 import com.demo.app.service.ExamClassService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/v1/class")
+@Tag(name = "Exam Class")
 @RequiredArgsConstructor
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 public class ExamClassController {

@@ -18,5 +18,7 @@ public interface TeacherRepository extends JpaRepository<Teacher, Integer> {
 
     @Query("select t from Teacher t join User u on t.user.id = u.id where u.username = :username")
     Optional<Teacher> findByUsername(String username);
+
+    Boolean existsByCode(String code);
 }
 

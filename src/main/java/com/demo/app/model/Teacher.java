@@ -11,7 +11,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "teacher", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "phone_number", name = "uni_phone_number")
+        @UniqueConstraint(columnNames = "phone_number", name = "uni_phone_number"),
+        @UniqueConstraint(columnNames = "code", name = "uni_code")
 })
 @Getter
 @Setter
@@ -37,6 +38,9 @@ public class Teacher implements Serializable {
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "code")
+    private String code;
 
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
     private List<ExamClass> examClasses;
