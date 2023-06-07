@@ -29,4 +29,5 @@ public class StudentResponse {
 
     private String code;
 
+    private String joinDate;
 }

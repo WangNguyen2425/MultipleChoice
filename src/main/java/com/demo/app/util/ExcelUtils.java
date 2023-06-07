@@ -3,6 +3,7 @@ package com.demo.app.util;
 import com.demo.app.model.Gender;
 import com.demo.app.model.Student;
 import com.demo.app.model.User;
+import jakarta.persistence.Index;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,7 +29,9 @@ public class ExcelUtils {
     private static final int COLUMN_INDEX_PHONE_NUMBER = 6;
     private static final int COLUMN_INDEX_CODE = 7;
     private static final int COLUMN_INDEX_ENABLED = 8;
-    private static final String[] HEADERs = {"Username", "Email", "Password", "Fullname", "Birthday", "Gender", "Phone Number", "Code", "Enabled"};
+
+    private static final int COLUMN_INDEX_COURSE = 9;
+    private static final String[] HEADERs = {"Username", "Email", "Password", "Fullname", "Birthday", "Gender", "Phone Number", "Code", "Enabled", "Course"};
     public static boolean hasExcelFormat(MultipartFile file) {
         return Objects.equals(file.getContentType(), TYPE);
     }
@@ -68,6 +71,7 @@ public class ExcelUtils {
                 });
             }
             return userStudents;
+
         }
     }
 
