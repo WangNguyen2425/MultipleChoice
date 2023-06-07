@@ -54,6 +54,4 @@ public class Teacher implements Serializable {
     @OneToOne
     @JoinColumn(referencedColumnName = "id", name = "user_id")
     private User user;
-
-
 }
