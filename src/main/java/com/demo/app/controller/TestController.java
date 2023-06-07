@@ -8,7 +8,6 @@ import com.demo.app.dto.testset.TestSetRequest;
 import com.demo.app.exception.EntityNotFoundException;
 import com.demo.app.model.MyObject;
 import com.demo.app.service.TestService;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +23,7 @@ import java.util.Scanner;
 
 @RestController
 @RequestMapping(path = "/api/v1/test")
+@Tag(name = "Test", description = "Test API management")
 @RequiredArgsConstructor
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 public class TestController {
@@ -32,13 +32,17 @@ public class TestController {
 
     @PostMapping(path = "/create/first-step")
     public ResponseEntity<?> createTest(@RequestBody @Valid final TestRequest request) throws EntityNotFoundException {
-        return ResponseEntity.status(HttpStatus.OK).body(testService.createTestFirstStep(request));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(testService.createTestFirstStep(request));
     }
 
     @PostMapping(path = "/create/second-step")
     public ResponseEntity<?> saveTest(@RequestBody final TestDetailResponse response) {
         testService.createTestSecondStep(response);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage("Created test successfully !"));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new ResponseMessage("Created test successfully !"));
     }
 
     @GetMapping(path = "/list")
@@ -49,7 +53,9 @@ public class TestController {
     @PostMapping(path = "/test-set/create/{id}")
     public ResponseEntity<?> createTestSetFromTest(@PathVariable(name = "id") int testId, @RequestBody @Valid final TestSetRequest request){
         testService.createTestSetFromTest(testId, request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseMessage(String.format("Created Set of test with id %d successfully !", testId)));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new ResponseMessage(String.format("Created Set of test with id %d successfully !", testId)));
     }
 
 
