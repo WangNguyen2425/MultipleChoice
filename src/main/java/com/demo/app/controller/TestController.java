@@ -73,8 +73,32 @@ public class TestController {
         testService.disableTest(testId);
         return new ResponseEntity<>(new ResponseMessage("Disable test successfully !"), HttpStatus.OK);
     }
-    @GetMapping(path="/chamdiem")
-    public ResponseEntity<?> getModelAI() throws IOException, InterruptedException {
+    @GetMapping(path="/mark-ai")
+    public ResponseEntity<?> getModelAI(@RequestParam(name="pathImg") String pathImg, @RequestParam(name="numberAnswer") Integer numberAnswer ) throws IOException, InterruptedException {
+         class MyRunnable implements Runnable {
+            public void run(){
+                String CMD =
+                        "cmd /c python app.py %s %d";
+                CMD = String.format(CMD, pathImg, numberAnswer);
+                try {
+                    File fileTxt = new File("result.txt");
+                    if(fileTxt.exists() && !fileTxt.isDirectory()) {
+                        fileTxt.delete();
+                    }
+                    File fileJson = new File("data.json");
+                    if(fileJson.exists() && !fileJson.isDirectory()) {
+                        fileJson.delete();
+                    }
+                    Process process = Runtime.getRuntime().exec(CMD);
+                    while (true) {
+                        File f = new File("result.txt");
+                        if (f.exists()) return;
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
         Thread thread = new Thread(new MyRunnable());
         thread.start();
         while (thread.isAlive());
@@ -84,28 +108,5 @@ public class TestController {
         MyObject myObject = objectMapper.readValue(file, MyObject.class);
         return ResponseEntity.status(HttpStatus.CREATED).body(myObject);
     }
-    public class MyRunnable implements Runnable {
-        public void run(){
-            String CMD =
-                    "cmd /c python app.py %s %d";
-            CMD = String.format(CMD, "a7.jpg", 60);
-            try {
-                File fileTxt = new File("result.txt");
-                if(fileTxt.exists() && !fileTxt.isDirectory()) {
-                    fileTxt.delete();
-                }
-                File fileJson = new File("data.json");
-                if(fileJson.exists() && !fileJson.isDirectory()) {
-                    fileJson.delete();
-                }
-                Process process = Runtime.getRuntime().exec(CMD);
-                while (true) {
-                    File f = new File("result.txt");
-                    if (f.exists()) return;
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
+
 }
