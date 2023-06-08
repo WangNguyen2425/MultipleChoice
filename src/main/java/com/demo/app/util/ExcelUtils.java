@@ -29,7 +29,6 @@ public class ExcelUtils {
     private static final int COLUMN_INDEX_PHONE_NUMBER = 6;
     private static final int COLUMN_INDEX_CODE = 7;
     private static final int COLUMN_INDEX_ENABLED = 8;
-
     private static final int COLUMN_INDEX_COURSE = 9;
     private static final String[] HEADERs = {"Username", "Email", "Password", "Fullname", "Birthday", "Gender", "Phone Number", "Code", "Enabled", "Course"};
     public static boolean hasExcelFormat(MultipartFile file) {
