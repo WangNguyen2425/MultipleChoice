@@ -1,9 +1,6 @@
 package com.demo.app.util;
 
-import com.demo.app.model.Gender;
-import com.demo.app.model.Student;
-import com.demo.app.model.Teacher;
-import com.demo.app.model.User;
+import com.demo.app.model.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,7 +51,7 @@ public class ExcelUtils {
                         case COLUMN_INDEX_USERNAME -> user.setUsername(cell.getStringCellValue());
                         case COLUMN_INDEX_EMAIL -> user.setEmail(cell.getStringCellValue());
                         case COLUMN_INDEX_PASSWORD -> user.setPassword(cell.getStringCellValue());
-                        case COLUMN_INDEX_FULLNAME -> student.setFullName(cell.getStringCellValue());
+                        case COLUMN_INDEX_FULLNAME -> student.setFullname(cell.getStringCellValue());
                         case COLUMN_INDEX_BIRTHDAY -> {
                             Date date = cell.getDateCellValue();
                             LocalDate birthday = Instant.ofEpochMilli(date.getTime())
@@ -88,7 +85,7 @@ public class ExcelUtils {
                 var row = sheet.createRow(rowIndex++);
                 row.createCell(COLUMN_INDEX_USERNAME).setCellValue(student.getUser().getUsername());
                 row.createCell(COLUMN_INDEX_EMAIL).setCellValue(student.getUser().getEmail());
-                row.createCell(COLUMN_INDEX_FULLNAME).setCellValue(student.getFullName());
+                row.createCell(COLUMN_INDEX_FULLNAME).setCellValue(student.getFullname());
                 row.createCell(COLUMN_INDEX_BIRTHDAY).setCellValue(student.getBirthday());
                 row.createCell(COLUMN_INDEX_GENDER).setCellValue(student.getGender().toString());
                 row.createCell(COLUMN_INDEX_PHONE_NUMBER).setCellValue(student.getPhoneNumber());
@@ -120,7 +117,7 @@ public class ExcelUtils {
                         case COLUMN_INDEX_USERNAME -> user.setUsername(cell.getStringCellValue());
                         case COLUMN_INDEX_EMAIL -> user.setEmail(cell.getStringCellValue());
                         case COLUMN_INDEX_PASSWORD -> user.setPassword(cell.getStringCellValue());
-                        case COLUMN_INDEX_FULLNAME -> teacher.setFullName(cell.getStringCellValue());
+                        case COLUMN_INDEX_FULLNAME -> teacher.setFullname(cell.getStringCellValue());
                         case COLUMN_INDEX_BIRTHDAY -> {
                             Date date = cell.getDateCellValue();
                             LocalDate birthday = Instant.ofEpochMilli(date.getTime())
@@ -152,7 +149,7 @@ public class ExcelUtils {
                 var row = sheet.createRow(rowIndex++);
                 row.createCell(COLUMN_INDEX_USERNAME).setCellValue(teacher.getUser().getUsername());
                 row.createCell(COLUMN_INDEX_EMAIL).setCellValue(teacher.getUser().getEmail());
-                row.createCell(COLUMN_INDEX_FULLNAME).setCellValue(teacher.getFullName());
+                row.createCell(COLUMN_INDEX_FULLNAME).setCellValue(teacher.getFullname());
                 row.createCell(COLUMN_INDEX_BIRTHDAY).setCellValue(teacher.getBirthday());
                 row.createCell(COLUMN_INDEX_GENDER).setCellValue(teacher.getGender().toString());
                 row.createCell(COLUMN_INDEX_PHONE_NUMBER).setCellValue(teacher.getPhoneNumber());
