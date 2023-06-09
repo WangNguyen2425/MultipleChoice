@@ -143,10 +143,10 @@ const Sidebar = () => {
 		<div
 			style={{ width: 256 }}
 			className={
-				isCollapse ? "a-sidebar-layout a-collapsed" : "a-sidebar-layout"
+				isCollapse ? "sidebar-layout collapsed" : "sidebar-layout"
 			}
 		>
-			<div className="a-sidebar">
+			<div className="sidebar">
 				<Menu
 					mode="inline"
 					onClick={(info) => handleClickMenu(info)}

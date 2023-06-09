@@ -1,4 +1,4 @@
-.a-header-layout {
+.header-layout {
   display: flex;
   position: fixed;
   align-items: center;
@@ -10,7 +10,7 @@
   background-color: #fff;
   border-bottom: 1px solid #f3f3f4;
 
-  .a-header-noti-account {
+  .header-noti-account {
     display: flex;
     gap: 30px;
     justify-content: center;
@@ -20,12 +20,12 @@
     right: 30px;
   }
 
-  .a-header-search {
+  .header-search {
     margin-left: 15px;
     float: left;
   }
 
-  .a-header-logo {
+  .header-logo {
     float: left;
     height: var(--height-header);
     position: relative;
@@ -38,11 +38,11 @@
     border-bottom: 1px solid #efefef;
   }
 
-  .a-logo-collapsed {
+  .logo-collapsed {
     width: var(--width-sidebar-collapse) !important;
   }
 
-  .a-button-header {
+  .button-header {
     height: var(--height-header);
     display: inline-flex;
     justify-content: center;

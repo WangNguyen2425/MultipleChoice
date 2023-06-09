@@ -20,9 +20,9 @@ const Account = () => {
 		{
 			key: 1,
 			label: (
-				<div className="a-account-role a-menu-item">
+				<div className="account-role menu-item">
 					<Avatar size={40} src={user.avatar} />
-					<div className="a-name-role">
+					<div className="name-role">
 						<span>{user.name}</span>
 						<span>{user.role}</span>
 					</div>
@@ -33,9 +33,9 @@ const Account = () => {
 		{
 			key: 2,
 			label: (
-				<div className="a-menu-item">
+				<div className="menu-item">
 					<UserOutlined />
-					<div className="a-account-content">My Profile</div>
+					<div className="account-content">My Profile</div>
 				</div>
 			),
 			onClick: () => { },
@@ -43,9 +43,9 @@ const Account = () => {
 		{
 			key: 3,
 			label: (
-				<div className="a-menu-item">
+				<div className="menu-item">
 					<SettingOutlined />
-					<div className="a-account-content">Setting</div>
+					<div className="account-content">Setting</div>
 				</div>
 			),
 			onClick: () => { },
@@ -53,9 +53,9 @@ const Account = () => {
 		{
 			key: 4,
 			label: (
-				<div className="a-menu-item">
+				<div className="menu-item">
 					<LogoutOutlined />
-					<div className="a-account-content">Logout</div>
+					<div className="account-content">Logout</div>
 				</div>
 			),
 			onClick: () => {
@@ -65,7 +65,7 @@ const Account = () => {
 		},
 	];
 	return (
-		<div className="a-account-menu">
+		<div className="account-menu">
 			<Dropdown
 				menu={{
 					items,

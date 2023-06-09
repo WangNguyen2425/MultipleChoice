@@ -24,15 +24,15 @@ const TeacherInfo = ({
   const dateFormat = "YYYY-MM-DD";
 
   return (
-    <div className="a-teacher-info">
-      <p className="a-info-header">{infoHeader}</p>
+    <div className="teacher-info">
+      <p className="info-header">{infoHeader}</p>
       <Form
         name="info-teacher-form"
         className="info-teacher-form"
         initialValues={initialValues}
         onFinish={onFinish}
       >
-        <div className="a-info-teacher-header">Thông tin giảng viên</div>
+        <div className="info-teacher-header">Thông tin giảng viên</div>
         <Form.Item
           name="fullName"
           label="Full Name"
@@ -50,23 +50,19 @@ const TeacherInfo = ({
         >
           <Input placeholder="Enter user name" />
         </Form.Item>
-        {/* <Form.Item
+        <Form.Item
           name="code"
-          label="MSSV"
+          label="MCB"
           colon={true}
           rules={[
             {
               required: true,
-              message: "Please input MSSV!",
-            },
-            {
-              pattern: /^(2[0-9]{7}|29[0-9]{6})$/,
-              message: "MSSV is not exist!",
-            },
+              message: "Please input MCB!",
+            }
           ]}
         >
-          <Input placeholder="Enter MSSV" />
-        </Form.Item> */}
+          <Input placeholder="Enter MCB" />
+        </Form.Item>
         <Form.Item
           name="username"
           label="User Name"
@@ -161,7 +157,7 @@ const TeacherInfo = ({
         >
           <Input placeholder="Enter phone number" />
         </Form.Item>
-        <Form.Item className="a-btn-info">
+        <Form.Item className="btn-info">
           <Button
             type="primary"
             htmlType="submit"

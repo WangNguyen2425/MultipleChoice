@@ -22,15 +22,15 @@ const Header = () => {
 		dispatch(setIsCollapse(!isCollapse));
 	};
 	return (
-		<div className="a-header-layout">
+		<div className="header-layout">
 			<div
 				className={
 					isCollapse
-						? "a-header-logo a-logo-collapsed"
-						: "a-header-logo"
+						? "header-logo logo-collapsed"
+						: "header-logo"
 				}
 			></div>
-			<div className="a-button-header">
+			<div className="button-header">
 				<Button
 					type="primary"
 					onClick={toggleCollapsed}
@@ -39,13 +39,13 @@ const Header = () => {
 					{isCollapse ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
 				</Button>
 			</div>
-			<div className="a-header-search">
+			<div className="header-search">
 				<Searchbox
 					onChange={(event) => handleOnChange(event)}
 					onSearch={(value) => handleOnSearch(value)}
 				/>
 			</div>
-			<div className="a-header-noti-account">
+			<div className="header-noti-account">
 				<Notifications />
 				<Account />
 			</div>

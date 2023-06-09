@@ -155,8 +155,8 @@ const Notifications = () => {
 		<List
 			size="small"
 			header={
-				<div className="a-noti-header">
-					<div className="a-noti-text">Notifications</div>
+				<div className="noti-header">
+					<div className="noti-text">Notifications</div>
 					<a href="/delete">CLEAR ALL</a>
 				</div>
 			}
@@ -164,14 +164,14 @@ const Notifications = () => {
 				notifications.length > MAX_NOTIFICATIONS && !showAll ? (
 					<div
 						onClick={() => setShowAll(true)}
-						className="a-view-all"
+						className="view-all"
 					>
 						View all notifications
 					</div>
 				) : (
 					<div
 						onClick={() => setShowAll(false)}
-						className="a-view-all"
+						className="view-all"
 					>
 						View less notifications
 					</div>
@@ -189,7 +189,7 @@ const Notifications = () => {
 						title={notification.title}
 						description={
 							<>
-								<div className="a-noti-description">
+								<div className="noti-description">
 									{notification.description}
 								</div>
 								<small>
@@ -211,7 +211,7 @@ const Notifications = () => {
 	);
 	return (
 		<Popover
-			className="a-notification"
+			className="notification"
 			content={content}
 			placement="bottomRight"
 			trigger="click"

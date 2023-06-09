@@ -1,4 +1,4 @@
-.a-login {
+.login {
   width: 800px;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -6,19 +6,19 @@
   border-radius: 6px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
-  .a-img-study img {
+  .img-study img {
     width: 400px;
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
   }
 
-  .a-social-login span,
-  .a-dont-have {
+  .social-login span,
+  .dont-have {
     font-size: 16px;
     color: #a0a0a0;
   }
 
-  .a-dont-have {
+  .dont-have {
     margin-top: 1.875rem;
 
     a {
@@ -27,7 +27,7 @@
     }
   }
 
-  .a-social-login {
+  .social-login {
     display: flex;
     align-items: center;
 
@@ -44,7 +44,7 @@
       margin-left: 8px;
     }
 
-    .a-facebook {
+    .facebook {
       background-color: #0084FF;
     }
   }
@@ -56,20 +56,20 @@ h1 {
   margin-bottom: 5px;
 }
 
-.a-header-login-content {
+.header-login-content {
   color: #4c4c4c;
   font-size: 18px;
   margin-bottom: 30px;
 }
 
-.a-login-or {
+.login-or {
   color: #a0a0a0;
   margin: 15px 0px;
   padding: 10px 0px;
   position: relative;
   width: 80%;
 
-  .a-or-line {
+  .or-line {
     background-color: #e5e5e5;
     width: 100%;
     height: 1px;
@@ -77,7 +77,7 @@ h1 {
     margin: 0;
   }
 
-  .a-or {
+  .or {
     background-color: #fff;
     display: block;
     left: 50%;

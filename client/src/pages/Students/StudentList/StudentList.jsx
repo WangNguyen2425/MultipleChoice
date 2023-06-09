@@ -58,6 +58,16 @@ const StudentList = () => {
       key: "username",
     },
     {
+      title: "Join date",
+      dataIndex: "joinDate",
+      key: "joinDate"
+    },
+    {
+      title: "Course",
+      dataIndex: "course",
+      key: "course"
+    },
+    {
       title: "Email",
       dataIndex: "email",
       key: "email",
@@ -127,6 +137,8 @@ const StudentList = () => {
     gender: [obj.gender],
     code: obj.code,
     id: obj.id,
+    course: obj.course,
+    joinDate: obj.joinDate
   }));
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const onSelectChange = (newSelectedRowKeys) => {
@@ -182,7 +194,7 @@ const StudentList = () => {
   };
 
   return (
-    <div className="a-student-list">
+    <div className="student-list">
       <div className="header-student-list">
         <p>Danh sách sinh viên</p>
         <div className="block-button">
@@ -197,6 +209,7 @@ const StudentList = () => {
                 Delete
               </Button>
             }
+            buttonDisable={deleteDisable}
             title="Delete Student"
             message={"Are you sure to remove this student and all of its related data? "}
             confirmMessage={"This action cannot be undone"}

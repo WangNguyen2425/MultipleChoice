@@ -1,17 +1,17 @@
-.a-login {
-  .a-login-form {
+.login {
+  .login-form {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 
-    .a-social-login span,
-    .a-dont-have {
+    .social-login span,
+    .dont-have {
       font-size: 16px;
       color: #a0a0a0;
     }
 
-    .a-dont-have {
+    .dont-have {
       margin-top: 1.875rem;
 
       a {
@@ -44,6 +44,9 @@
       height: 40px;
       border-radius: 5px;
     }
+    .ant-form-item {
+      width: 95%;
+    }
   }
 
   .ant-input-affix-wrapper {
@@ -55,7 +58,7 @@
     height: 30px !important;
   }
 
-  .a-forgot-password {
+  .forgot-password {
     color: #a0a0a0;
     font-size: 18px;
   }

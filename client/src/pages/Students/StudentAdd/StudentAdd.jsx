@@ -29,7 +29,7 @@ const StudentAdd = () => {
 		console.log(value);
 	};
 	return (
-		<div className="a-student-add">
+		<div className="student-add">
 			<StudentInfo
 				infoHeader="Thêm sinh viên"
 				onFinish={onFinish}
@@ -39,6 +39,7 @@ const StudentAdd = () => {
 				initialValues={{ remember: false }}
 				loading={loading}
 				isPasswordDisplay={true}
+				courseDisable={false}
 			/>
 		</div>
 	);

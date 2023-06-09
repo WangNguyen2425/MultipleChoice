@@ -1,5 +1,5 @@
 import React from "react";
 const DepartmentAdd = () => {
-	return <div className="a-department-add">Department Add</div>;
+	return <div className="department-add">Department Add</div>;
 };
 export default DepartmentAdd;

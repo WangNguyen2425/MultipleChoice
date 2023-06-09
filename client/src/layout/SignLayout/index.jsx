@@ -1,7 +1,7 @@
 import "./index.scss";
 import React from "react";
 const SignLayout = ({ children }) => {
-	return <div className="a-sign-layout">
+	return <div className="sign-layout">
 		{children}
 	</div>;
 };

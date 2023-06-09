@@ -8,7 +8,7 @@ function DefaultLayout({ children }) {
   return (
     <div className="wrapper-default-layout">
       <Header />
-      <div className="a-menu-content">
+      <div className="menu-content">
         <Sidebar />
         <div className={isCollapse ? "container-content-collapse" : "container-content"}>
           {children}

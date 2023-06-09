@@ -9,7 +9,8 @@ const StudentInfo = ({
   datePickerOnchange,
   genderOnchange,
   loading,
-  isPasswordDisplay
+  isPasswordDisplay,
+  courseDisable
 }) => {
   const genderOption = [
     {
@@ -24,15 +25,15 @@ const StudentInfo = ({
   const dateFormat = "YYYY-MM-DD";
 
   return (
-    <div className="a-student-info">
-      <p className="a-info-header">{infoHeader}</p>
+    <div className="student-info">
+      <p className="info-header">{infoHeader}</p>
       <Form
         name="info-student-form"
         className="info-student-form"
         initialValues={initialValues}
         onFinish={onFinish}
       >
-        <div className="a-info-student-header">Thông tin sinh viên</div>
+        <div className="info-student-header">Thông tin sinh viên</div>
         <Form.Item
           name="fullName"
           label="Full Name"
@@ -80,6 +81,12 @@ const StudentInfo = ({
           ]}
         >
           <Input placeholder="Enter user name" />
+        </Form.Item>
+        <Form.Item
+          name="course"
+          label="Course"
+        >
+          <Input disabled={courseDisable} />
         </Form.Item>
         <Form.Item
           name="gender"
@@ -162,7 +169,7 @@ const StudentInfo = ({
         >
           <Input placeholder="Enter phone number" />
         </Form.Item>
-        <Form.Item className="a-btn-info">
+        <Form.Item className="btn-info">
           <Button
             type="primary"
             htmlType="submit"
