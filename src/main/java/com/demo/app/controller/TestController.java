@@ -48,6 +48,11 @@ public class TestController {
         return ResponseEntity.status(HttpStatus.OK).body(testService.getAllTests());
     }
 
+    @GetMapping(path = "/list/detail/{id}")
+    public ResponseEntity<?> getTestDetail(@PathVariable(name = "id") int testId){
+        return null;
+    }
+
     @PostMapping(path = "/test-set/create/{id}")
     public ResponseEntity<?> createTestSetFromTest(@PathVariable(name = "id") int testId, @RequestBody @Valid final TestSetRequest request){
         testService.createTestSetFromTest(testId, request);
@@ -55,9 +60,6 @@ public class TestController {
                 .status(HttpStatus.CREATED)
                 .body(new ResponseMessage(String.format("Created Set of test with id %d successfully !", testId)));
     }
-
-
-
 
     @PutMapping(path = "/update/{id}")
     public  ResponseEntity<?> updateTest(@PathVariable(name = "id") int testId, @Valid final TestDetailRequest request){
