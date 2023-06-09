@@ -1,21 +1,19 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useState } from "react";
-import "./SubjectList.scss";
 import { Button, Space, Table } from "antd";
-import useSubjects from "../../../hooks/useSubjects";
-import deleteIcon from "../../../assets/images/delete-icon.svg";
-import addIcon from "../../../assets/images/add-icon.svg";
-import deletePopUpIcon from "../../../assets/images/delete-popup-icon.svg";
-import { useNavigate } from "react-router-dom";
-import useNotify from "../../../hooks/useNotify";
-import { appPath } from "../../../config/appPath";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import addIcon from "../../../assets/images/add-icon.svg";
+import deleteIcon from "../../../assets/images/delete-icon.svg";
+import deletePopUpIcon from "../../../assets/images/delete-popup-icon.svg";
+import { appPath } from "../../../config/appPath";
+import useNotify from "../../../hooks/useNotify";
+import useSubjects from "../../../hooks/useSubjects";
 import { setSelectedItem } from "../../../redux/slices/appSlice";
+import "./SubjectList.scss";
 
-import { deleteSubjectsService } from "../../../services/subjectsService";
 import ModalPopup from "../../../components/ModalPopup/ModalPopup";
-import { apiPath } from "../../../config/apiPath";
+import { deleteSubjectsService } from "../../../services/subjectsService";
 
 const SubjectList = () => {
   const [deleteDisable, setDeleteDisable] = useState(true);
@@ -34,6 +32,7 @@ const SubjectList = () => {
   };
   useEffect(() => {
     getAllSubjects();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const notify = useNotify();
   const navigate = useNavigate();
@@ -92,9 +91,7 @@ const SubjectList = () => {
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRowKeys(newSelectedRowKeys);
     if (newSelectedRowKeys.length === 1) {
-      setDeleteKey(
-        dataFetch.find((item) => item.key === newSelectedRowKeys[0]).id
-      );
+      setDeleteKey(dataFetch.find((item) => item.key === newSelectedRowKeys[0]).id);
       setDeleteDisable(false);
       // console.log(dataFetch.find((item) => item.key === newSelectedRowKeys[0]));
     } else {
@@ -136,9 +133,7 @@ const SubjectList = () => {
               </Button>
             }
             title="Delete Subject"
-            message={
-              "Are you sure to remove this subject and all of its related data? "
-            }
+            message={"Are you sure to remove this subject and all of its related data? "}
             confirmMessage={"This action cannot be undone"}
             icon={deletePopUpIcon}
             ok={"Ok"}

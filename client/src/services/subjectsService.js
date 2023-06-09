@@ -1,7 +1,7 @@
 import { getRequest, postRequest, putRequest, deleteRequest } from "../api/apiCaller";
 import { apiPath } from "../config/apiPath";
 export const getAllSubjectsService = async (params, successCallback, errorCallback) => {
-  await getRequest(`${apiPath.allSubjects}`, params, successCallback, errorCallback, 3000);
+  await getRequest(`${apiPath.allSubjects}`, params, successCallback, errorCallback, 10000);
 };
 export const updateSubjectsService = async (subjectId, params, successCallback, errorCallback) => {
   await putRequest(
@@ -9,7 +9,7 @@ export const updateSubjectsService = async (subjectId, params, successCallback, 
     params,
     successCallback,
     errorCallback,
-    3000
+    10000
   );
 };
 export const addSubjectsService = async (params, successCallback, errorCallback) => {
@@ -21,6 +21,6 @@ export const deleteSubjectsService = async (subjectId, params, successCallback, 
     params,
     successCallback,
     errorCallback,
-    3000
+    10000
   );
 };

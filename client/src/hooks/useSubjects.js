@@ -8,14 +8,17 @@ const useSubjects = () => {
   const [tableLoading, setTableLoading] = useState(true);
 
   const getAllSubjects = (payload = {}) => {
+    setTableLoading(true);
     getAllSubjectsService(
       payload,
       (res) => {
+        console.log("success");
         setAllSubjects(res.data);
         setTableLoading(false);
       },
       (err) => {
-        setTableLoading(true);
+        console.log("failed");
+        setTableLoading(false);
         if (err.response.status === 401) {
           notify.warning(err.response.data.message || "Permission denied");
         }
