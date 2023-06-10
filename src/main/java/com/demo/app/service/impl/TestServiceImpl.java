@@ -62,6 +62,7 @@ public class TestServiceImpl implements TestService {
                 .subjectCode(subject.getCode())
                 .subjectTitle(subject.getTitle())
                 .questionResponses(questionResponses)
+                .duration(request.getDuration())
                 .build();
     }
 
@@ -78,6 +79,7 @@ public class TestServiceImpl implements TestService {
         var test = Test.builder()
                 .testDay(LocalDate.parse(response.getTestDay(), FORMATTER))
                 .questionQuantity(response.getQuestionQuantity())
+                .duration(response.getDuration())
                 .build();
         test = testRepository.save(test);
         test.setQuestions(questions);
@@ -107,7 +109,13 @@ public class TestServiceImpl implements TestService {
     public List<TestResponse> getAllTests() {
         var tests = testRepository.findByEnabledIsTrue();
         return tests.stream()
-                .map(test -> mapper.map(test, TestResponse.class))
+                .map(test -> {
+                    var testResponse = mapper.map(test, TestResponse.class);
+                    var subject = test.getSubject();
+                    testResponse.setSubjectCode(subject.getCode());
+                    testResponse.setSubjectTitle(subject.getTitle());
+                    return testResponse;
+                })
                 .collect(Collectors.toList());
     }
 

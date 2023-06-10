@@ -1,5 +1,6 @@
 package com.demo.app.service.impl;
 
+import com.demo.app.dto.chapter.ChapterResponse;
 import com.demo.app.dto.question.QuestionRequest;
 import com.demo.app.dto.question.QuestionResponse;
 import com.demo.app.exception.EntityNotFoundException;
@@ -36,7 +37,7 @@ public class QuestionServiceImpl implements QuestionService {
         var chapter = subject.getChapters().get(request.getChapterNo());
         var question = mapper.map(request, Question.class);
         question.setAnswers(
-                request.getAnswerRequests()
+                request.getAnswers()
                         .stream()
                         .map(answerRequest -> {
                             var answer = mapper.map(answerRequest, Answer.class);
@@ -65,7 +66,11 @@ public class QuestionServiceImpl implements QuestionService {
             }
         });
         return questions.stream()
-                .map(question -> mapper.map(question, QuestionResponse.class))
+                .map(question -> {
+                    var questionResponse = mapper.map(question, QuestionResponse.class);
+                    questionResponse.setChapter(mapper.map(question.getChapter(), ChapterResponse.class));
+                    return questionResponse;
+                })
                 .collect(Collectors.toList());
     }
 
