@@ -62,6 +62,7 @@ public class Test implements Serializable {
         totalPoint = 100.0d;
         enabled = true;
     }
+
     @PreUpdate
     private void preUpdate(){
         updatedAt = LocalDate.now();
