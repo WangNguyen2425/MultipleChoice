@@ -28,5 +28,5 @@ public class QuestionRequest {
 
     private List<AnswerRequest> answerRequests;
 
-    private byte[] questionImage;
+    private String questionImage;
 }
