@@ -54,6 +54,18 @@ const TableResult = ({ resultAI, numberAnswer }) => {
   return (
     <div className="table-result-component">
       <Table
+        expandable={{
+          expandedRowRender: (record) => (
+            <p
+              style={{
+                margin: 0,
+              }}
+            >
+              {record.description}
+            </p>
+          ),
+          rowExpandable: (record) => record.isExpandable !== "Not Expandable",
+        }}
         className="table-ai"
         columns={columns}
         dataSource={data}

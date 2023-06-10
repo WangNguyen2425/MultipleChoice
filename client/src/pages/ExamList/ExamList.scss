@@ -98,9 +98,19 @@
         width: 200px;
       }
     }
-    .table-result-component {
-      .table-ai {
+    .result-ai {
+      display: flex;
+      justify-content: center;
+      .table-result-component {
         width: 1000px;
+        .table-ai {
+          margin-top: 24px;
+          // width: 80%;
+          .ant-table-container {
+            border-radius: 6px;
+            outline: 1px solid #ccc;
+          }
+        }
       }
     }
   }
@@ -108,4 +118,7 @@
 .item_DropBar {
   display: flex;
   justify-content: space-between;
+}
+.ant-upload-list-item-container {
+  cursor: pointer;
 }
