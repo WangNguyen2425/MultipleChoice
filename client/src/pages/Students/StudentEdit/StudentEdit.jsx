@@ -36,7 +36,7 @@ const StudentEdit = () => {
 	};
 	console.log(selectedItem);
 	return (
-		<div className="a-student-add">
+		<div className="student-add">
 			<StudentInfo
 				infoHeader="Cập nhật thông tin"
 				onFinish={onFinish}
@@ -51,10 +51,12 @@ const StudentEdit = () => {
 					code: selectedItem ? selectedItem.code : "",
 					phoneNumber: selectedItem ? selectedItem.phoneNumber : "",
 					birthday: selectedItem ? dayjs(selectedItem.birthday, "YYYY-MM-DD") : "",
-					gender: selectedItem ? selectedItem.gender[0] : null
+					gender: selectedItem ? selectedItem.gender[0] : null,
+					course: selectedItem ? selectedItem.course : null
 				}}
 				loading={loading}
 				isPasswordDisplay={false}
+				courseDisable={true}
 			/>
 		</div>
 	);

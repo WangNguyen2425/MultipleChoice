@@ -12,28 +12,28 @@ const SignFragment = ({
   href,
 }) => {
   return (
-    <div className="a-login">
-      <div className="a-img-study">
+    <div className="login">
+      <div className="img-study">
         <img src={studyImage} alt="study img" />
       </div>
-      <div className="a-login-form">
+      <div className="login-form">
         <h1>{header}</h1>
-        <div className="a-header-login-content">Access to our dashboard</div>
+        <div className="header-login-content">Access to our dashboard</div>
         {children}
-        <div className="a-login-or">
-          <span className="a-or-line"></span>
-          <span className="a-or">OR</span>
+        <div className="login-or">
+          <span className="or-line"></span>
+          <span className="or">OR</span>
         </div>
-        <div className="a-social-login">
+        <div className="social-login">
           <span>{socialText}</span>
-          <a href="/facebook" className="a-facebook">
+          <a href="/facebook" className="facebook">
             <TfiFacebook size={16} />
           </a>
-          <a href="/google" className="a-google">
+          <a href="/google" className="google">
             <FaGoogle size={16} />
           </a>
         </div>
-        <div className="a-dont-have">
+        <div className="dont-have">
           {endText} <a href={href}>{signText}</a>
         </div>
       </div>

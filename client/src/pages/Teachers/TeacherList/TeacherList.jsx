@@ -11,11 +11,13 @@ import useNotify from "../../../hooks/useNotify";
 import useTeachers from "../../../hooks/useTeachers";
 import { setSelectedItem } from "../../../redux/slices/appSlice";
 import { deleteTeachersService } from "../../../services/teachersServices";
+import ModalPopup from "../../../components/ModalPopup/ModalPopup";
+import deletePopUpIcon from "../../../assets/images/delete-popup-icon.svg";
+
 import "./TeacherList.scss";
 
 const TeacherList = () => {
   const [deleteDisable, setDeleteDisable] = useState(true);
-  const [loading, setLoading] = useState(false);
   const { allTeachers, getAllTeachers, tableLoading } = useTeachers();
   const [deleteKey, setDeleteKey] = useState(null);
   const dispatch = useDispatch();
@@ -37,6 +39,11 @@ const TeacherList = () => {
   const navigate = useNavigate();
 
   const columns = [
+    {
+      title: "MCB",
+      dataIndex:"code",
+      key: "code"
+    },
     {
       title: "Full Name",
       dataIndex: "fullName",
@@ -140,18 +147,15 @@ const TeacherList = () => {
     navigate("/teacher-add");
   };
   const handleDelete = () => {
-    setLoading(true);
     deleteTeachersService(
       deleteKey,
       null,
       (res) => {
-        setLoading(false);
         notify.success("Xoá giảng viên thành công!");
         getAllTeachers();
         setSelectedRowKeys([]);
       },
       (error) => {
-        setLoading(false);
         notify.error("Lỗi xoá giảng viên!");
       }
     );
@@ -178,7 +182,7 @@ const TeacherList = () => {
   // };
 
   return (
-    <div className="a-teacher-list">
+    <div className="teacher-list">
       <div className="header-teacher-list">
         <p>Danh sách giảng viên</p>
         <div className="block-button">
@@ -186,15 +190,21 @@ const TeacherList = () => {
             <img src={exportIcon} alt="Export Icon" />
             Export
           </Button>
-          <Button
-            className="options"
-            disabled={deleteDisable}
-            onClick={handleDelete}
-            loading={loading}
-          >
-            <img src={deleteIcon} alt="Delete Icon" />
-            Delete
-          </Button>
+          <ModalPopup
+            buttonOpenModal={
+              <Button className="options" disabled={deleteDisable}>
+                <img src={deleteIcon} alt="Delete Icon" />
+                Delete
+              </Button>
+            }
+            buttonDisable={deleteDisable}
+            title="Delete Teacher"
+            message={"Are you sure to remove this teacher and all of its related data? "}
+            confirmMessage={"This action cannot be undone"}
+            icon={deletePopUpIcon}
+            ok={"Ok"}
+            onAccept={handleDelete}
+          />
           <Button className="options" onClick={handleClickAddStudent}>
             <img src={addIcon} alt="Add Icon" />
             Add Teacher

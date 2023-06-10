@@ -6,7 +6,7 @@
   position: fixed;
 }
 
-.a-notification {
+.notification {
   .ant-popover-content {
     width: 300px !important;
   }
@@ -21,11 +21,11 @@
     height: 100%;
     border: none;
 
-    .a-noti-header {
+    .noti-header {
       display: flex;
       justify-content: space-between;
 
-      .a-noti-text {
+      .noti-text {
         font-size: 16px;
       }
     }
@@ -35,13 +35,13 @@
       overflow-y: scroll;
     }
 
-    .a-view-all {
+    .view-all {
       text-align: center;
       cursor: pointer;
       font-size: 16px;
     }
 
-    .a-view-all:hover {
+    .view-all:hover {
       color: #007BFF;
     }
 

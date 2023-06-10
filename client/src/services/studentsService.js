@@ -1,15 +1,15 @@
 import { getRequest, postRequest, putRequest, deleteRequest } from "../api/apiCaller";
 import { apiPath } from "../config/apiPath";
 export const getAllStudentsService = async (params, successCallback, errorCallback) => {
-  await getRequest(`${apiPath.allStudents}`, params, successCallback, errorCallback, 3000);
+  await getRequest(`${apiPath.allStudents}`, params, successCallback, errorCallback, 10000);
 };
 export const updateStudentsService = async (studentId, params, successCallback, errorCallback) => {
   await putRequest(
-    `${apiPath.updateStudent}${studentId}`,
+    `${apiPath.updateStudent}/${studentId}`,
     params,
     successCallback,
     errorCallback,
-    3000
+    10000
   );
 };
 export const addStudentsService = async (params, successCallback, errorCallback) => {
@@ -17,10 +17,10 @@ export const addStudentsService = async (params, successCallback, errorCallback)
 };
 export const deleteStudentsService = async (studentId, params, successCallback, errorCallback) => {
   await deleteRequest(
-    `${apiPath.deleteStudent}${studentId}`,
+    `${apiPath.deleteStudent}/${studentId}`,
     params,
     successCallback,
     errorCallback,
-    3000
+    10000
   );
 };

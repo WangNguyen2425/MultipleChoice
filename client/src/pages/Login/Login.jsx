@@ -87,7 +87,7 @@ const Login = () => {
 					</Button>
 				</Form.Item>
 			</Form>
-			<div className="a-forgot-password">Forgot Password?</div>
+			<div className="forgot-password">Forgot Password?</div>
 		</>
 	);
 	return (

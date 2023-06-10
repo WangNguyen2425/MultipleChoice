@@ -1,5 +1,5 @@
-.teacher-list {
-  .header-teacher-list {
+.subject-list {
+  .header-subject-list {
     padding: 12px;
     display: flex;
     align-items: center;
@@ -23,7 +23,7 @@
       }
     }
   }
-  .teacher-list-table {
+  .subject-list-table {
     border: 1px solid #ccc;
     padding: 12px;
     .ant-table-content {

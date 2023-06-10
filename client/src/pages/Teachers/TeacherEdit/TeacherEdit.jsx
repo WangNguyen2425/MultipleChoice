@@ -36,7 +36,7 @@ const TeacherEdit = () => {
 	};
 	console.log(selectedItem);
 	return (
-		<div className="a-teacher-add">
+		<div className="teacher-add">
 			<TeacherInfo
 				infoHeader="Cập nhật thông tin"
 				onFinish={onFinish}

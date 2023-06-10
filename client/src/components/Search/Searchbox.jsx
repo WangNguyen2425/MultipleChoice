@@ -3,8 +3,8 @@ import "./Searchbox.scss";
 import { FaSearch } from "react-icons/fa";
 const Searchbox = (props) => {
   return (
-    <div className="a-search-wrapper">
-      <Space.Compact compact="true" className="a-search">
+    <div className="search-wrapper">
+      <Space.Compact compact="true" className="search">
         <Input.Search
           {...props}
           placeholder="Search here"
@@ -22,7 +22,7 @@ const Searchbox = (props) => {
         />
       </Space.Compact>
       {props.isErrorMessage && (
-        <span className="a-search-error-message">Không có kết quả phù hợp</span>
+        <span className="search-error-message">Không có kết quả phù hợp</span>
       )}
     </div>
   );

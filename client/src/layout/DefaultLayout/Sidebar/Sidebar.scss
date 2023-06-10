@@ -1,10 +1,10 @@
-.a-sidebar-menu-title {
+.sidebar-menu-title {
   margin-left: 10px;
   font-family: "Poppins", sans-serif;
   font-size: 14px;
 }
 
-.a-sidebar-layout {
+.sidebar-layout {
   position: fixed;
   left: 0px;
   top: var(--height-header);
@@ -12,12 +12,12 @@
   border-right: 1px solid #ececf5;
   background-color: var(--hust-color);
 
-  .a-scrollable {
+  .scrollable {
     height: 100%;
     overflow-y: scroll;
   }
 
-  .a-sidebar {
+  .sidebar {
     height: calc(100vh - var(--height-header));
     overflow-y: scroll;
     overflow-x: hidden;
@@ -53,6 +53,6 @@
 
 }
 
-.a-collapsed {
+.collapsed {
   width: var(--width-sidebar-collapse) !important;
 }

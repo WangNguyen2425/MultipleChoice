@@ -1,4 +1,4 @@
-.a-account-menu {
+.account-menu {
   .ant-dropdown-trigger {
     display: flex;
     gap: 5px;
@@ -31,12 +31,12 @@
 
   .ant-dropdown-menu-title-content:hover {
 
-    .a-account-content,
+    .account-content,
     .anticon {
       color: var(--hust-color);
     }
 
-    .a-account-content {
+    .account-content {
       display: flex;
       align-items: center;
     }
@@ -51,7 +51,7 @@
     padding: 0px;
   }
 
-  .a-menu-item {
+  .menu-item {
     border-bottom: 1px solid #e3e3e3;
     display: flex;
     gap: 10px;
@@ -62,7 +62,7 @@
   }
 }
 
-.a-account-role.a-menu-item {
+.account-role.menu-item {
   align-items: center;
   display: flex;
   padding: 10px 20px;
@@ -70,7 +70,7 @@
   background-color: #f7f7fa;
   height: 60px;
 
-  .a-name-role {
+  .name-role {
     display: flex;
     flex-direction: column;
     margin-left: 10px;

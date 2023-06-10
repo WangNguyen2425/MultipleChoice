@@ -11,12 +11,15 @@ const ModalPopup = ({
   icon,
   confirmMessage,
   ok,
+  buttonDisable
 }) => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
   const showModal = () => {
-    setOpen(true);
+    if(!buttonDisable){
+      setOpen(true);
+    }
   };
 
   const handleOk = () => {

@@ -29,7 +29,7 @@ const TeacherAdd = () => {
 		console.log(value);
 	};
 	return (
-		<div className="a-student-add">
+		<div className="student-add">
 			<TeacherInfo
 				infoHeader="Thêm giảng viên"
 				onFinish={onFinish}
