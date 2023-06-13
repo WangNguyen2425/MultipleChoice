@@ -18,6 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -114,6 +115,23 @@ public class SubjectServiceImpl implements SubjectService {
        var chapter = mapper.map(request, Chapter.class);
        chapter.setSubject(subject);
        chapterRepository.save(chapter);
+   }
+
+   @Override
+   @Transactional
+   public void addSubjectChapters(String code, List<ChapterRequest> request) {
+        var subject = subjectRepository.findByCode(code)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Cannot find any chapter with code %s", code), HttpStatus.NOT_FOUND));
+        var chapters = new HashSet<Chapter>();
+        request.forEach(chapterRequest -> {
+            if (chapterRepository.existsBySubjectIdAndOrder(subject.getId(), chapterRequest.getOrder())){
+                throw new FieldExistedException("This chapter already existed in subject !", HttpStatus.BAD_REQUEST);
+            }
+            var chapter = mapper.map(chapterRequest, Chapter.class);
+            chapter.setSubject(subject);
+            chapters.add(chapter);
+        });
+        chapterRepository.saveAll(chapters);
    }
 
 
