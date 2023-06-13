@@ -56,14 +56,14 @@ const SubjectList = () => {
       key: "description",
     },
     {
-      title: "Quantity chapter",
-      dataIndex: "quantityChapter",
-      key: "quantityChapter",
+      title: "Quantity question",
+      dataIndex: "questionQuantity",
+      key: "questionQuantity",
     },
     {
-      title: "Quantity question",
-      dataIndex: "quantityQuestion",
-      key: "quantityQuestio",
+      title: "Quantity chapter",
+      dataIndex: "chapterQuantity",
+      key: "chapterQuantity",
     },
     {
       title: "Action",
@@ -81,8 +81,8 @@ const SubjectList = () => {
     key: (index + 1).toString(),
     title: obj.title,
     credit: obj.credit,
-    quantityChapter: obj.quantityChapter,
-    quantityQuestion: obj.quantityQuestion,
+    chapterQuantity: obj.chapterQuantity,
+    questionQuantity: obj.questionQuantity,
     description: obj.description,
     code: obj.code,
     id: obj.id,
@@ -91,7 +91,9 @@ const SubjectList = () => {
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRowKeys(newSelectedRowKeys);
     if (newSelectedRowKeys.length === 1) {
-      setDeleteKey(dataFetch.find((item) => item.key === newSelectedRowKeys[0]).id);
+      setDeleteKey(
+        dataFetch.find((item) => item.key === newSelectedRowKeys[0]).id
+      );
       setDeleteDisable(false);
       // console.log(dataFetch.find((item) => item.key === newSelectedRowKeys[0]));
     } else {
@@ -133,7 +135,9 @@ const SubjectList = () => {
               </Button>
             }
             title="Delete Subject"
-            message={"Are you sure to remove this subject and all of its related data? "}
+            message={
+              "Are you sure to remove this subject and all of its related data? "
+            }
             confirmMessage={"This action cannot be undone"}
             icon={deletePopUpIcon}
             ok={"Ok"}

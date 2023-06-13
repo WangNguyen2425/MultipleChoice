@@ -49,7 +49,7 @@ const StudentInfo = ({
             },
           ]}
         >
-          <Input placeholder="Enter user name" />
+          <Input placeholder="Enter full name" />
         </Form.Item>
         <Form.Item
           name="code"

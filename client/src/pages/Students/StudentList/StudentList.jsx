@@ -58,11 +58,6 @@ const StudentList = () => {
       key: "username",
     },
     {
-      title: "Join date",
-      dataIndex: "joinDate",
-      key: "joinDate"
-    },
-    {
       title: "Course",
       dataIndex: "course",
       key: "course"
@@ -137,8 +132,7 @@ const StudentList = () => {
     gender: [obj.gender],
     code: obj.code,
     id: obj.id,
-    course: obj.course,
-    joinDate: obj.joinDate
+    course: obj.course
   }));
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const onSelectChange = (newSelectedRowKeys) => {
