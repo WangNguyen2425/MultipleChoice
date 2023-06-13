@@ -105,4 +105,44 @@
     background-color: #ffffff;
   }
 
+  .chapter-add {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .chapter-add-item {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .chapter-item {
+      display: grid;
+      grid-template-columns: 1fr 5fr;
+      column-gap: 50px;
+      position: relative;
+      width: 92%;
+    }
+
+    .minus-chapter-item {
+      position: absolute;
+      right: 0px;
+      top: 8px;
+    }
+
+    .a-chapter-add-header {
+      display: flex;
+      margin-bottom: 30px;
+    }
+
+    .ant-form-item {
+      width: 100%;
+    }
+
+    .chapter-add-header-title {
+      font-size: 24px;
+      margin-right: 20px;
+    }
+  }
+
 }
