@@ -57,6 +57,18 @@ export const useQuestionStore = defineStore("question", () => {
     return res;
   };
 
+  const deleteById = async (id: number) => {
+    const res = await api.delete(`question/disable/${id}`).catch(() => null);
+    if (res !== null) {
+      const deletedItemIndex = questions.value.findIndex(
+        (item) => item.id === id
+      );
+      if (deletedItemIndex > -1) {
+        questions.value.splice(deletedItemIndex, 1);
+      }
+    }
+  };
+
   return {
     questions,
     isCreating,
@@ -64,5 +76,6 @@ export const useQuestionStore = defineStore("question", () => {
     createQuestion,
     createAnswers,
     updateById,
+    deleteById,
   };
 });

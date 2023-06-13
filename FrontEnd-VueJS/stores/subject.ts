@@ -109,6 +109,7 @@ export const useSubjectStore = defineStore("subject", () => {
 
   return {
     subjects,
+    chapters,
     getSubjects,
     create,
     updateById,

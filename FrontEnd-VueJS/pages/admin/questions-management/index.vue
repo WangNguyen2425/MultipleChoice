@@ -7,7 +7,6 @@ const questionStore = useQuestionStore();
 const subjectStore = useSubjectStore();
 
 const subjectCode = ref("");
-const authUser = ref("admin");
 const questions = computed(() => questionStore.questions);
 
 //get subjects
@@ -33,7 +32,7 @@ const fetchQuestionsBySubject = async (code: string) => {
     <v-btn @click="fetchQuestionsBySubject(subjectCode)">Tìm kiếm</v-btn>
   </div>
 
-  <test-management-list :questions="questions" :auth-user="authUser" />
+  <question-management-admin-list :questions="questions" />
 </template>
 
 <style scoped lang="scss">

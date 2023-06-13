@@ -1,3 +1,3 @@
 <template>
-  <test-management />
+  <question-management-teacher />
 </template>

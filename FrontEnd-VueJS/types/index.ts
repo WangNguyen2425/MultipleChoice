@@ -50,6 +50,17 @@ export interface Chapter {
   title: string;
   order: number;
 }
+
+export interface Test {
+  id: number;
+  createdAt: string;
+  updatedAt?: string;
+  totalPoint: number;
+  testDay: string;
+  subjectCode: string;
+  subjectTitle: string;
+  duration: number;
+}
 // constants
 
 export const AUTH_USER = {
@@ -57,3 +68,9 @@ export const AUTH_USER = {
   student: "student",
   teacher: "teacher",
 };
+
+export const LEVEL = [
+  { key: "EASY", label: "EASY" },
+  { key: "MEDIUM", label: "MEDIUM" },
+  { key: "DIFFICULT", label: "DIFFICULT" },
+];
