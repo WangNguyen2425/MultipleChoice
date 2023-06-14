@@ -13,7 +13,6 @@ import useNotify from "../../../hooks/useNotify";
 import { appPath } from "../../../config/appPath";
 import { useDispatch } from "react-redux";
 import { setSelectedItem } from "../../../redux/slices/appSlice";
-
 import { deleteStudentsService } from "../../../services/studentsService";
 import ModalPopup from "../../../components/ModalPopup/ModalPopup";
 
@@ -60,7 +59,7 @@ const StudentList = () => {
     {
       title: "Course",
       dataIndex: "course",
-      key: "course"
+      key: "course",
     },
     {
       title: "Email",
@@ -132,15 +131,18 @@ const StudentList = () => {
     gender: [obj.gender],
     code: obj.code,
     id: obj.id,
-    course: obj.course
+    course: obj.course,
   }));
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const onSelectChange = (newSelectedRowKeys) => {
+    console.log(newSelectedRowKeys, "newSelectedRowKeys");
     setSelectedRowKeys(newSelectedRowKeys);
     if (newSelectedRowKeys.length === 1) {
-      setDeleteKey(dataFetch.find((item) => item.key === newSelectedRowKeys[0]).id);
+      setDeleteKey(
+        dataFetch.find((item) => item.key === newSelectedRowKeys[0]).id
+      );
       setDeleteDisable(false);
-      // console.log(dataFetch.find((item) => item.key === newSelectedRowKeys[0]));
+      console.log(dataFetch.find((item) => item.key === newSelectedRowKeys[0]),"delete item");
     } else {
       setDeleteDisable(true);
     }
@@ -160,6 +162,7 @@ const StudentList = () => {
       (res) => {
         notify.success("Xoá sinh viên thành công!");
         getAllStudents();
+        setSelectedRowKeys([]);
       },
       (error) => {
         notify.error("Lỗi xoá sinh viên!");
@@ -186,7 +189,6 @@ const StudentList = () => {
         console.error("Error downloading Excel file:", error);
       });
   };
-
   return (
     <div className="student-list">
       <div className="header-student-list">
@@ -205,7 +207,9 @@ const StudentList = () => {
             }
             buttonDisable={deleteDisable}
             title="Delete Student"
-            message={"Are you sure to remove this student and all of its related data? "}
+            message={
+              "Are you sure to remove this student and all of its related data? "
+            }
             confirmMessage={"This action cannot be undone"}
             icon={deletePopUpIcon}
             ok={"Ok"}

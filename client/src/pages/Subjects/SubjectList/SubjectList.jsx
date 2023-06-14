@@ -30,6 +30,9 @@ const SubjectList = () => {
   const handleEdit = () => {
     navigate(appPath.subjectEdit);
   };
+  const handleView = () => {
+    navigate(appPath.subjectView);
+  };
   useEffect(() => {
     getAllSubjects();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -73,6 +76,7 @@ const SubjectList = () => {
           <Button danger onClick={handleEdit}>
             Edit
           </Button>
+          <Button onClick={handleView}>View</Button>
         </Space>
       ),
     },
@@ -115,6 +119,7 @@ const SubjectList = () => {
       (res) => {
         notify.success("Xoá học phần thành công!");
         getAllSubjects();
+        setSelectedRowKeys([]);
       },
       (error) => {
         notify.error("Lỗi xoá học phần!");

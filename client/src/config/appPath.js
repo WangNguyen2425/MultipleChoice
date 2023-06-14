@@ -21,10 +21,12 @@ export const appPath = {
 	subjectList: "/subject-list",
 	subjectAdd: "/subject-add",
 	subjectEdit: "/subject-edit",
+	subjectView: "/subject-view",
 	examList: "/exam-list",
 	timeTable: "/time-table",
 	library: "/library",
 	allBlogs: "/all-blogs",
 	addBlog: "/add-blog",
 	editBlog: "/edit-blog",
+
 };

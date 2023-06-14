@@ -27,8 +27,7 @@ export const updateSubjectsService = async (
     `${apiPath.updateSubject}/${subjectId}`,
     params,
     successCallback,
-    errorCallback,
-    10000
+    errorCallback
   );
 };
 export const addSubjectsService = async (
@@ -40,8 +39,7 @@ export const addSubjectsService = async (
     `${apiPath.addSubject}`,
     params,
     successCallback,
-    errorCallback,
-    3000
+    errorCallback
   );
 };
 export const deleteSubjectsService = async (
@@ -54,7 +52,25 @@ export const deleteSubjectsService = async (
     `${apiPath.deleteSubject}/${subjectId}`,
     params,
     successCallback,
+    errorCallback
+  );
+};
+export const getAllChaptersService = async (code, params, successCallback, errorCallback) => {
+  await getRequest(`${apiPath.allChapters}${code}/chapter/list`, params, successCallback, errorCallback, 10000);
+};
+export const deleteChaptersService = async (code, params, successCallback, errorCallback) => {
+  await deleteRequest(
+    `${apiPath.deleteSubject}/${code}`,
+    params,
+    successCallback,
     errorCallback,
-    10000
+  );
+};
+export const updateChaptersService = async (code, params, successCallback, errorCallback) => {
+  await putRequest(
+    `${apiPath.updateSubject}/${code}`,
+    params,
+    successCallback,
+    errorCallback,
   );
 };

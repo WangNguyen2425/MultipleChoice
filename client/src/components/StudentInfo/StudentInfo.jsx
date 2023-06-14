@@ -10,6 +10,7 @@ const StudentInfo = ({
   genderOnchange,
   loading,
   isPasswordDisplay,
+  isUserNameDisplay,
   courseDisable
 }) => {
   const genderOption = [
@@ -68,8 +69,7 @@ const StudentInfo = ({
         >
           <Input placeholder="Enter MSSV" />
         </Form.Item>
-
-        <Form.Item
+          {isUserNameDisplay &&  <Form.Item
           name="username"
           label="User Name"
           colon={true}
@@ -81,7 +81,8 @@ const StudentInfo = ({
           ]}
         >
           <Input placeholder="Enter user name" />
-        </Form.Item>
+        </Form.Item>}
+       
         <Form.Item
           name="course"
           label="Course"

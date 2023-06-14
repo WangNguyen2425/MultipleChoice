@@ -8,6 +8,7 @@ const useStudents = () => {
 	const [tableLoading, setTableLoading] = useState(true);
 
 	const getAllStudents = (payload = {}) => {
+		setTableLoading(true);
 		getAllStudentsService(
 			payload,
 			(res) => {

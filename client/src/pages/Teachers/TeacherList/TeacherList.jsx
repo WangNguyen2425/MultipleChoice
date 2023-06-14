@@ -13,13 +13,13 @@ import { setSelectedItem } from "../../../redux/slices/appSlice";
 import { deleteTeachersService } from "../../../services/teachersServices";
 import ModalPopup from "../../../components/ModalPopup/ModalPopup";
 import deletePopUpIcon from "../../../assets/images/delete-popup-icon.svg";
-
 import "./TeacherList.scss";
 
 const TeacherList = () => {
   const [deleteDisable, setDeleteDisable] = useState(true);
   const { allTeachers, getAllTeachers, tableLoading } = useTeachers();
   const [deleteKey, setDeleteKey] = useState(null);
+  
   const dispatch = useDispatch();
   const onRow = (record) => {
     return {
@@ -180,7 +180,6 @@ const TeacherList = () => {
   // 			console.error("Error downloading Excel file:", error);
   // 		});
   // };
-
   return (
     <div className="teacher-list">
       <div className="header-teacher-list">
