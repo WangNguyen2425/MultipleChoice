@@ -36,7 +36,7 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public void addSubject(SubjectRequest request) throws FieldExistedException{
-        if(subjectRepository.existsByCode(request.getCode())){
+        if(subjectRepository.existsByCodeAndEnabledTrue(request.getCode())){
             throw new FieldExistedException("Subject's code already taken !", HttpStatus.BAD_REQUEST);
         }
         Subject subject = mapper.map(request, Subject.class);
@@ -72,7 +72,7 @@ public class SubjectServiceImpl implements SubjectService {
         );
         String updateCode = request.getCode();
         if (!updateCode.equalsIgnoreCase(existSubject.getCode())){
-            if(subjectRepository  .existsByCode(updateCode)){
+            if(subjectRepository  .existsByCodeAndEnabledTrue(updateCode)){
                 throw new FieldExistedException("", HttpStatus.CONFLICT);
             }
         }
@@ -109,7 +109,7 @@ public class SubjectServiceImpl implements SubjectService {
    public void addSubjectChapter(String code, ChapterRequest request) throws EntityNotFoundException{
        var subject = subjectRepository.findByCode(code)
                .orElseThrow(() -> new EntityNotFoundException(String.format("Cannot find any chapter with code %s", code), HttpStatus.NOT_FOUND));
-       if (chapterRepository.existsBySubjectIdAndOrder(subject.getId(), request.getOrder())){
+       if (chapterRepository.existsBySubjectIdAndOrderAndEnabledTrue(subject.getId(), request.getOrder())){
            throw new FieldExistedException("This chapter already existed in subject !", HttpStatus.BAD_REQUEST);
        }
        var chapter = mapper.map(request, Chapter.class);
@@ -124,7 +124,7 @@ public class SubjectServiceImpl implements SubjectService {
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Cannot find any chapter with code %s", code), HttpStatus.NOT_FOUND));
         var chapters = new HashSet<Chapter>();
         request.forEach(chapterRequest -> {
-            if (chapterRepository.existsBySubjectIdAndOrder(subject.getId(), chapterRequest.getOrder())){
+            if (chapterRepository.existsBySubjectIdAndOrderAndEnabledTrue(subject.getId(), chapterRequest.getOrder())){
                 throw new FieldExistedException("This chapter already existed in subject !", HttpStatus.BAD_REQUEST);
             }
             var chapter = mapper.map(chapterRequest, Chapter.class);
@@ -137,7 +137,8 @@ public class SubjectServiceImpl implements SubjectService {
 
    @Override
    public void updateSubjectChapter(int chapterId, ChapterRequest request){
-       var chapter = chapterRepository.findById(chapterId).orElseThrow(() -> new EntityNotFoundException(String.format("Cannot find any chapter with id %d", chapterId), HttpStatus.NOT_FOUND));
+       var chapter = chapterRepository.findById(chapterId)
+               .orElseThrow(() -> new EntityNotFoundException(String.format("Cannot find any chapter with id %d", chapterId), HttpStatus.NOT_FOUND));
        chapter.setTitle(request.getTitle());
        chapter.setOrder(request.getOrder());
        chapterRepository.save(chapter);
