@@ -46,14 +46,15 @@ const TeacherEdit = () => {
 				initialValues={{
 					remember: false,
 					fullName: selectedItem ? selectedItem.fullName : "",
-					username: selectedItem ? selectedItem.username : "",
 					email: selectedItem ? selectedItem.email : "",
 					phoneNumber: selectedItem ? selectedItem.phoneNumber : "",
 					birthday: selectedItem ? dayjs(selectedItem.birthday, "YYYY-MM-DD") : "",
-					gender: selectedItem ? selectedItem.gender[0] : null
+					gender: selectedItem ? selectedItem.gender[0] : null,
+					code: selectedItem ? selectedItem.code : null
 				}}
 				loading={loading}
 				isPasswordDisplay={false}
+				isUserNameDisplay={false}
 			/>
 		</div>
 	);

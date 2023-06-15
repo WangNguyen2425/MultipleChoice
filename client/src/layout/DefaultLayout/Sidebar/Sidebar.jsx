@@ -80,6 +80,7 @@ const item = [
 					{ label: "Subject List", key: "subject-list" },
 					{ label: "Subject Add", key: "subject-add" },
 					{ label: "Subject Edit", key: "subject-edit" },
+					{ label: "Subject View", key: "subject-view"}
 				],
 			},
 		],

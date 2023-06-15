@@ -46,7 +46,6 @@ const StudentEdit = () => {
 				initialValues={{
 					remember: false,
 					fullName: selectedItem ? selectedItem.fullName : "",
-					username: selectedItem ? selectedItem.username : "",
 					email: selectedItem ? selectedItem.email : "",
 					code: selectedItem ? selectedItem.code : "",
 					phoneNumber: selectedItem ? selectedItem.phoneNumber : "",
@@ -56,6 +55,7 @@ const StudentEdit = () => {
 				}}
 				loading={loading}
 				isPasswordDisplay={false}
+				isUserNameDisplay={false}
 				courseDisable={true}
 			/>
 		</div>

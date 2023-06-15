@@ -117,7 +117,7 @@ public class SubjectServiceImpl implements SubjectService {
        chapterRepository.save(chapter);
    }
 
-   @Override
+
    @Transactional
    public void addSubjectChapters(String code, List<ChapterRequest> request) {
         var subject = subjectRepository.findByCode(code)
