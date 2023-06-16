@@ -39,6 +39,7 @@ const StudentAdd = () => {
 				initialValues={{ remember: false }}
 				loading={loading}
 				isPasswordDisplay={true}
+				isUserNameDisplay={true}
 				courseDisable={false}
 			/>
 		</div>

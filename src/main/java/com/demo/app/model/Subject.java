@@ -26,7 +26,6 @@ public class Subject extends BaseEntity {
     private String code;
 
     @Column(name = "description")
-    @Nationalized
     private String description;
 
     @Column(name = "credit")
