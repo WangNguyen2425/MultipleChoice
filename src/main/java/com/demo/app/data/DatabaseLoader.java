@@ -46,7 +46,6 @@ public class DatabaseLoader implements CommandLineRunner {
                     .username("admin")
                     .email("knkuro00@gmail.com")
                     .password(passwordEncoder.passwordEncode().encode("admin"))
-                    .enabled(true)
                     .roles(roles)
                     .build();
             userRepository.save(user);
