@@ -1,0 +1,47 @@
+{
+  "classCode" : "199345",
+  "studentCode": "235790",
+  "testNo": "299",
+  "answers": [
+    {
+      "questionNo": 1,
+      "selected": "0101"
+    },
+    {
+      "questionNo": 2,
+      "selected": "0010"
+    },
+    {
+      "questionNo": 3,
+      "selected": "0100"
+    },
+    {
+      "questionNo": 4,
+      "selected": "0001"
+    },
+    {
+      "questionNo": 5,
+      "selected": "0001"
+    },
+    {
+      "questionNo": 6,
+      "selected": "0110"
+    },
+    {
+      "questionNo": 7,
+      "selected": "0010"
+    },
+    {
+      "questionNo": 8,
+      "selected": "0001"
+    },
+    {
+      "questionNo": 9,
+      "selected": "0010"
+    },
+    {
+      "questionNo": 10,
+      "selected": "0110"
+    }
+  ]
+}
