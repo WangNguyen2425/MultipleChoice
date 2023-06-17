@@ -1,9 +1,9 @@
 package com.demo.app.repository;
 
-import com.demo.app.model.TestSetQuestion;
+import com.demo.app.model.StudentTest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TestSetQuestionRepository extends JpaRepository<TestSetQuestion, Integer> {
+public interface StudentTestRepository extends JpaRepository<StudentTest, Integer> {
 }
