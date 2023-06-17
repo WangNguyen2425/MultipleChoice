@@ -1,10 +1,12 @@
 package com.demo.app.service.impl;
 
+import com.demo.app.dto.offline.OfflineAnswer;
 import com.demo.app.dto.offline.OfflineExam;
 import com.demo.app.exception.EntityNotFoundException;
 import com.demo.app.exception.InvalidRoleException;
 import com.demo.app.exception.UserNotEnrolledException;
 import com.demo.app.model.StudentTest;
+import com.demo.app.model.StudentTestDetail;
 import com.demo.app.model.TestSet;
 import com.demo.app.repository.*;
 import com.demo.app.service.StudentTestService;
@@ -17,8 +19,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +36,8 @@ public class StudentTestServiceImpl implements StudentTestService {
     private final StudentTestRepository studentTestRepository;
 
     private final TestSetRepository testSetRepository;
+
+    private final TestSetQuestionRepository testSetQuestionRepository;
 
     @Override
     public void matchRandomTestForStudent(String classCode, Principal principal){
@@ -75,7 +78,46 @@ public class StudentTestServiceImpl implements StudentTestService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format("Class %s not found !", offlineExam.getClassCode()),
                         HttpStatus.NOT_FOUND));
-        var testset = testSetRepository.findByTestAndTestNoAndEnabledTrue(examClass.getTest(), offlineExam.getTestNo());
-
+        var testset = testSetRepository.findByTestAndTestNoAndEnabledTrue(examClass.getTest(), offlineExam.getTestNo())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Test %s not found !", offlineExam.getTestNo()),
+                        HttpStatus.NOT_FOUND));
+        String studentCode = "20" + offlineExam.getStudentCode();
+        var student = studentRepository.findByCode(studentCode)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Student %s not found", offlineExam.getStudentCode()),
+                        HttpStatus.NOT_FOUND));
+        var questionAnswers = new HashMap<Integer, String>();
+        testset.getTestSetQuestions().forEach(question -> questionAnswers.put(question.getQuestionNo(), question.getBinaryAnswer()));
+        var mark = markStudentTest(offlineExam.getAnswers(), questionAnswers);
+        var studentTest = StudentTest.builder()
+                .student(student)
+                .testSet(testset)
+                .mark(mark)
+                .grade((double) mark / questionAnswers.size())
+                .build();
+        var studentTestDetails = new ArrayList<StudentTestDetail>();
+        offlineExam.getAnswers().forEach(offlineAnswer -> {
+            var testSetQuestion = testSetQuestionRepository.findByTestSetAndQuestionNo(testset, offlineAnswer.getQuestionNo());
+            var studentTestDetail = StudentTestDetail.builder()
+                    .studentTest(studentTest)
+                    .selectedAnswer(offlineAnswer.getSelected())
+                    .testSetQuestion(testSetQuestion)
+                    .build();
+            studentTestDetails.add(studentTestDetail);
+        });
+        studentTest.setStudentTestDetails(studentTestDetails);
+        studentTestRepository.save(studentTest);
     }
+
+    private int markStudentTest(List<OfflineAnswer> offlineAnswers, Map<Integer, String> correctedAnswers){
+        var mark = 0;
+        for (var offlineAnswer : offlineAnswers){
+            String corrected = correctedAnswers.get(offlineAnswer.getQuestionNo());
+            if (corrected.equals(offlineAnswer.getSelected()))
+                mark++;
+        }
+        return mark;
+    }
+
 }
