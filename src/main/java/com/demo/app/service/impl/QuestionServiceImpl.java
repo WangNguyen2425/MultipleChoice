@@ -46,14 +46,12 @@ public class QuestionServiceImpl implements QuestionService {
         questionRepository.saveAll(questions);
     }
     private Question mapRequestToQuestion(QuestionRequest request){
-        var subject = subjectRepository.findByCode(request.getSubjectCode())
+        var chapter = chapterRepository.findById(request.getChapterId())
                 .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("Not found any subject with code: %s !", request.getSubjectCode()),
-                        HttpStatus.NOT_FOUND));
-        var chapter = chapterRepository.findBySubjectAndOrder(subject, request.getChapterNo())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("Not found any chapter with order %d in subject %s !", request.getChapterNo(), request.getSubjectCode()),
-                        HttpStatus.NOT_FOUND));
+                        String.format("Chapter with id %d not found !", request.getChapterId()),
+                        HttpStatus.NOT_FOUND
+                ));
+
         var question = mapper.map(request, Question.class);
         question.setAnswers(
                 request.getAnswers()
