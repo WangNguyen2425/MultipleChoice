@@ -175,7 +175,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     private List<StudentResponse> mapStudentToResponse(List<Student> students){
-        return students.stream().map(student -> {
+        return students.parallelStream().map(student -> {
             var response = mapper.map(student, StudentResponse.class);
             response.setUsername(student.getUser().getUsername());
             response.setEmail(student.getUser().getEmail());
