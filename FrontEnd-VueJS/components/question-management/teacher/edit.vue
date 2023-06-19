@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+import { LEVEL, Subject, stringToBoolean } from "@/types";
+import { useSubjectStore } from "@/stores/subject";
+const subjectStore = useSubjectStore();
+
 const props = defineProps({
   isEditQuestion: {
     type: Boolean,
@@ -8,6 +12,23 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
+  subjects: {
+    type: Array<Subject>,
+    default: () => [{}],
+  },
+});
+const { questionById, subjects } = toRefs(props);
+const subjectCode = ref("");
+
+const question = computed(() => props.questionById);
+
+watch(subjectCode, () => {
+  console.log(123);
+  subjectStore.getChapters(subjectCode.value);
+});
+
+const chapters = computed(() => {
+  return subjectStore.chapters;
 });
 
 const emit = defineEmits<{
@@ -15,16 +36,17 @@ const emit = defineEmits<{
   (e: "close"): void;
 }>();
 
+const levels = computed(() => {
+  return LEVEL;
+});
+
 const closeDialog = () => {
   emit("close");
 };
 
 const editQuestion = () => {
-  // TODO CALL API
-  emit("edit", {
-    id: 1,
-    topicText: "hanh",
-  });
+  console.log("question", question);
+  emit("edit", { question });
 };
 </script>
 
@@ -41,8 +63,7 @@ const editQuestion = () => {
               <v-row>
                 <v-col cols="12" sm="6" md="4">
                   <v-select
-                    label="Môn học"
-                    :items="subjects"
+                    :value="question.subjectTitle"
                     class="select"
                     :variant="'outlined'"
                   ></v-select>
@@ -51,6 +72,9 @@ const editQuestion = () => {
                   <v-select
                     label="Chương"
                     :items="chapters"
+                    item-title="order"
+                    item-value="id"
+                    v-model="question.chapter.order"
                     class="select"
                     :variant="'outlined'"
                   ></v-select>
@@ -62,14 +86,14 @@ const editQuestion = () => {
                     item-title="label"
                     item-value="key"
                     class="select"
-                    :model-value="questionById.level"
+                    v-model="question.level"
                     :variant="'outlined'"
                   ></v-select>
                 </v-col>
                 <v-col cols="12">
                   <v-text-field
                     required
-                    :model-value="questionById.topicText"
+                    v-model="question.topicText"
                     :placeholder="'Nhập câu hỏi'"
                   ></v-text-field>
                 </v-col>
@@ -77,16 +101,16 @@ const editQuestion = () => {
                 <v-col cols="12">
                   <div
                     class="wrap"
-                    v-for="answer in questionById.answers"
-                    :key="answer.content"
+                    v-for="answer in question.answers"
+                    :key="answer.id"
                   >
                     <v-text-field
-                      :model-value="answer.content"
+                      v-model="answer.content"
                       required
                       :placeholder="'Nhập đáp án'"
                     ></v-text-field>
                     <v-checkbox
-                      :model-value="answer.corrected"
+                      :model-value="stringToBoolean(answer.isCorrected)"
                       label="Đáp án đúng"
                     ></v-checkbox>
                   </div>

@@ -43,7 +43,7 @@ const deleteQuestion = () => {
         variant="underlined"
       ></v-file-input>
     </div>
-
+    <v-btn @click="uploadFile">submit</v-btn>
     <div class="search-question-list">
       <v-autocomplete
         clearable
