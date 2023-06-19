@@ -2,7 +2,7 @@ package com.demo.app.config.jwt;
 
 import com.demo.app.repository.TokenRepository;
 import com.demo.app.service.impl.UserServiceImpl;
-import com.demo.app.util.JwtUtils;
+import com.demo.app.util.jwt.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
