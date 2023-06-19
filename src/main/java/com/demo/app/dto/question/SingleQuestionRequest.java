@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QuestionRequest {
+public class SingleQuestionRequest {
 
     private int chapterId;
 
