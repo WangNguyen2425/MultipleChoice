@@ -1,6 +1,5 @@
 package com.demo.app.dto.auth;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.util.List;
@@ -20,10 +19,8 @@ public class AuthenticationResponse {
 
     private List<String> roles;
 
-    @JsonProperty("access_token")
     private String accessToken;
 
-    @JsonProperty("refresh_token")
     private String refreshToken;
 
 
