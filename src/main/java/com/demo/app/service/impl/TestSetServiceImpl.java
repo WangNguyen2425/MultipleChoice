@@ -15,10 +15,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
@@ -40,7 +38,7 @@ public class TestSetServiceImpl implements TestSetService {
                         String.format("Test with id: %d not found !", testId),
                         HttpStatus.NOT_FOUND));
         var testSetQuantity = request.getTestSetQuantity();
-        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        var executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         for (var digit = 1; digit <= testSetQuantity; ++digit) {
             int finalDigit = digit;
             executor.execute(() -> {
@@ -127,13 +125,13 @@ public class TestSetServiceImpl implements TestSetService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format("Test set with id %d not found !", testSetId),
                         HttpStatus.NOT_FOUND));
-        var questionResponses = new ArrayList<TestSetQuestionResponse>();
-        testSet.getTestSetQuestions()
-                .forEach(testSetQuestion -> {
+
+        var questionResponses = testSet.getTestSetQuestions()
+                .parallelStream()
+                .map(testSetQuestion -> {
                     var questionResponse = mapper.map(testSetQuestion, TestSetQuestionResponse.class);
                     var question = testSetQuestion.getQuestion();
                     var answers = testSetQuestion.getTestSetQuestionAnswers();
-
                     questionResponse.setLevel(question.getLevel().toString());
                     questionResponse.setTopicText(question.getTopicText());
                     questionResponse.setTopicImage(question.getTopicImage());
@@ -141,9 +139,8 @@ public class TestSetServiceImpl implements TestSetService {
                         String content = answers.get(i).getAnswer().getContent();
                         questionResponse.getAnswers().get(i).setContent(content);
                     }
-                    questionResponses.add(questionResponse);
-                });
-
+                    return questionResponse;})
+                .collect(Collectors.toList());
         return TestSetDetailResponse.builder()
                 .duration(testSet.getTest().getDuration())
                 .questions(questionResponses)
