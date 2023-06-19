@@ -3,6 +3,8 @@ package com.demo.app.dto.auth;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,6 +17,8 @@ public class AuthenticationResponse {
     private String username;
 
     private String email;
+
+    private List<String> roles;
 
     @JsonProperty("access_token")
     private String accessToken;

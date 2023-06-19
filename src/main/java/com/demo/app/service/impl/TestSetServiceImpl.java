@@ -32,7 +32,7 @@ public class TestSetServiceImpl implements TestSetService {
 
     @Override
     @Transactional
-    public void createTestSetFromTest(int testId, TestSetRequest request) throws InterruptedException {
+    public void createTestSetFromTest(int testId, TestSetRequest request) {
         var test = testRepository.findById(testId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format("Test with id: %d not found !", testId),
@@ -52,11 +52,9 @@ public class TestSetServiceImpl implements TestSetService {
                 var testSetQuestions = assignQuestionsNumber(testSet, test.getQuestions());
                 testSet.setTestSetQuestions(testSetQuestions);
                 testSetRepository.save(testSet);
-
             });
         }
-
-        Thread.sleep(5000);
+        executor.shutdown();
     }
 
 
@@ -102,21 +100,21 @@ public class TestSetServiceImpl implements TestSetService {
         return stringBuilder.toString();
     }
 
-
     @Override
     public List<TestSetResponse> getAllTestSet() {
         var testsets = testSetRepository.findByEnabledIsTrue();
-        return testsets.parallelStream().map(testSet -> {
-            var testSetResponse = mapper.map(testSet, TestSetResponse.class);
-            var test = testSet.getTest();
-            var subject = test.getSubject();
+        return testsets.stream()
+                .map(testSet -> {
+                    var testSetResponse = mapper.map(testSet, TestSetResponse.class);
+                    var test = testSet.getTest();
+                    var subject = test.getSubject();
 
-            testSetResponse.setTestDay(test.getTestDay().toString());
-            testSetResponse.setQuestionQuantity(test.getQuestionQuantity());
-            testSetResponse.setSubjectTitle(subject.getTitle());
-            testSetResponse.setSubjectCode(subject.getCode());
-            return testSetResponse;
-        }).collect(Collectors.toList());
+                    testSetResponse.setTestDay(test.getTestDay().toString());
+                    testSetResponse.setQuestionQuantity(test.getQuestionQuantity());
+                    testSetResponse.setSubjectTitle(subject.getTitle());
+                    testSetResponse.setSubjectCode(subject.getCode());
+                    return testSetResponse;
+                }).collect(Collectors.toList());
     }
 
     @Override
@@ -127,7 +125,7 @@ public class TestSetServiceImpl implements TestSetService {
                         HttpStatus.NOT_FOUND));
 
         var questionResponses = testSet.getTestSetQuestions()
-                .parallelStream()
+                .stream()
                 .map(testSetQuestion -> {
                     var questionResponse = mapper.map(testSetQuestion, TestSetQuestionResponse.class);
                     var question = testSetQuestion.getQuestion();
@@ -139,7 +137,8 @@ public class TestSetServiceImpl implements TestSetService {
                         String content = answers.get(i).getAnswer().getContent();
                         questionResponse.getAnswers().get(i).setContent(content);
                     }
-                    return questionResponse;})
+                    return questionResponse;
+                })
                 .collect(Collectors.toList());
         return TestSetDetailResponse.builder()
                 .duration(testSet.getTest().getDuration())
