@@ -1,5 +1,6 @@
 package com.demo.app.util.excel;
 
+import com.demo.app.marker.Excelable;
 import com.demo.app.model.Student;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -46,7 +47,7 @@ public class ExcelUtils {
     /**
      * A new method to read any Excel file
      */
-    public static <T> List<T> convertExcelToDataTransferObject(MultipartFile file, Class<T> classType) throws IOException{
+    public static <T extends Excelable> List<T> convertExcelToDataTransferObject(MultipartFile file, Class<T> classType) throws IOException{
         var mapper = new ObjectMapper()
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL);
         var contents = getExcelContents(file);
