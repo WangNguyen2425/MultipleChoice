@@ -1,8 +1,8 @@
 package com.demo.app.config.jwt;
 
 import com.demo.app.repository.TokenRepository;
-import com.demo.app.service.impl.UserServiceImpl;
-import com.demo.app.util.JwtUtils;
+import com.demo.app.util.jwt.JwtUtils;
+import com.demo.app.service.impl.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +23,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
 
-    private final UserServiceImpl userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
 
     private final TokenRepository tokenRepository;
     @Override
@@ -40,19 +40,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             var userDetails = userDetailsService.loadUserByUsername(username);
+            var isTokenValid = tokenRepository.findByToken(jwt)
+                    .map(token -> !token.isExpired() && !token.isRevoked())
+                    .orElse(false);
 
-            var isTokenValid = tokenRepository.findByToken(jwt).map(
-                    token -> !token.isExpired() && !token.isRevoked()
-            ).orElse(false);
             if (jwtUtils.isTokenValid(jwt, userDetails) && isTokenValid){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities()
-                );
+                        userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
         filterChain.doFilter(request, response);
-
     }
 }

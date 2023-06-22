@@ -3,6 +3,7 @@ package com.demo.app.service.impl;
 import com.demo.app.config.security.PasswordEncoder;
 import com.demo.app.dto.student.StudentRequest;
 import com.demo.app.dto.student.StudentResponse;
+import com.demo.app.dto.student.StudentSearchRequest;
 import com.demo.app.dto.student.StudentUpdateRequest;
 import com.demo.app.exception.EntityNotFoundException;
 import com.demo.app.exception.FieldExistedException;
@@ -15,7 +16,9 @@ import com.demo.app.repository.RoleRepository;
 import com.demo.app.repository.StudentRepository;
 import com.demo.app.repository.UserRepository;
 import com.demo.app.service.StudentService;
-import com.demo.app.util.ExcelUtils;
+import com.demo.app.specification.EntitySpecification;
+import com.demo.app.specification.SearchFilter;
+import com.demo.app.util.excel.ExcelUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -27,7 +30,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,91 +47,77 @@ public class StudentServiceImpl implements StudentService {
 
     private final ModelMapper mapper;
 
+
+    @Override
+    public ByteArrayInputStream exportStudentsToExcel() throws IOException {
+        var students = studentRepository.findByEnabled(true);
+        var responses = mapStudentToResponse(students);
+        return ExcelUtils.convertContentsToExcel(responses);
+    }
+
     @Override
     @Transactional
-    public void saveStudentsExcelFile(MultipartFile file) throws FileInputException, FieldExistedException {
-        if (!ExcelUtils.hasExcelFormat(file)) {
-            throw new FileInputException("Please upload an excel file!", HttpStatus.BAD_REQUEST);
+    public void importStudentExcel(MultipartFile file) throws FieldExistedException, IOException {
+        if (!ExcelUtils.hasExcelFormat(file)){
+            throw new FileInputException(
+                    "There are something wrong with file, please check file format is .xlsx !",
+                    HttpStatus.CONFLICT);
         }
-        try {
-            var userStudents = ExcelUtils.excelFileToUserStudents(file);
-            var roles = roleRepository.findAllByRoleNameIn(Arrays.asList(Role.RoleType.ROLE_USER, Role.RoleType.ROLE_STUDENT));
-            userStudents.forEach((user, student) -> {
-                if (userRepository.existsByEmailOrUsername(user.getEmail(), user.getUsername()) ||
-                        studentRepository.existsByPhoneNumber(student.getPhoneNumber()) ||
-                        studentRepository.existsByCode(student.getCode())) {
-                    throw new FieldExistedException("Some field in excel file already existed !", HttpStatus.CONFLICT);
-                }
-                user.setRoles(roles);
-                String encodePassword = passwordEncoder.passwordEncode().encode(user.getPassword());
-                user.setPassword(encodePassword);
-                user.setStudent(student);
-            });
-            userRepository.saveAll(userStudents.keySet());
-        } catch (IOException ex) {
-            throw new FileInputException("Could not read the file !", HttpStatus.EXPECTATION_FAILED);
-        }
+        var requests = ExcelUtils.convertExcelToDataTransferObject(file, StudentRequest.class);
+        var users = requests.parallelStream()
+                .map(this::mapRequestToUser)
+                .collect(Collectors.toList());
+        userRepository.saveAll(users);
     }
-
-    @Override
-    public ByteArrayInputStream exportStudentsExcel() throws FileInputException {
-        try {
-            var students = studentRepository.findAll();
-            return ExcelUtils.studentsToExcelFile(students);
-        } catch (IOException ex) {
-            throw new FileInputException("Could not write the file !", HttpStatus.EXPECTATION_FAILED);
-        }
-    }
-
 
     @Override
     @Transactional
     public void saveStudent(StudentRequest request) throws FieldExistedException {
+        userRepository.save(mapRequestToUser(request));
+    }
+
+    private User mapRequestToUser(StudentRequest request){
         checkIfUsernameExists(request.getUsername());
         checkIfEmailExists(request.getEmail());
         checkIfPhoneNumberExists(request.getPhoneNumber());
         checkIfCodeExists(request.getCode());
-
-        List<Role> roles = roleRepository.findAllByRoleNameIn(
-                Arrays.asList(Role.RoleType.ROLE_USER, Role.RoleType.ROLE_STUDENT)
+        var roles = roleRepository.findAllByRoleNameIn(
+                List.of(Role.RoleType.ROLE_USER, Role.RoleType.ROLE_STUDENT)
         );
         User user = mapper.map(request, User.class);
         user.setPassword(passwordEncoder.passwordEncode().encode(request.getPassword()));
         user.setRoles(roles);
         user.getStudent().setUser(user);
-        user.setEnabled(true);
-        userRepository.save(user);
+        return user;
     }
 
 
     @Override
     public List<StudentResponse> getAllStudents() throws EntityNotFoundException {
-        List<Student> students = studentRepository.findByEnabled(true);
-        if (students.size() == 0) {
-            throw new EntityNotFoundException("Not found any students", HttpStatus.NOT_FOUND);
-        }
-        return students.stream().map(student -> {
-            StudentResponse response = mapper.map(student, StudentResponse.class);
-            response.setUsername(student.getUser().getUsername());
-            response.setEmail(student.getUser().getEmail());
-            return response;
-        }).collect(Collectors.toList());
+        var students = studentRepository.findByEnabled(true);
+        return mapStudentToResponse(students);
     }
+
+    @Override
+    public List<StudentResponse> searchByFilter(StudentSearchRequest request) {
+        var filter = mapper.map(request, SearchFilter.class);
+        var students = studentRepository.findAll(new EntitySpecification<Student>().withFilters(filter));
+        return mapStudentToResponse(students);
+    }
+
 
     @Override
     @Transactional
     public void updateStudent(int studentId, StudentUpdateRequest request) throws EntityNotFoundException, FieldExistedException {
         Student existStudent = studentRepository.findById(studentId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Student with id: %s not found !", studentId), HttpStatus.NOT_FOUND));
-        if (!existStudent.getPhoneNumber().equals(request.getPhoneNumber())) {
+        if (!existStudent.getPhoneNumber().equals(request.getPhoneNumber()))
             checkIfPhoneNumberExists(request.getPhoneNumber());
-        }
-        if (!existStudent.getUser().getEmail().equals(request.getEmail())) {
+        if (!existStudent.getUser().getEmail().equals(request.getEmail()))
             checkIfEmailExists(request.getEmail());
-        }
-        if (!existStudent.getCode().equals(request.getCode())) {
+        if (!existStudent.getCode().equals(request.getCode()))
             checkIfCodeExists(request.getCode());
-        }
+
         var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         existStudent.setFullname(request.getFullName());
         existStudent.setPhoneNumber(request.getPhoneNumber());
@@ -173,6 +161,15 @@ public class StudentServiceImpl implements StudentService {
         if (studentRepository.existsByCode(code)) {
             throw new FieldExistedException("Code already taken!", HttpStatus.CONFLICT);
         }
+    }
+
+    private List<StudentResponse> mapStudentToResponse(List<Student> students){
+        return students.parallelStream().map(student -> {
+            var response = mapper.map(student, StudentResponse.class);
+            response.setUsername(student.getUser().getUsername());
+            response.setEmail(student.getUser().getEmail());
+            return response;
+        }).collect(Collectors.toList());
     }
 
 }

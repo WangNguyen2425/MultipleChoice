@@ -15,7 +15,6 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/api/v1/subject")
 @RequiredArgsConstructor
-@CrossOrigin(allowedHeaders = "*", origins = "*")
 public class SubjectController {
 
     private final SubjectService subjectService;
@@ -58,8 +57,7 @@ public class SubjectController {
     @PostMapping(path = "/{code}/chapters/add")
     public ResponseEntity<?> addSubjectChapters(@PathVariable(name = "code") String code, @RequestBody @Valid final List<ChapterRequest> request){
         subjectService.addSubjectChapters(code, request);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(new ResponseMessage("Add subject's chapters successfully !"));
     }
 

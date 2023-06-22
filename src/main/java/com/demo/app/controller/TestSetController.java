@@ -14,14 +14,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/api/v1/test-set")
 @Tag(name = "Test-Set", description = "TestSet API management")
 @RequiredArgsConstructor
-@CrossOrigin(allowedHeaders = "*", origins = "*")
 public class TestSetController {
 
     private final TestSetService testSetService;
 
     @PostMapping(path = "/test-set/{test-id}/create")
-    public ResponseEntity<?> createTestSetFromTest(@PathVariable(name = "test-id") int testId, @RequestBody @Valid final TestSetRequest request){
+    public ResponseEntity<?> createTestSetFromTest(@PathVariable(name = "test-id") int testId,
+                                                   @RequestBody @Valid final TestSetRequest request) throws InterruptedException {
         testSetService.createTestSetFromTest(testId, request);
+        Thread.sleep(5000);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ResponseMessage(String.format("Created Set of test with id %d successfully !", testId)));
@@ -38,6 +39,6 @@ public class TestSetController {
     public ResponseEntity<?> getTestSetDetail(@PathVariable(name = "id") int testSetId){
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(testSetService.getTestSetDetailResponse(testSetId));
+                .body(testSetService.getTestSetDetail(testSetId));
     }
 }

@@ -15,7 +15,7 @@ import com.demo.app.repository.RoleRepository;
 import com.demo.app.repository.TokenRepository;
 import com.demo.app.repository.UserRepository;
 import com.demo.app.service.AuthService;
-import com.demo.app.util.JwtUtils;
+import com.demo.app.util.jwt.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,18 +31,19 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final AuthenticationManager manager;
-
     private final ModelMapper mapper;
 
-    private final PasswordEncoder passwordEncoder;
-
     private final JwtUtils jwtUtils;
+
+    private final AuthenticationManager manager;
+
+    private final PasswordEncoder passwordEncoder;
 
     private final RoleRepository roleRepository;
 
@@ -77,6 +78,9 @@ public class AuthServiceImpl implements AuthService {
                 .email(user.getEmail())
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .roles(roles.parallelStream()
+                        .map(role -> role.getRoleName().name())
+                        .collect(Collectors.toList()))
                 .build();
     }
 
@@ -110,16 +114,21 @@ public class AuthServiceImpl implements AuthService {
         ));
 
         var user = userRepository.findByUsernameAndEnabledIsTrue(request.getUsername()).orElseThrow(
-                () -> new EntityNotFoundException("Username not found !", HttpStatus.BAD_REQUEST));
+                () -> new EntityNotFoundException("Username not found !", HttpStatus.NOT_FOUND));
         var jwtToken = jwtUtils.generateToken(user);
         var refreshToken = jwtUtils.generateRefreshToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
+        var roles = user.getRoles()
+                .parallelStream()
+                .map(role -> role.getRoleName().name())
+                .collect(Collectors.toList());
         return AuthenticationResponse.builder()
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .roles(roles)
                 .build();
     }
 

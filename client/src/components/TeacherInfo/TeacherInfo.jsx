@@ -9,7 +9,8 @@ const TeacherInfo = ({
   datePickerOnchange,
   genderOnchange,
   loading,
-  isPasswordDisplay
+  isPasswordDisplay,
+  isUserNameDisplay
 }) => {
   const genderOption = [
     {
@@ -63,7 +64,7 @@ const TeacherInfo = ({
         >
           <Input placeholder="Enter MCB" />
         </Form.Item>
-        <Form.Item
+        {isUserNameDisplay &&  <Form.Item
           name="username"
           label="User Name"
           colon={true}
@@ -75,7 +76,7 @@ const TeacherInfo = ({
           ]}
         >
           <Input placeholder="Enter user name" />
-        </Form.Item>
+        </Form.Item>}  
         <Form.Item
           name="gender"
           colon={true}

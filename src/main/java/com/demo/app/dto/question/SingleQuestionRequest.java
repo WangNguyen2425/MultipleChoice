@@ -14,12 +14,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QuestionRequest {
+public class SingleQuestionRequest {
 
-    @NotBlank(message = "Please enter subject's code !")
-    private String subjectCode;
-
-    private int chapterNo;
+    private int chapterId;
 
     @NotBlank(message = "Please enter question's topic !")
     private String topicText;
@@ -27,8 +24,9 @@ public class QuestionRequest {
     @NotBlank(message = "Please enter question's level !")
     private String level;
 
+    private String topicImage;
+
     @JsonProperty("answers")
     private List<AnswerRequest> answers;
 
-    private String questionImage;
 }

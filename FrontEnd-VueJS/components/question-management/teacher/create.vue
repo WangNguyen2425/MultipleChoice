@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 import { Subject, LEVEL } from "@/types";
 import { useQuestionStore } from "@/stores/question";
+import { useSubjectStore } from "@/stores/subject";
 
 const questionStore = useQuestionStore();
+const subjectStore = useSubjectStore();
 
 const props = defineProps({
   subjects: {
@@ -11,8 +13,15 @@ const props = defineProps({
   },
 });
 const { subjects } = toRefs(props);
+const subjectCode = ref("");
 
-const chapters = ["Chương 1", "Chương 2", "Chương 3"]; // TODO
+watch(subjectCode, () => {
+  subjectStore.getChapters(subjectCode.value);
+});
+
+const chapters = computed(() => {
+  return subjectStore.chapters;
+});
 
 const levels = computed(() => {
   return LEVEL;
@@ -20,18 +29,28 @@ const levels = computed(() => {
 const topicText = ref("");
 const chapterId = ref(1);
 const level = ref("");
-const topicImageFile = ref("");
-const answers = ref([{ content: "", isCorrected: false }]);
+const topicImage = ref("");
+const answers = ref([
+  { content: "", isCorrected: "" },
+  { content: "", isCorrected: "" },
+  { content: "", isCorrected: "" },
+  { content: "", isCorrected: "" },
+]);
+
 const isCreateQuestion = ref(false);
 
-// TODO
 const submit = async () => {
-  const res = await questionStore.createQuestion(
-    chapterId.value,
-    topicText.value,
-    topicImageFile.value,
-    level.value
-  );
+  const res = await questionStore.createQuestion({
+    subjectCode: subjectCode.value,
+    chapterId: chapterId.value,
+    topicText: topicText.value,
+    topicImage: topicImage.value,
+    level: level.value,
+    answers: answers.value.map((item) => ({
+      ...item,
+      isCorrected: item.isCorrected ? "true" : "false",
+    })),
+  });
   // await questionStore.getQuestions();
   isCreateQuestion.value = false;
 };
@@ -68,6 +87,9 @@ const createQuestion = () => {
                       label="Môn học"
                       :items="subjects"
                       class="select"
+                      item-title="title"
+                      item-value="code"
+                      v-model="subjectCode"
                       :variant="'outlined'"
                     ></v-select>
                   </v-col>
@@ -75,7 +97,10 @@ const createQuestion = () => {
                     <v-select
                       label="Chương"
                       :items="chapters"
+                      item-title="order"
+                      item-value="id"
                       class="select"
+                      v-model="chapterId"
                       :variant="'outlined'"
                     ></v-select>
                   </v-col>
@@ -98,40 +123,22 @@ const createQuestion = () => {
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">Đáp án </v-col>
-                  <v-col cols="12">
+
+                  <v-col
+                    cols="12"
+                    v-for="(answer, index) in answers"
+                    :key="index"
+                  >
                     <div class="wrap">
                       <v-text-field
                         required
+                        v-model="answer.content"
                         :placeholder="'Nhập đáp án'"
                       ></v-text-field>
-                      <v-checkbox label="Đáp án đúng"></v-checkbox>
-                    </div>
-                  </v-col>
-                  <v-col cols="12">
-                    <div class="wrap">
-                      <v-text-field
-                        required
-                        :placeholder="'Nhập đáp án'"
-                      ></v-text-field>
-                      <v-checkbox label="Đáp án đúng"></v-checkbox>
-                    </div>
-                  </v-col>
-                  <v-col cols="12">
-                    <div class="wrap">
-                      <v-text-field
-                        required
-                        :placeholder="'Nhập đáp án'"
-                      ></v-text-field>
-                      <v-checkbox label="Đáp án đúng"></v-checkbox>
-                    </div>
-                  </v-col>
-                  <v-col cols="12">
-                    <div class="wrap">
-                      <v-text-field
-                        required
-                        :placeholder="'Nhập đáp án'"
-                      ></v-text-field>
-                      <v-checkbox label="Đáp án đúng"></v-checkbox>
+                      <v-checkbox
+                        v-model="answer.isCorrected"
+                        label="Đáp án đúng"
+                      ></v-checkbox>
                     </div>
                   </v-col>
                 </v-row>

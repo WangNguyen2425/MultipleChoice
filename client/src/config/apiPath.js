@@ -24,4 +24,8 @@ export const apiPath = {
   updateSubject: BASE_URL + "/api/v1/subject/update",
   addSubject: BASE_URL + "/api/v1/subject/add",
   deleteSubject: BASE_URL + "/api/v1/subject/disable",
+  allChapters: BASE_URL + "/api/v1/subject/",
+  disableChapter: BASE_URL + "/api/v1/subject/chapter/disable/",
+  updateChapter: BASE_URL + "/api/v1/subject/chapter/update/"
+
 };

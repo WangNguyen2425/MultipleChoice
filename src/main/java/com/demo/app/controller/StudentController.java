@@ -2,6 +2,7 @@ package com.demo.app.controller;
 
 import com.demo.app.dto.message.ResponseMessage;
 import com.demo.app.dto.student.StudentRequest;
+import com.demo.app.dto.student.StudentSearchRequest;
 import com.demo.app.dto.student.StudentUpdateRequest;
 import com.demo.app.exception.FileInputException;
 import com.demo.app.service.StudentService;
@@ -29,7 +30,6 @@ import java.util.List;
 @RequestMapping(path = "/api/v1/student")
 @Tag(name = "Student", description = "Student APIs Management")
 @AllArgsConstructor
-@CrossOrigin(allowedHeaders = "*", origins = "*")
 public class StudentController {
     private final String EXAMPLE_LIST_STUDENT_RESPONSES = """
             [
@@ -83,7 +83,7 @@ public class StudentController {
                 "course" : 65
             }
             """;
-    private final String EXAMPLE_NO_DATA_IN_DB = """
+private final String EXAMPLE_NO_DATA_IN_DB = """
             {
                 "message" : "no information in database"
             }
@@ -101,18 +101,17 @@ public class StudentController {
     private final StudentService studentService;
 
     @PostMapping(path = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> importExcelFile(@RequestPart final MultipartFile file) throws FileInputException {
-        studentService.saveStudentsExcelFile(file);
-        String message = "Uploaded the file successfully: " + file.getOriginalFilename();
+    public ResponseEntity<?> importExcelFile(@RequestPart final MultipartFile file) throws FileInputException, IOException {
+        studentService.importStudentExcel(file);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseMessage(message));
+                .body(new ResponseMessage("Uploaded the file successfully: " + file.getOriginalFilename()));
     }
 
     @GetMapping(path = "/export")
-    public ResponseEntity<?> exportExcelFile() throws IOException {
+    public ResponseEntity<?> exportExcelFile() throws IOException, IllegalAccessException {
         String filename = "Students" + System.currentTimeMillis() + ".xlsx";
-        var file = new InputStreamResource(studentService.exportStudentsExcel());
+        var file = new InputStreamResource(studentService.exportStudentsToExcel());
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
                 .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
@@ -176,8 +175,16 @@ public class StudentController {
             })
     @GetMapping(path = "/list")
     public ResponseEntity<?> getAllStudents() {
-        var studentResponses = studentService.getAllStudents();
-        return ResponseEntity.status(HttpStatus.OK).body(studentResponses);
+        var response = studentService.getAllStudents();
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(response);
+    }
+
+    @GetMapping(path = "/search")
+    public ResponseEntity<?> getAllStudentsByFilter(@RequestBody @Valid StudentSearchRequest request)  {
+        var response = studentService.searchByFilter(request);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(response);
     }
 
     @Operation(
@@ -253,7 +260,7 @@ public class StudentController {
             })
     @DeleteMapping(path = "/disable/{id}")
     public ResponseEntity<?> disableStudent(
-            @Parameter(description = "This is ID of student need to be deleted", example = "1") @PathVariable(name = "id") int studentId){
+            @Parameter(description = "This is ID of student need to be deleted", example = "1") @PathVariable(name = "id") int studentId) {
         studentService.disableStudent(studentId);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)

@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface TestSetService {
     @Transactional
-    void createTestSetFromTest(int testId, TestSetRequest request);
+    void createTestSetFromTest(int testId, TestSetRequest request) throws InterruptedException;
 
     List<TestSetResponse> getAllTestSet();
 
-    TestSetDetailResponse getTestSetDetailResponse(int testSetId);
+    TestSetDetailResponse getTestSetDetail(int testSetId);
 }

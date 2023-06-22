@@ -1,14 +1,20 @@
 export interface UserInfo {
   id: number;
+  username: string;
+  password: string;
   fullName: string;
   birthday: string;
   gender: string;
-  joinDate?: string;
   phoneNumber: string;
   email: string;
   code: string;
 }
 
+export interface Teacher extends UserInfo {}
+export interface Student extends UserInfo {
+  joinDate: string;
+  course: number;
+}
 export interface MenuItem {
   title: string;
   icon: string;
@@ -22,8 +28,9 @@ export interface Question {
   createdDate?: string;
   level: string;
   answers: {
+    id: number;
     content: string;
-    corrected?: boolean;
+    isCorrected?: string;
   }[];
 }
 
@@ -72,5 +79,26 @@ export const AUTH_USER = {
 export const LEVEL = [
   { key: "EASY", label: "EASY" },
   { key: "MEDIUM", label: "MEDIUM" },
-  { key: "DIFFICULT", label: "DIFFICULT" },
+  { key: "HARD", label: "HARD" },
 ];
+
+export const ANSWERS = [
+  { key: 1, name: "A" },
+  { key: 2, name: "B" },
+  { key: 3, name: "C" },
+  { key: 4, name: "D" },
+];
+
+// functions
+export const stringToBoolean = (stringValue: string) => {
+  switch (stringValue?.toLowerCase()?.trim()) {
+    case "true":
+      return true;
+
+    case "false":
+      return false;
+
+    default:
+      return JSON.parse(stringValue);
+  }
+};
