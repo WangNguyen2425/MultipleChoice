@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:title="Exams Offline"
+        app:showAsAction="never"
+        android:icon="@drawable/baseline_work_off_24"
+        android:id="@+id/menuTeacher_ExamOffline"/>
+    <item android:title="Exam"
+        android:id="@+id/menuTeacher_Exam"
+        android:icon="@drawable/baseline_note_alt_24"/>
+    <item android:title="Exam Class"
+        app:showAsAction="never"
+        android:icon="@drawable/baseline_class_24"
+        android:id="@+id/menuTeacher_ExamClass"/>
+</menu>

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MultipleChoiceExam</string>
+    <string name="forget_password_tv"><u>Forget Password</u></string>
+    <string name="create_your_account_tv"><u>Create your Account</u></string>
+    <string name="sign_in_tv"><u>Sign In</u></string>
+    <string name="title_signIn">Welcome to \n MultipleChoice Exam</string>
+    <string name="upload_image"><b>Upload Image</b></string>
+    <!-- TODO: Remove or change this placeholder text -->
+</resources>

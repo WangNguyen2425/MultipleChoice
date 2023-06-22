@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Teacher.ExamsOffline.UploadImageActivity">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/pickImage"
+        android:layout_width="wrap_content"
+        android:layout_height="55dp"
+        android:layout_marginStart="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
+        android:text="Pick Image"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:backgroundTint="@color/color_btn"
+        app:strokeColor="@color/color_btn" />
+
+    <TextView
+        android:id="@+id/imageCount_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         android:layout_alignParentTop="true"
+        android:layout_marginTop="25dp"
+        android:layout_centerHorizontal="true"
+        android:text="Image Count"
+        android:textColor="@color/color_btn"
+        android:textSize="18dp"
+        android:visibility="visible" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/pickImage"
+        android:layout_below="@id/imageCount_tv"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:elevation="20dp" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/upload_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/color_btn"
+        android:src="@drawable/baseline_done_24"
+        android:visibility="gone"
+        app:tint="@color/white" />
+    <EditText
+        android:padding="8dp"
+        android:id="@+id/classCode_edt"
+        android:layout_width="150dp"
+        android:background="@drawable/border_edt_bg"
+        android:layout_height="55dp"
+        android:textSize="16sp"
+        android:inputType="numberDecimal"
+        android:layout_marginStart="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:hint="Enter ClassCode"
+        android:visibility="gone"
+        android:layout_toStartOf="@id/upload_img"/>
+</RelativeLayout>
